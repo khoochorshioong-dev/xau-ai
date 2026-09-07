@@ -1,5 +1,18 @@
-const ALLOWED_INTERVALS = new Set(["1min","5min","15min","1h","4h"]);
-const TFS = ["1min","5min","15min","1h","4h"];
+const ALLOWED_INTERVALS = new Set([
+  "1min",
+  "5min",
+  "15min",
+  "1h",
+  "4h"
+]);
+
+const TFS = [
+  "1min",
+  "5min",
+  "15min",
+  "1h",
+  "4h"
+];
 
 const CACHE_TTL = 15;
 
@@ -22,10 +35,13 @@ function cors(){
 }
 
 function json(data,status=200){
-  return new Response(JSON.stringify(data,null,2),{
-    status,
-    headers:cors()
-  });
+  return new Response(
+    JSON.stringify(data,null,2),
+    {
+      status,
+      headers:cors()
+    }
+  );
 }
 
 function n(v){
@@ -50,13 +66,17 @@ function ema(a,p){
 function rsi(a,p=14){
   if(a.length<=p)return null;
 
-  let g=0,l=0;
+  let g=0;
+  let l=0;
 
   for(let i=1;i<=p;i++){
     const d=a[i]-a[i-1];
 
-    if(d>=0)g+=d;
-    else l-=d;
+    if(d>=0){
+      g+=d;
+    }else{
+      l-=d;
+    }
   }
 
   let ag=g/p;
@@ -82,7 +102,11 @@ function atr(c,p=14){
   for(let i=0;i<c.length;i++){
 
     if(i===0){
-      tr.push(c[i].high-c[i].low);
+
+      tr.push(
+        c[i].high-c[i].low
+      );
+
     }else{
 
       const pc=c[i-1].close;
@@ -110,6 +134,7 @@ function atr(c,p=14){
 function macd(a){
 
   if(a.length<35){
+
     return {
       macd:null,
       signal:null,
@@ -140,12 +165,14 @@ function macd(a){
   for(let i=es;i<a.length;i++){
 
     f=a[i]*kf+f*(1-kf);
+
     s=a[i]*ks+s*(1-ks);
 
     m.push(f-s);
   }
 
   if(m.length<sg){
+
     return {
       macd:null,
       signal:null,
@@ -183,15 +210,22 @@ function structure(c){
 
       if(j===i)continue;
 
-      if(c[j].high>=c[i].high)
+      if(c[j].high>=c[i].high){
         hi=false;
+      }
 
-      if(c[j].low<=c[i].low)
+      if(c[j].low<=c[i].low){
         lo=false;
+      }
     }
 
-    if(hi)highs.push(c[i].high);
-    if(lo)lows.push(c[i].low);
+    if(hi){
+      highs.push(c[i].high);
+    }
+
+    if(lo){
+      lows.push(c[i].low);
+    }
   }
 
   const h=highs.slice(-2);
@@ -237,14 +271,21 @@ function structure(c){
   return {
     structure:s,
     bos,
-    swingHigh:h.length?h[h.length-1]:null,
-    swingLow:l.length?l[l.length-1]:null
+    swingHigh:
+      h.length
+        ?h[h.length-1]
+        :null,
+    swingLow:
+      l.length
+        ?l[l.length-1]
+        :null
   };
 }
 
 function sweep(c){
 
   if(c.length<22){
+
     return {
       type:"NONE",
       level:null
@@ -252,6 +293,7 @@ function sweep(c){
   }
 
   const last=c[c.length-1];
+
   const old=c.slice(-21,-1);
 
   const high=Math.max(
@@ -266,6 +308,7 @@ function sweep(c){
     last.high>high &&
     last.close<high
   ){
+
     return {
       type:"BUY_SIDE_SWEEP",
       level:high
@@ -276,6 +319,7 @@ function sweep(c){
     last.low<low &&
     last.close>low
   ){
+
     return {
       type:"SELL_SIDE_SWEEP",
       level:low
@@ -292,50 +336,78 @@ function analyze(c){
 
   const close=c.map(x=>x.close);
 
-  const price=close[close.length-1];
+  const price=
+    close[close.length-1];
 
-  const e20=ema(close,20);
-  const e50=ema(close,50);
-  const e200=ema(close,200);
+  const e20=
+    ema(close,20);
 
-  const r=rsi(close);
-  const a=atr(c);
-  const m=macd(close);
+  const e50=
+    ema(close,50);
 
-  const st=structure(c);
-  const sw=sweep(c);
+  const e200=
+    ema(close,200);
+
+  const r=
+    rsi(close);
+
+  const a=
+    atr(c);
+
+  const m=
+    macd(close);
+
+  const st=
+    structure(c);
+
+  const sw=
+    sweep(c);
 
   let trend="NEUTRAL";
 
-  if(e20!==null&&e50!==null&&e200!==null){
+  if(
+    e20!==null &&
+    e50!==null &&
+    e200!==null
+  ){
 
     if(
       price>e20 &&
       e20>e50 &&
       e50>e200
     ){
-      trend="BULLISH";
-    }
 
-    else if(
+      trend="BULLISH";
+
+    }else if(
       price<e20 &&
       e20<e50 &&
       e50<e200
     ){
+
       trend="BEARISH";
     }
   }
 
   return {
     price,
+
     ema20:e20,
+
     ema50:e50,
+
     ema200:e200,
+
     rsi14:r,
+
     atr14:a,
+
     macd:m,
+
     trend,
+
     structure:st,
+
     liquiditySweep:sw
   };
 }
@@ -343,25 +415,44 @@ function analyze(c){
 function score(x){
 
   let bull=0;
+
   let bear=0;
 
-  if(x.trend==="BULLISH")
+  if(
+    x.trend==="BULLISH"
+  ){
     bull+=25;
+  }
 
-  if(x.trend==="BEARISH")
+  if(
+    x.trend==="BEARISH"
+  ){
     bear+=25;
+  }
 
-  if(x.structure.structure==="BULLISH")
+  if(
+    x.structure.structure==="BULLISH"
+  ){
     bull+=20;
+  }
 
-  if(x.structure.structure==="BEARISH")
+  if(
+    x.structure.structure==="BEARISH"
+  ){
     bear+=20;
+  }
 
-  if(x.structure.bos==="BULLISH_BOS")
+  if(
+    x.structure.bos==="BULLISH_BOS"
+  ){
     bull+=15;
+  }
 
-  if(x.structure.bos==="BEARISH_BOS")
+  if(
+    x.structure.bos==="BEARISH_BOS"
+  ){
     bear+=15;
+  }
 
   if(x.rsi14!==null){
 
@@ -380,72 +471,115 @@ function score(x){
     }
   }
 
-  if(x.macd.histogram!==null){
+  if(
+    x.macd.histogram!==null
+  ){
 
-    if(x.macd.histogram>0)
+    if(
+      x.macd.histogram>0
+    ){
       bull+=10;
+    }
 
-    if(x.macd.histogram<0)
+    if(
+      x.macd.histogram<0
+    ){
       bear+=10;
+    }
   }
 
   if(
-    x.liquiditySweep.type==="SELL_SIDE_SWEEP"
+    x.liquiditySweep.type===
+    "SELL_SIDE_SWEEP"
   ){
     bull+=15;
   }
 
   if(
-    x.liquiditySweep.type==="BUY_SIDE_SWEEP"
+    x.liquiditySweep.type===
+    "BUY_SIDE_SWEEP"
   ){
     bear+=15;
   }
 
   let bias="NEUTRAL";
 
-  if(bull>bear+10)
+  if(
+    bull>bear+10
+  ){
     bias="BULLISH";
+  }
 
-  if(bear>bull+10)
+  if(
+    bear>bull+10
+  ){
     bias="BEARISH";
+  }
 
   return {
+
     bull,
+
     bear,
-    score:Math.min(
-      100,
-      Math.max(bull,bear)
-    ),
+
+    score:
+      Math.min(
+        100,
+        Math.max(
+          bull,
+          bear
+        )
+      ),
+
     bias
   };
 }
 
 function parseDateTime(value){
 
-  if(!value)return null;
-
-  const d=new Date(value);
-
-  if(Number.isNaN(d.getTime()))
+  if(!value){
     return null;
+  }
+
+  const d=
+    new Date(value);
+
+  if(
+    Number.isNaN(
+      d.getTime()
+    )
+  ){
+    return null;
+  }
 
   return d;
 }
 
-function isFresh(candles,interval){
+function isFresh(
+  candles,
+  interval
+){
 
   if(!candles.length){
+
     return {
       fresh:false,
       ageSeconds:null
     };
   }
 
-  const latest=candles[candles.length-1];
+  const latest=
+    candles[
+      candles.length-1
+    ];
 
-  const d=parseDateTime(latest.datetime);
+  const d=
+    parseDateTime(
+      latest.datetime
+    );
 
   if(!d){
+
     return {
       fresh:false,
       ageSeconds:null
@@ -455,28 +589,44 @@ function isFresh(candles,interval){
   const ageSeconds=
     Math.max(
       0,
-      (Date.now()-d.getTime())/1000
+      (
+        Date.now()-
+        d.getTime()
+      )/1000
     );
 
   return {
+
     fresh:
-      ageSeconds<=FRESHNESS_LIMITS[interval],
+      ageSeconds<=
+      FRESHNESS_LIMITS[
+        interval
+      ],
+
     ageSeconds
   };
 }
 
 function isWeekend(){
 
-  const day=new Date().getUTCDay();
+  const day=
+    new Date().getUTCDay();
 
-  return day===0||day===6;
+  return (
+    day===0 ||
+    day===6
+  );
 }
 
-async function fetchTwelveData(env,interval){
+async function fetchTwelveData(
+  env,
+  interval
+){
 
-  const u=new URL(
-    "https://api.twelvedata.com/time_series"
-  );
+  const u=
+    new URL(
+      "https://api.twelvedata.com/time_series"
+    );
 
   u.searchParams.set(
     "symbol",
@@ -503,13 +653,18 @@ async function fetchTwelveData(env,interval){
     env.TWELVE_DATA_API_KEY
   );
 
-  const r=await fetch(u);
+  const r=
+    await fetch(u);
 
   let d;
 
   try{
-    d=await r.json();
+
+    d=
+      await r.json();
+
   }catch{
+
     throw new Error(
       "Invalid response from Twelve Data"
     );
@@ -520,11 +675,13 @@ async function fetchTwelveData(env,interval){
     d?.code===429
   ){
 
-    const error=new Error(
-      "Twelve Data rate limit exceeded"
-    );
+    const error=
+      new Error(
+        "Twelve Data rate limit exceeded"
+      );
 
     error.code=429;
+
     error.provider=d;
 
     throw error;
@@ -535,33 +692,51 @@ async function fetchTwelveData(env,interval){
     d?.status==="error"
   ){
 
-    const error=new Error(
-      d?.message ||
-      "Twelve Data request failed"
-    );
+    const error=
+      new Error(
+        d?.message ||
+        "Twelve Data request failed"
+      );
 
-    error.code=d?.code||r.status;
+    error.code=
+      d?.code ||
+      r.status;
 
     error.provider=d;
 
     throw error;
   }
 
-  const values=(d.values||[])
-    .map(v=>({
-      datetime:v.datetime,
-      open:n(v.open),
-      high:n(v.high),
-      low:n(v.low),
-      close:n(v.close),
-      volume:
-        v.volume==null
-          ?null
-          :n(v.volume)
-    }))
-    .reverse();
+  const values=
+    (d.values||[])
+      .map(v=>({
 
-  if(values.length<50){
+        datetime:
+          v.datetime,
+
+        open:
+          n(v.open),
+
+        high:
+          n(v.high),
+
+        low:
+          n(v.low),
+
+        close:
+          n(v.close),
+
+        volume:
+          v.volume==null
+            ?null
+            :n(v.volume)
+
+      }))
+      .reverse();
+
+  if(
+    values.length<50
+  ){
 
     throw new Error(
       `Insufficient candles for ${interval}`
@@ -571,7 +746,10 @@ async function fetchTwelveData(env,interval){
   return values;
 }
 
-async function market(env,interval){
+async function market(
+  env,
+  interval
+){
 
   const cache=
     caches.default;
@@ -582,7 +760,9 @@ async function market(env,interval){
     );
 
   const cached=
-    await cache.match(cacheKey);
+    await cache.match(
+      cacheKey
+    );
 
   if(cached){
 
@@ -590,8 +770,11 @@ async function market(env,interval){
       await cached.json();
 
     return {
+
       values,
+
       cached:true
+
     };
   }
 
@@ -608,6 +791,7 @@ async function market(env,interval){
         headers:{
           "Content-Type":
             "application/json",
+
           "Cache-Control":
             `public, max-age=${CACHE_TTL}`
         }
@@ -620,17 +804,27 @@ async function market(env,interval){
   );
 
   return {
+
     values,
+
     cached:false
+
   };
 }
 
-function round(v,d=2){
+function round(
+  v,
+  d=2
+){
 
-  return v==null ||
+  return (
+    v==null ||
     Number.isNaN(v)
-      ?null
-      :Number(v.toFixed(d));
+  )
+    ?null
+    :Number(
+      v.toFixed(d)
+    );
 }
 
 function riskPlan(
@@ -640,67 +834,175 @@ function riskPlan(
 ){
 
   const risk={
-    entry:round(price),
+
+    entry:null,
+
     stopLoss:null,
+
     takeProfit1:null,
+
     takeProfit2:null,
+
     rrToTP1:null,
+
     rrToTP2:null
+
   };
+
+  /*
+   * WATCH and NO TRADE
+   * must never receive
+   * an executable risk plan.
+   */
 
   if(
     direction!=="BUY" &&
     direction!=="SELL"
   ){
+
     return risk;
   }
+
+  risk.entry=
+    round(price);
 
   if(
     atrValue===null ||
     !Number.isFinite(atrValue) ||
     atrValue<=0
   ){
+
     return risk;
   }
 
-  const sl=atrValue*1.5;
-  const tp1=atrValue*2.25;
-  const tp2=atrValue*3;
+  const sl=
+    atrValue*1.5;
 
-  if(direction==="BUY"){
+  const tp1=
+    atrValue*2.25;
+
+  const tp2=
+    atrValue*3;
+
+  if(
+    direction==="BUY"
+  ){
 
     risk.stopLoss=
-      round(price-sl);
+      round(
+        price-sl
+      );
 
     risk.takeProfit1=
-      round(price+tp1);
+      round(
+        price+tp1
+      );
 
     risk.takeProfit2=
-      round(price+tp2);
+      round(
+        price+tp2
+      );
 
   }else{
 
     risk.stopLoss=
-      round(price+sl);
+      round(
+        price+sl
+      );
 
     risk.takeProfit1=
-      round(price-tp1);
+      round(
+        price-tp1
+      );
 
     risk.takeProfit2=
-      round(price-tp2);
+      round(
+        price-tp2
+      );
   }
 
-  risk.rrToTP1=1.5;
-  risk.rrToTP2=2;
+  risk.rrToTP1=
+    1.5;
+
+  risk.rrToTP2=
+    2;
 
   return risk;
 }
 
+function executionState(
+  direction
+){
+
+  if(direction==="BUY"){
+
+    return {
+      type:"TRADE",
+      executable:true,
+      label:"BUY",
+      description:
+        "Strict BUY signal. All required conditions passed."
+    };
+  }
+
+  if(direction==="SELL"){
+
+    return {
+      type:"TRADE",
+      executable:true,
+      label:"SELL",
+      description:
+        "Strict SELL signal. All required conditions passed."
+    };
+  }
+
+  if(
+    direction===
+    "WATCH — BUY SETUP"
+  ){
+
+    return {
+      type:"WATCH",
+      executable:false,
+      label:"WATCH — BUY SETUP",
+      description:
+        "Bullish setup is developing, but BUY conditions are not fully confirmed."
+    };
+  }
+
+  if(
+    direction===
+    "WATCH — SELL SETUP"
+  ){
+
+    return {
+      type:"WATCH",
+      executable:false,
+      label:"WATCH — SELL SETUP",
+      description:
+        "Bearish setup is developing, but SELL conditions are not fully confirmed."
+    };
+  }
+
+  return {
+    type:"NO_TRADE",
+    executable:false,
+    label:"NO TRADE",
+    description:
+      "Market conditions do not provide a valid executable setup."
+  };
+}
+
 export default {
 
-  async fetch(request,env){
+  async fetch(
+    request,
+    env
+  ){
 
-    if(request.method==="OPTIONS"){
+    if(
+      request.method==="OPTIONS"
+    ){
 
       return new Response(
         null,
@@ -711,19 +1013,24 @@ export default {
       );
     }
 
-    if(request.method!=="GET"){
+    if(
+      request.method!=="GET"
+    ){
 
       return json(
         {
           ok:false,
-          error:"GET requests only"
+          error:
+            "GET requests only"
         },
         405
       );
     }
 
     const url=
-      new URL(request.url);
+      new URL(
+        request.url
+      );
 
     if(
       url.pathname==="/" ||
@@ -731,16 +1038,30 @@ export default {
     ){
 
       return json({
+
         ok:true,
-        service:"XAU AI API",
-        status:"online",
-        symbol:"XAU/USD",
-        engine:"Technical Engine V2.0",
-        cacheTtlSeconds:CACHE_TTL
+
+        service:
+          "XAU AI API",
+
+        status:
+          "online",
+
+        symbol:
+          "XAU/USD",
+
+        engine:
+          "Technical Engine V3.0",
+
+        cacheTtlSeconds:
+          CACHE_TTL
+
       });
     }
 
-    if(!env.TWELVE_DATA_API_KEY){
+    if(
+      !env.TWELVE_DATA_API_KEY
+    ){
 
       return json(
         {
@@ -752,21 +1073,33 @@ export default {
       );
     }
 
-    if(url.pathname==="/api/market"){
+    if(
+      url.pathname===
+      "/api/market"
+    ){
 
       const interval=
-        url.searchParams.get("interval")||
+        url.searchParams.get(
+          "interval"
+        ) ||
         "5min";
 
       if(
-        !ALLOWED_INTERVALS.has(interval)
+        !ALLOWED_INTERVALS.has(
+          interval
+        )
       ){
 
         return json(
           {
             ok:false,
-            error:"Unsupported interval",
-            allowed:[...ALLOWED_INTERVALS]
+
+            error:
+              "Unsupported interval",
+
+            allowed:[
+              ...ALLOWED_INTERVALS
+            ]
           },
           400
         );
@@ -787,32 +1120,55 @@ export default {
           );
 
         return json({
+
           ok:true,
-          symbol:"XAU/USD",
+
+          symbol:
+            "XAU/USD",
+
           interval,
-          cached:result.cached,
-          candleCount:result.values.length,
+
+          cached:
+            result.cached,
+
+          candleCount:
+            result.values.length,
+
           latestDatetime:
             result.values[
               result.values.length-1
-            ]?.datetime||null,
+            ]?.datetime ||
+            null,
+
           freshness,
-          values:result.values
+
+          values:
+            result.values
+
         });
 
       }catch(e){
 
-        if(e.code===429){
+        if(
+          e.code===429
+        ){
 
           return json(
             {
               ok:false,
-              error:"DATA_LIMIT",
-              provider:"Twelve Data",
+
+              error:
+                "DATA_LIMIT",
+
+              provider:
+                "Twelve Data",
+
               message:
                 "Twelve Data API credit limit reached. Wait for the next quota window.",
+
               details:
-                e.provider||null
+                e.provider ||
+                null
             },
             429
           );
@@ -821,63 +1177,117 @@ export default {
         return json(
           {
             ok:false,
-            error:"Market data request failed",
-            details:String(
-              e.message||e
-            )
+
+            error:
+              "Market data request failed",
+
+            details:
+              String(
+                e.message ||
+                e
+              )
           },
           502
         );
       }
     }
 
-    if(url.pathname==="/api/analyze"){
+    if(
+      url.pathname===
+      "/api/analyze"
+    ){
 
       const generatedAt=
         new Date().toISOString();
 
       /*
-       * XAU/USD is normally closed over the weekend.
-       * Never generate a live BUY/SELL signal
-       * during Saturday/Sunday.
+       * =================================================
+       * WEEKEND SAFETY FILTER
+       * =================================================
+       *
+       * Never generate BUY / SELL / WATCH
+       * during Saturday or Sunday.
        */
 
-      if(isWeekend()){
+      if(
+        isWeekend()
+      ){
 
         return json({
 
           ok:true,
 
-          symbol:"XAU/USD",
+          symbol:
+            "XAU/USD",
 
-          engine:"Technical Engine V2.0",
+          engine:
+            "Technical Engine V3.0",
 
           generatedAt,
 
           decision:{
-            direction:"NO TRADE",
-            setupScore:0,
+
+            direction:
+              "NO TRADE",
+
+            setupScore:
+              0,
+
             rule:
               "Weekend market filter"
+
+          },
+
+          execution:{
+            type:
+              "NO_TRADE",
+
+            executable:
+              false,
+
+            label:
+              "NO TRADE",
+
+            description:
+              "Market is closed for the weekend."
           },
 
           riskPlan:{
+
             entry:null,
+
             stopLoss:null,
+
             takeProfit1:null,
+
             takeProfit2:null,
+
             rrToTP1:null,
+
             rrToTP2:null
+
           },
 
           safety:{
-            weekend:true,
-            newsRisk:"NOT CHECKED",
-            spread:"NOT CHECKED",
-            slippage:"NOT CHECKED",
-            dataFreshness:"NOT CHECKED",
+
+            weekend:
+              true,
+
+            newsRisk:
+              "NOT CHECKED",
+
+            spread:
+              "NOT CHECKED",
+
+            slippage:
+              "NOT CHECKED",
+
+            dataFreshness:
+              "NOT CHECKED",
+
             note:
               "XAU/USD weekend filter active. No trading signal generated."
+
           }
 
         });
@@ -885,15 +1295,29 @@ export default {
 
       try{
 
+        /*
+         * ===============================================
+         * LOAD ALL REQUIRED TIMEFRAMES
+         * ===============================================
+         */
+
         const rawResults=
           await Promise.allSettled(
+
             TFS.map(
-              tf=>market(env,tf)
+              tf=>
+                market(
+                  env,
+                  tf
+                )
             )
+
           );
 
         const data={};
+
         const freshness={};
+
         const unavailable=[];
 
         for(
@@ -902,7 +1326,8 @@ export default {
           i++
         ){
 
-          const tf=TFS[i];
+          const tf=
+            TFS[i];
 
           const result=
             rawResults[i];
@@ -912,22 +1337,28 @@ export default {
           ){
 
             unavailable.push({
-              timeframe:tf,
+
+              timeframe:
+                tf,
+
               reason:
                 String(
-                  result.reason?.message||
-                  result.reason||
+                  result.reason?.message ||
+                  result.reason ||
                   "Unknown error"
                 ),
+
               code:
-                result.reason?.code||
+                result.reason?.code ||
                 null
+
             });
 
             continue;
           }
 
-          data[tf]=result.value.values;
+          data[tf]=
+            result.value.values;
 
           freshness[tf]=
             isFresh(
@@ -937,36 +1368,73 @@ export default {
         }
 
         /*
-         * If any timeframe failed,
-         * do NOT manufacture a signal.
+         * ===============================================
+         * DATA AVAILABILITY GATE
+         * ===============================================
+         *
+         * If any required timeframe fails,
+         * never manufacture a signal.
          */
 
-        if(unavailable.length){
+        if(
+          unavailable.length
+        ){
 
           return json({
 
             ok:true,
 
-            symbol:"XAU/USD",
+            symbol:
+              "XAU/USD",
 
-            engine:"Technical Engine V2.0",
+            engine:
+              "Technical Engine V3.0",
 
             generatedAt,
 
             decision:{
-              direction:"NO TRADE",
-              setupScore:0,
+
+              direction:
+                "NO TRADE",
+
+              setupScore:
+                0,
+
               rule:
                 "Required timeframe data unavailable"
+
+            },
+
+            execution:{
+
+              type:
+                "NO_TRADE",
+
+              executable:
+                false,
+
+              label:
+                "NO TRADE",
+
+              description:
+                "Required market data is unavailable."
+
             },
 
             riskPlan:{
+
               entry:null,
+
               stopLoss:null,
+
               takeProfit1:null,
+
               takeProfit2:null,
+
               rrToTP1:null,
+
               rrToTP2:null
+
             },
 
             unavailable,
@@ -974,135 +1442,398 @@ export default {
             freshness,
 
             safety:{
-              weekend:false,
-              newsRisk:"NOT CHECKED",
-              spread:"NOT CHECKED",
-              slippage:"NOT CHECKED",
-              dataFreshness:"FAILED",
+
+              weekend:
+                false,
+
+              newsRisk:
+                "NOT CHECKED",
+
+              spread:
+                "NOT CHECKED",
+
+              slippage:
+                "NOT CHECKED",
+
+              dataFreshness:
+                "FAILED",
+
               note:
                 "NO TRADE because required market data could not be loaded."
+
             }
 
           });
         }
 
         /*
-         * Freshness gate.
-         * Old data = NO TRADE.
+         * ===============================================
+         * FRESHNESS GATE
+         * ===============================================
+         *
+         * Old market data = NO TRADE.
          */
 
         const stale=
           TFS.filter(
-            tf=>!freshness[tf].fresh
+            tf=>
+              !freshness[tf].fresh
           );
 
-        if(stale.length){
+        if(
+          stale.length
+        ){
 
           return json({
 
             ok:true,
 
-            symbol:"XAU/USD",
+            symbol:
+              "XAU/USD",
 
-            engine:"Technical Engine V2.0",
+            engine:
+              "Technical Engine V3.0",
 
             generatedAt,
 
             decision:{
-              direction:"NO TRADE",
-              setupScore:0,
+
+              direction:
+                "NO TRADE",
+
+              setupScore:
+                0,
+
               rule:
                 "Stale market data detected"
+
+            },
+
+            execution:{
+
+              type:
+                "NO_TRADE",
+
+              executable:
+                false,
+
+              label:
+                "NO TRADE",
+
+              description:
+                "One or more timeframe datasets are stale."
+
             },
 
             riskPlan:{
+
               entry:null,
+
               stopLoss:null,
+
               takeProfit1:null,
+
               takeProfit2:null,
+
               rrToTP1:null,
+
               rrToTP2:null
+
             },
 
             freshness,
 
-            staleTimeframes:stale,
+            staleTimeframes:
+              stale,
 
             safety:{
-              weekend:false,
-              newsRisk:"NOT CHECKED",
-              spread:"NOT CHECKED",
-              slippage:"NOT CHECKED",
-              dataFreshness:"STALE",
+
+              weekend:
+                false,
+
+              newsRisk:
+                "NOT CHECKED",
+
+              spread:
+                "NOT CHECKED",
+
+              slippage:
+                "NOT CHECKED",
+
+              dataFreshness:
+                "STALE",
+
               note:
                 "NO TRADE because one or more timeframe datasets are stale."
+
             }
 
           });
         }
 
+        /*
+         * ===============================================
+         * TECHNICAL ANALYSIS
+         * ===============================================
+         */
+
         const analysis={};
+
         const scores={};
 
-        for(const tf of TFS){
+        for(
+          const tf of TFS
+        ){
 
           analysis[tf]=
-            analyze(data[tf]);
+            analyze(
+              data[tf]
+            );
 
           scores[tf]=
-            score(analysis[tf]);
+            score(
+              analysis[tf]
+            );
         }
 
+        /*
+         * ===============================================
+         * HIGHER TIMEFRAME ALIGNMENT
+         * ===============================================
+         *
+         * H4 + H1 + M15 determine the
+         * higher timeframe direction.
+         */
+
         const bull=
-          ["4h","1h","15min"]
-            .filter(
-              tf=>
-                scores[tf].bias==="BULLISH"
-            )
-            .length;
+          [
+            "4h",
+            "1h",
+            "15min"
+          ]
+          .filter(
+            tf=>
+              scores[tf].bias===
+              "BULLISH"
+          )
+          .length;
 
         const bear=
-          ["4h","1h","15min"]
-            .filter(
-              tf=>
-                scores[tf].bias==="BEARISH"
-            )
-            .length;
+          [
+            "4h",
+            "1h",
+            "15min"
+          ]
+          .filter(
+            tf=>
+              scores[tf].bias===
+              "BEARISH"
+          )
+          .length;
+
+        /*
+         * ===============================================
+         * SETUP SCORE
+         * ===============================================
+         */
+
+        const setupScore=
+          Math.round(
+
+            TFS.reduce(
+
+              (sum,tf)=>
+                sum+
+                scores[tf].score,
+
+              0
+
+            ) /
+            TFS.length
+
+          );
+
+        /*
+         * ===============================================
+         * V3.0 STRICT EXECUTION ENGINE
+         * ===============================================
+         *
+         * BUY / SELL:
+         *   Real executable signal.
+         *
+         * WATCH:
+         *   Developing setup only.
+         *
+         * NO TRADE:
+         *   No valid setup.
+         */
 
         let direction=
           "NO TRADE";
 
-        if(
+        /*
+         * STRICT BUY ALIGNMENT
+         */
+
+        const buyAlignment=
+
           bull>=2 &&
-          scores["5min"].bias==="BULLISH" &&
-          scores["1min"].bias!=="BEARISH"
-        ){
 
-          direction="BUY";
-        }
+          scores["5min"].bias===
+            "BULLISH" &&
+
+          scores["1min"].bias!==
+            "BEARISH";
+
+        /*
+         * STRICT SELL ALIGNMENT
+         */
+
+        const sellAlignment=
+
+          bear>=2 &&
+
+          scores["5min"].bias===
+            "BEARISH" &&
+
+          scores["1min"].bias!==
+            "BULLISH";
+
+        /*
+         * ===============================================
+         * STRICT BUY
+         * ===============================================
+         *
+         * Existing V2 conditions preserved.
+         * Score must be >=70.
+         */
 
         if(
-          bear>=2 &&
-          scores["5min"].bias==="BEARISH" &&
-          scores["1min"].bias!=="BULLISH"
+
+          buyAlignment &&
+
+          setupScore>=70
+
         ){
 
-          direction="SELL";
+          direction=
+            "BUY";
+
         }
 
-        const setupScore=
-          Math.round(
-            TFS.reduce(
-              (sum,tf)=>
-                sum+scores[tf].score,
-              0
-            )/TFS.length
+        /*
+         * ===============================================
+         * STRICT SELL
+         * ===============================================
+         *
+         * Existing V2 conditions preserved.
+         * Score must be >=70.
+         */
+
+        else if(
+
+          sellAlignment &&
+
+          setupScore>=70
+
+        ){
+
+          direction=
+            "SELL";
+
+        }
+
+        /*
+         * ===============================================
+         * WATCH — BUY SETUP
+         * ===============================================
+         *
+         * Score 50-69.
+         *
+         * Bullish alignment is developing,
+         * but strict BUY confirmation
+         * has NOT been achieved.
+         *
+         * NOT executable.
+         */
+
+        else if(
+
+          setupScore>=50 &&
+
+          setupScore<70 &&
+
+          bull>=2 &&
+
+          scores["5min"].bias===
+            "BULLISH" &&
+
+          scores["1min"].bias!==
+            "BEARISH"
+
+        ){
+
+          direction=
+            "WATCH — BUY SETUP";
+
+        }
+
+        /*
+         * ===============================================
+         * WATCH — SELL SETUP
+         * ===============================================
+         *
+         * Score 50-69.
+         *
+         * Bearish alignment is developing,
+         * but strict SELL confirmation
+         * has NOT been achieved.
+         *
+         * NOT executable.
+         */
+
+        else if(
+
+          setupScore>=50 &&
+
+          setupScore<70 &&
+
+          bear>=2 &&
+
+          scores["5min"].bias===
+            "BEARISH" &&
+
+          scores["1min"].bias!==
+            "BULLISH"
+
+        ){
+
+          direction=
+            "WATCH — SELL SETUP";
+
+        }
+
+        /*
+         * ===============================================
+         * EVERYTHING ELSE
+         * ===============================================
+         *
+         * Remains NO TRADE.
+         */
+
+        const execution=
+          executionState(
+            direction
           );
 
-        if(setupScore<70){
-
-          direction="NO TRADE";
-        }
+        /*
+         * ===============================================
+         * RISK PLAN
+         * ===============================================
+         *
+         * Only BUY / SELL receive
+         * executable Entry / SL / TP.
+         */
 
         const price=
           analysis["1min"].price;
@@ -1117,122 +1848,166 @@ export default {
             atrValue
           );
 
+        /*
+         * ===============================================
+         * FINAL RESPONSE
+         * ===============================================
+         */
+
         return json({
 
           ok:true,
 
-          symbol:"XAU/USD",
+          symbol:
+            "XAU/USD",
 
-          engine:"Technical Engine V2.0",
+          engine:
+            "Technical Engine V3.0",
 
           generatedAt,
 
           decision:{
+
             direction,
+
             setupScore,
+
             rule:
-              "NO TRADE when alignment is insufficient"
+              "Strict BUY/SELL requires alignment and setup score >=70"
+
           },
 
-          riskPlan:risk,
+          execution,
+
+          riskPlan:
+            risk,
 
           marketStatus:{
-            weekend:false,
-            allTimeframesFresh:true
+
+            weekend:
+              false,
+
+            allTimeframesFresh:
+              true
+
           },
 
           freshness,
 
+          alignment:{
+
+            higherTimeframeBullish:
+              bull,
+
+            higherTimeframeBearish:
+              bear,
+
+            buyAlignment,
+
+            sellAlignment
+
+          },
+
           timeframes:
+
             Object.fromEntries(
 
-              TFS.map(tf=>[
+              TFS.map(
+                tf=>[
 
-                tf,
+                  tf,
 
-                {
+                  {
 
-                  price:
-                    round(
-                      analysis[tf].price,
-                      2
-                    ),
-
-                  trend:
-                    analysis[tf].trend,
-
-                  structure:
-                    analysis[tf].structure,
-
-                  liquiditySweep:
-                    analysis[tf]
-                      .liquiditySweep,
-
-                  indicators:{
-
-                    ema20:
+                    price:
                       round(
-                        analysis[tf].ema20,
-                        4
+                        analysis[tf].price,
+                        2
                       ),
 
-                    ema50:
-                      round(
-                        analysis[tf].ema50,
-                        4
-                      ),
+                    trend:
+                      analysis[tf].trend,
 
-                    ema200:
-                      round(
-                        analysis[tf].ema200,
-                        4
-                      ),
+                    structure:
+                      analysis[tf].structure,
 
-                    rsi14:
-                      round(
-                        analysis[tf].rsi14
-                      ),
+                    liquiditySweep:
+                      analysis[tf]
+                        .liquiditySweep,
 
-                    atr14:
-                      round(
-                        analysis[tf].atr14,
-                        4
-                      ),
+                    indicators:{
 
-                    macd:{
-
-                      macd:
+                      ema20:
                         round(
-                          analysis[tf]
-                            .macd.macd,
+                          analysis[tf].ema20,
                           4
                         ),
 
-                      signal:
+                      ema50:
                         round(
-                          analysis[tf]
-                            .macd.signal,
+                          analysis[tf].ema50,
                           4
                         ),
 
-                      histogram:
+                      ema200:
                         round(
-                          analysis[tf]
-                            .macd.histogram,
+                          analysis[tf].ema200,
                           4
-                        )
-                    }
-                  },
+                        ),
 
-                  score:
-                    scores[tf]
-                }
-              ])
+                      rsi14:
+                        round(
+                          analysis[tf].rsi14
+                        ),
+
+                      atr14:
+                        round(
+                          analysis[tf].atr14,
+                          4
+                        ),
+
+                      macd:{
+
+                        macd:
+                          round(
+                            analysis[tf]
+                              .macd.macd,
+                            4
+                          ),
+
+                        signal:
+                          round(
+                            analysis[tf]
+                              .macd.signal,
+                            4
+                          ),
+
+                        histogram:
+                          round(
+                            analysis[tf]
+                              .macd.histogram,
+                            4
+                          )
+
+                      }
+
+                    },
+
+                    score:
+                      scores[tf]
+
+                  }
+
+                ]
+
+              )
+
             ),
 
           safety:{
 
-            weekend:false,
+            weekend:
+              false,
 
             newsRisk:
               "NOT CHECKED",
@@ -1247,7 +2022,8 @@ export default {
               "PASSED",
 
             note:
-              "Rules-based prototype. No guaranteed win rate."
+              "Rules-based prototype. WATCH states are informational only. No guaranteed win rate."
+
           }
 
         });
@@ -1258,11 +2034,13 @@ export default {
 
           ok:false,
 
-          error:"Analysis failed",
+          error:
+            "Analysis failed",
 
           details:
             String(
-              e.message||e
+              e.message ||
+              e
             )
 
         },502);
@@ -1273,7 +2051,8 @@ export default {
 
       ok:false,
 
-      error:"Endpoint not found",
+      error:
+        "Endpoint not found",
 
       available:[
 
