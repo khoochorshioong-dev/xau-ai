@@ -1,49 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1,viewport-fit=cover"
+>
 
 <title>XAU AI — Strict Execution System</title>
 
 <link rel="manifest" href="manifest.json">
 
-<meta name="theme-color" content="#08090c">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="XAU AI">
+<meta
+  name="theme-color"
+  content="#08090c"
+>
 
-<link rel="apple-touch-icon" href="icon-192.png">
+<meta
+  name="apple-mobile-web-app-capable"
+  content="yes"
+>
+
+<meta
+  name="apple-mobile-web-app-status-bar-style"
+  content="black-translucent"
+>
+
+<meta
+  name="apple-mobile-web-app-title"
+  content="XAU AI"
+>
+
+<link
+  rel="apple-touch-icon"
+  href="icon-192.png"
+>
+
 
 <style>
 
 :root{
+
   --bg:#08090c;
+
   --card:#111318;
+
   --card2:#0d0f13;
+
   --muted:#8d93a1;
+
   --text:#f4f6f8;
+
   --green:#29d17d;
+
   --red:#ff5b68;
+
   --yellow:#f5c84c;
+
   --orange:#ff9f43;
+
   --line:#242832;
+
   --white:#ffffff;
+
 }
+
 
 *{
+
   box-sizing:border-box;
+
   -webkit-tap-highlight-color:transparent;
+
 }
+
 
 html{
+
   background:var(--bg);
+
 }
 
+
 body{
+
   margin:0;
+
   background:var(--bg);
+
   color:var(--text);
+
   font-family:
     -apple-system,
     BlinkMacSystemFont,
@@ -51,510 +99,922 @@ body{
     "SF Pro Text",
     Arial,
     sans-serif;
+
   min-height:100vh;
+
   padding-bottom:100px;
+
 }
+
 
 button{
+
   font:inherit;
+
 }
 
+
 .app{
+
   width:100%;
+
   max-width:900px;
+
   margin:0 auto;
+
   padding:
     max(22px,env(safe-area-inset-top))
     18px
     120px;
+
 }
 
-/* HEADER */
+
+/* =====================================================
+   HEADER
+   ===================================================== */
 
 .header{
+
   display:flex;
+
   justify-content:space-between;
+
   align-items:flex-start;
+
   margin-bottom:32px;
+
 }
+
 
 .brand{
+
   font-size:34px;
+
   font-weight:800;
+
   letter-spacing:-1.5px;
+
 }
+
 
 .subtitle{
+
   margin-top:7px;
+
   font-size:13px;
+
   letter-spacing:4px;
+
   color:var(--muted);
+
 }
+
 
 .settings{
+
   width:52px;
+
   height:52px;
+
   border:1px solid var(--line);
+
   background:var(--card);
+
   border-radius:18px;
+
   color:var(--muted);
+
   font-size:22px;
+
 }
 
-/* PRICE */
+
+/* =====================================================
+   PRICE
+   ===================================================== */
 
 .symbol{
+
   font-size:17px;
+
   color:var(--muted);
+
   margin-bottom:8px;
+
 }
+
 
 .price{
+
   font-size:56px;
+
   font-weight:800;
+
   letter-spacing:-2px;
+
   line-height:1;
+
 }
+
 
 .live{
+
   margin-top:12px;
+
   color:var(--muted);
+
   font-size:15px;
+
 }
 
-/* CARD */
+
+/* =====================================================
+   CARD
+   ===================================================== */
 
 .card{
+
   background:var(--card);
+
   border:1px solid var(--line);
+
   border-radius:28px;
+
   padding:26px;
+
   margin-top:22px;
-  box-shadow:0 12px 40px rgba(0,0,0,.18);
+
+  box-shadow:
+    0 12px 40px rgba(0,0,0,.18);
+
 }
+
 
 .section-title{
+
   color:var(--muted);
+
   font-size:14px;
+
   letter-spacing:3px;
+
   margin:10px 4px 16px;
+
 }
 
-/* DECISION */
+
+/* =====================================================
+   DECISION
+   ===================================================== */
 
 .decision-card{
+
   text-align:center;
+
   padding-top:38px;
+
   padding-bottom:34px;
+
 }
+
 
 .decision-label{
+
   color:var(--muted);
+
   font-size:14px;
+
   letter-spacing:3px;
+
 }
+
 
 .decision{
+
   font-size:42px;
+
   font-weight:850;
+
   letter-spacing:-1.5px;
+
   margin-top:25px;
+
   line-height:1.08;
+
 }
+
 
 .decision.buy{
+
   color:var(--green);
+
 }
+
 
 .decision.sell{
+
   color:var(--red);
+
 }
+
 
 .decision.watch-buy{
+
   color:var(--yellow);
+
 }
+
 
 .decision.watch-sell{
+
   color:var(--orange);
+
 }
+
 
 .decision.no-trade{
+
   color:var(--muted);
+
 }
+
 
 .score{
+
   margin-top:14px;
+
   font-size:22px;
+
   color:var(--text);
+
 }
+
 
 .score span{
+
   font-weight:800;
+
 }
 
-/* STATUS BANNER */
+
+/* =====================================================
+   STATUS BANNER
+   ===================================================== */
 
 .status-banner{
+
   margin-top:24px;
+
   padding:16px 18px;
+
   border-radius:17px;
+
   font-weight:700;
+
   font-size:15px;
+
   border:1px solid var(--line);
+
 }
+
 
 .status-banner.buy{
+
   background:rgba(41,209,125,.08);
+
   color:var(--green);
+
 }
+
 
 .status-banner.sell{
+
   background:rgba(255,91,104,.08);
+
   color:var(--red);
+
 }
+
 
 .status-banner.watch-buy{
+
   background:rgba(245,200,76,.08);
+
   color:var(--yellow);
+
 }
+
 
 .status-banner.watch-sell{
+
   background:rgba(255,159,67,.08);
+
   color:var(--orange);
+
 }
+
 
 .status-banner.no-trade{
+
   background:rgba(141,147,161,.07);
+
   color:var(--muted);
+
 }
 
-/* ANALYSIS ROWS */
+
+/* =====================================================
+   ANALYSIS ROWS
+   ===================================================== */
 
 .analysis-list{
+
   margin-top:28px;
+
   text-align:left;
+
 }
+
 
 .analysis-row{
+
   display:flex;
+
   justify-content:space-between;
+
   align-items:center;
+
   min-height:59px;
+
   border-bottom:1px solid var(--line);
+
   font-size:16px;
+
 }
+
 
 .analysis-row:last-child{
+
   border-bottom:none;
+
 }
+
 
 .analysis-value{
+
   display:flex;
+
   align-items:center;
+
   gap:9px;
+
   font-weight:600;
+
   color:var(--muted);
+
+  text-align:right;
+
 }
+
 
 .dot{
+
   width:10px;
+
   height:10px;
+
   border-radius:50%;
+
   display:inline-block;
+
+  flex:none;
+
 }
+
 
 .dot.green{
+
   background:var(--green);
+
 }
+
 
 .dot.red{
+
   background:var(--red);
+
 }
+
 
 .dot.yellow{
+
   background:var(--yellow);
+
 }
+
 
 .dot.orange{
+
   background:var(--orange);
+
 }
+
 
 .dot.gray{
+
   background:#8d93a1;
+
 }
+
 
 .value-green{
+
   color:var(--green);
+
 }
+
 
 .value-red{
+
   color:var(--red);
+
 }
+
 
 .value-yellow{
+
   color:var(--yellow);
+
 }
+
 
 .value-orange{
+
   color:var(--orange);
+
 }
+
 
 .value-gray{
+
   color:var(--muted);
+
 }
 
-/* EXECUTION */
+
+/* =====================================================
+   EXECUTION
+   ===================================================== */
 
 .execution-grid{
+
   display:grid;
+
   grid-template-columns:1fr 1fr;
+
   gap:14px;
+
 }
+
 
 .metric{
+
   min-height:112px;
+
   background:var(--card2);
+
   border:1px solid var(--line);
+
   border-radius:22px;
+
   padding:18px;
+
 }
+
 
 .metric-label{
+
   color:var(--muted);
+
   font-size:13px;
+
   letter-spacing:1px;
+
 }
+
 
 .metric-value{
+
   margin-top:16px;
+
   font-size:23px;
+
   font-weight:800;
+
 }
+
 
 .metric-value.muted{
+
   color:var(--muted);
+
 }
 
-/* ANALYZE BUTTON */
+
+/* =====================================================
+   ANALYZE BUTTON
+   ===================================================== */
 
 .analyze-btn{
+
   width:100%;
+
   margin-top:18px;
+
   border:none;
+
   border-radius:25px;
+
   background:var(--white);
+
   color:#08090c;
+
   min-height:70px;
+
   font-size:18px;
+
   font-weight:850;
+
   letter-spacing:.5px;
+
 }
+
 
 .analyze-btn:active{
+
   transform:scale(.985);
+
 }
+
 
 .analyze-btn:disabled{
+
   opacity:.55;
+
 }
+
 
 .updated{
+
   text-align:center;
+
   color:var(--muted);
+
   margin-top:16px;
+
   font-size:14px;
+
 }
+
 
 .note{
+
   color:var(--muted);
+
   font-size:14px;
+
   line-height:1.6;
+
   margin-top:22px;
+
 }
 
-/* TIMEFRAMES */
+
+/* =====================================================
+   TIMEFRAMES
+   ===================================================== */
 
 .tf-grid{
+
   display:grid;
+
   grid-template-columns:1fr 1fr;
+
   gap:14px;
+
 }
+
 
 .tf{
+
   background:var(--card);
+
   border:1px solid var(--line);
+
   border-radius:22px;
+
   padding:20px;
+
   min-height:115px;
+
 }
+
 
 .tf-name{
+
   color:var(--muted);
+
   font-size:13px;
+
   margin-bottom:16px;
+
 }
+
 
 .tf-bias{
+
   font-size:22px;
+
   font-weight:800;
+
 }
 
-/* DATA */
+
+/* =====================================================
+   DATA
+   ===================================================== */
 
 .data-status{
+
   display:flex;
+
   justify-content:space-between;
+
   align-items:center;
+
   padding:17px 0 4px;
+
 }
+
 
 .data-status-label{
+
   color:var(--muted);
+
 }
+
 
 .data-fresh{
+
   color:var(--green);
+
   font-weight:800;
+
 }
+
 
 .data-stale{
+
   color:var(--red);
+
   font-weight:800;
+
 }
 
-/* ERROR */
+
+/* =====================================================
+   ERROR
+   ===================================================== */
 
 .error-box{
+
   display:none;
+
   margin-top:20px;
+
   padding:18px;
+
   border-radius:18px;
-  border:1px solid rgba(255,91,104,.3);
-  background:rgba(255,91,104,.07);
+
+  border:
+    1px solid rgba(255,91,104,.3);
+
+  background:
+    rgba(255,91,104,.07);
+
   color:var(--red);
+
   line-height:1.5;
+
 }
 
-/* LOADING */
+
+/* =====================================================
+   LOADING
+   ===================================================== */
 
 .loading{
+
   display:none;
+
   margin-top:18px;
+
   text-align:center;
+
   color:var(--muted);
+
 }
 
-/* NAV */
+
+/* =====================================================
+   NAV
+   ===================================================== */
 
 .bottom-nav{
+
   position:fixed;
+
   z-index:20;
+
   left:0;
+
   right:0;
+
   bottom:0;
+
   background:rgba(10,11,15,.94);
+
   backdrop-filter:blur(18px);
+
   -webkit-backdrop-filter:blur(18px);
+
   border-top:1px solid var(--line);
+
   padding:
     12px
     8px
     max(12px,env(safe-area-inset-bottom));
+
 }
+
 
 .nav-inner{
+
   max-width:900px;
+
   margin:auto;
+
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+
+  grid-template-columns:
+    repeat(4,1fr);
+
 }
+
 
 .nav-item{
+
   border:none;
+
   background:transparent;
+
   color:var(--muted);
+
   padding:7px 2px;
+
   font-size:12px;
+
   font-weight:600;
+
 }
+
 
 .nav-icon{
+
   font-size:18px;
+
   margin-bottom:5px;
+
 }
+
 
 .nav-item.active{
+
   color:var(--text);
+
 }
 
-/* RESPONSIVE */
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
 
 @media(min-width:700px){
 
   .app{
+
     padding-left:30px;
+
     padding-right:30px;
+
   }
 
+
   .price{
+
     font-size:68px;
+
   }
 
 }
+
 
 @media(max-width:420px){
 
   .card{
+
     padding:21px;
+
     border-radius:24px;
+
   }
+
 
   .decision{
+
     font-size:35px;
+
   }
+
 
   .price{
+
     font-size:50px;
+
   }
+
 
   .metric{
+
     min-height:105px;
+
     padding:16px;
+
   }
+
 
   .metric-value{
+
     font-size:21px;
+
   }
 
 }
 
-/* WATCH PULSE */
+
+/* =====================================================
+   WATCH PULSE
+   ===================================================== */
 
 .watch-pulse{
+
   animation:
     watchPulse 2.2s ease-in-out infinite;
+
 }
+
 
 @keyframes watchPulse{
 
   0%,100%{
+
     opacity:1;
+
   }
 
   50%{
+
     opacity:.72;
+
   }
 
 }
 
 </style>
+
 </head>
+
 
 <body>
 
+
 <div class="app">
 
-  <!-- HEADER -->
+
+  <!-- =================================================
+       HEADER
+       ================================================= -->
 
   <header class="header">
 
@@ -570,6 +1030,7 @@ button{
 
     </div>
 
+
     <button
       class="settings"
       type="button"
@@ -581,11 +1042,14 @@ button{
   </header>
 
 
-  <!-- MARKET -->
+  <!-- =================================================
+       MARKET
+       ================================================= -->
 
   <div class="symbol">
     XAUUSD · Gold / US Dollar
   </div>
+
 
   <div
     id="price"
@@ -594,18 +1058,22 @@ button{
     —
   </div>
 
+
   <div class="live">
     Live analysis
   </div>
 
 
-  <!-- DECISION -->
+  <!-- =================================================
+       DECISION
+       ================================================= -->
 
   <div class="card decision-card">
 
     <div class="decision-label">
       MARKET DECISION
     </div>
+
 
     <div
       id="decision"
@@ -614,11 +1082,15 @@ button{
       NO TRADE
     </div>
 
+
     <div class="score">
+
       SETUP SCORE
+
       <span id="score">
         —
       </span>/100
+
     </div>
 
 
@@ -632,6 +1104,9 @@ button{
 
     <div class="analysis-list">
 
+
+      <!-- TREND -->
+
       <div class="analysis-row">
 
         <div>
@@ -642,12 +1117,17 @@ button{
           id="trend"
           class="analysis-value"
         >
+
           <span class="dot gray"></span>
+
           NEUTRAL
+
         </div>
 
       </div>
 
+
+      <!-- STRUCTURE -->
 
       <div class="analysis-row">
 
@@ -659,12 +1139,17 @@ button{
           id="structure"
           class="analysis-value"
         >
+
           <span class="dot gray"></span>
+
           RANGE
+
         </div>
 
       </div>
 
+
+      <!-- MOMENTUM -->
 
       <div class="analysis-row">
 
@@ -676,12 +1161,17 @@ button{
           id="momentum"
           class="analysis-value"
         >
+
           <span class="dot gray"></span>
+
           —
+
         </div>
 
       </div>
 
+
+      <!-- LIQUIDITY -->
 
       <div class="analysis-row">
 
@@ -693,12 +1183,17 @@ button{
           id="liquidity"
           class="analysis-value"
         >
+
           <span class="dot gray"></span>
+
           NONE
+
         </div>
 
       </div>
 
+
+      <!-- NEWS -->
 
       <div class="analysis-row">
 
@@ -710,26 +1205,37 @@ button{
           id="news"
           class="analysis-value"
         >
+
           <span class="dot gray"></span>
+
           NOT CHECKED
+
         </div>
 
       </div>
+
 
     </div>
 
   </div>
 
 
-  <!-- EXECUTION -->
+  <!-- =================================================
+       EXECUTION PLAN
+       ================================================= -->
 
   <div class="section-title">
     EXECUTION PLAN
   </div>
 
+
   <div class="card">
 
+
     <div class="execution-grid">
+
+
+      <!-- ENTRY -->
 
       <div class="metric">
 
@@ -747,6 +1253,8 @@ button{
       </div>
 
 
+      <!-- SL -->
+
       <div class="metric">
 
         <div class="metric-label">
@@ -762,6 +1270,8 @@ button{
 
       </div>
 
+
+      <!-- TP1 -->
 
       <div class="metric">
 
@@ -779,6 +1289,8 @@ button{
       </div>
 
 
+      <!-- TP2 -->
+
       <div class="metric">
 
         <div class="metric-label">
@@ -794,6 +1306,8 @@ button{
 
       </div>
 
+
+      <!-- RR -->
 
       <div class="metric">
 
@@ -811,6 +1325,8 @@ button{
       </div>
 
 
+      <!-- STATUS -->
+
       <div class="metric">
 
         <div class="metric-label">
@@ -826,6 +1342,7 @@ button{
 
       </div>
 
+
     </div>
 
 
@@ -837,12 +1354,14 @@ button{
       ANALYZE XAUUSD
     </button>
 
+
     <div
       id="loading"
       class="loading"
     >
       Analyzing live market data…
     </div>
+
 
     <div
       id="updated"
@@ -851,28 +1370,40 @@ button{
       Ready
     </div>
 
+
     <div class="note">
+
       Rules-based prototype. Signals are for analysis only
       and do not execute trades. No guaranteed win rate.
+
     </div>
+
 
     <div
       id="error"
       class="error-box"
     ></div>
 
+
   </div>
 
 
-  <!-- TIMEFRAMES -->
+  <!-- =================================================
+       TIMEFRAMES
+       ================================================= -->
 
   <div class="section-title">
     TIMEFRAMES
   </div>
 
+
   <div class="card">
 
+
     <div class="tf-grid">
+
+
+      <!-- M1 -->
 
       <div class="tf">
 
@@ -890,6 +1421,8 @@ button{
       </div>
 
 
+      <!-- M5 -->
+
       <div class="tf">
 
         <div class="tf-name">
@@ -905,6 +1438,8 @@ button{
 
       </div>
 
+
+      <!-- M15 -->
 
       <div class="tf">
 
@@ -922,6 +1457,8 @@ button{
       </div>
 
 
+      <!-- H1 -->
+
       <div class="tf">
 
         <div class="tf-name">
@@ -937,6 +1474,8 @@ button{
 
       </div>
 
+
+      <!-- H4 -->
 
       <div class="tf">
 
@@ -954,6 +1493,8 @@ button{
       </div>
 
 
+      <!-- DATA -->
+
       <div class="tf">
 
         <div class="tf-name">
@@ -968,6 +1509,7 @@ button{
         </div>
 
       </div>
+
 
     </div>
 
@@ -987,16 +1529,24 @@ button{
 
     </div>
 
+
   </div>
+
 
 </div>
 
 
-<!-- BOTTOM NAV -->
+<!-- =====================================================
+     BOTTOM NAV
+     ===================================================== -->
 
 <nav class="bottom-nav">
 
+
   <div class="nav-inner">
+
+
+    <!-- DASHBOARD -->
 
     <button
       class="nav-item active"
@@ -1011,6 +1561,8 @@ button{
 
     </button>
 
+
+    <!-- CHART -->
 
     <button
       class="nav-item"
@@ -1027,6 +1579,8 @@ button{
     </button>
 
 
+    <!-- AI -->
+
     <button
       class="nav-item"
       type="button"
@@ -1042,6 +1596,8 @@ button{
     </button>
 
 
+    <!-- JOURNAL -->
+
     <button
       class="nav-item"
       type="button"
@@ -1056,6 +1612,7 @@ button{
 
     </button>
 
+
   </div>
 
 </nav>
@@ -1065,20 +1622,23 @@ button{
 
 /* =====================================================
    XAU AI V3.1
-   Frontend
+   FRONTEND
    ===================================================== */
+
 
 const API_URL =
   "https://xau-ai-api.khoochorshioong.workers.dev";
 
 
-const $ = id =>
-  document.getElementById(id);
+const $ =
+  id =>
+    document.getElementById(id);
 
 
 /* =====================================================
    FORMAT HELPERS
    ===================================================== */
+
 
 function safe(value){
 
@@ -1087,39 +1647,98 @@ function safe(value){
     value === undefined ||
     value === ""
   ){
+
     return "—";
+
   }
 
+
   return String(value);
+
 }
+
+
+/* =====================================================
+   BIAS CLASS
+   ===================================================== */
 
 
 function biasClass(value){
 
-  if(value==="BULLISH"){
+  if(
+    value === "BULLISH"
+  ){
+
     return "value-green";
+
   }
 
-  if(value==="BEARISH"){
+
+  if(
+    value === "BEARISH"
+  ){
+
     return "value-red";
+
   }
+
+
+  if(
+    value === "WATCH"
+  ){
+
+    return "value-yellow";
+
+  }
+
 
   return "value-gray";
+
 }
+
+
+/* =====================================================
+   BIAS DOT
+   ===================================================== */
 
 
 function biasDot(value){
 
-  if(value==="BULLISH"){
+  if(
+    value === "BULLISH"
+  ){
+
     return "green";
+
   }
 
-  if(value==="BEARISH"){
+
+  if(
+    value === "BEARISH"
+  ){
+
     return "red";
+
   }
+
+
+  if(
+    value === "WATCH"
+  ){
+
+    return "yellow";
+
+  }
+
 
   return "gray";
+
 }
+
+
+/* =====================================================
+   MOMENTUM
+   ===================================================== */
 
 
 function momentumFromTimeframe(tf){
@@ -1127,15 +1746,21 @@ function momentumFromTimeframe(tf){
   const data =
     tf?.indicators;
 
+
   if(!data){
+
     return "—";
+
   }
+
 
   const histogram =
     data?.macd?.histogram;
 
+
   const rsi =
     data?.rsi14;
+
 
   if(
     histogram !== null &&
@@ -1146,19 +1771,32 @@ function momentumFromTimeframe(tf){
       histogram > 0 &&
       rsi >= 50
     ){
+
       return "BULLISH";
+
     }
+
 
     if(
       histogram < 0 &&
       rsi <= 50
     ){
+
       return "BEARISH";
+
     }
+
   }
 
+
   return "NEUTRAL";
+
 }
+
+
+/* =====================================================
+   ANALYSIS VALUE
+   ===================================================== */
 
 
 function setAnalysisValue(
@@ -1169,23 +1807,128 @@ function setAnalysisValue(
   const cls =
     biasDot(value);
 
+
   element.className =
     "analysis-value";
+
 
   element.innerHTML =
     `<span class="dot ${cls}"></span>${safe(value)}`;
 
-  if(value==="BULLISH"){
+
+  if(
+    value === "BULLISH"
+  ){
+
     element.classList.add(
       "value-green"
     );
+
   }
 
-  if(value==="BEARISH"){
+
+  if(
+    value === "BEARISH"
+  ){
+
     element.classList.add(
       "value-red"
     );
+
   }
+
+
+  if(
+    value === "WATCH"
+  ){
+
+    element.classList.add(
+      "value-yellow"
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   STRUCTURE FORMATTER
+   =====================================================
+
+   Worker returns:
+
+   structure: {
+      structure: "..."
+      bos: "..."
+      swingHigh: ...
+      swingLow: ...
+   }
+
+   The previous frontend displayed the entire object
+   and therefore produced:
+
+   [object Object]
+
+   This function safely extracts the actual structure.
+   ===================================================== */
+
+
+function structureValue(tf){
+
+  const raw =
+    tf?.structure;
+
+
+  if(
+    raw === null ||
+    raw === undefined
+  ){
+
+    return "RANGE";
+
+  }
+
+
+  /* Worker V3 object */
+
+  if(
+    typeof raw === "object"
+  ){
+
+    if(
+      raw.structure !== null &&
+      raw.structure !== undefined &&
+      raw.structure !== ""
+    ){
+
+      return String(
+        raw.structure
+      );
+
+    }
+
+
+    if(
+      raw.bos !== null &&
+      raw.bos !== undefined &&
+      raw.bos !== ""
+    ){
+
+      return String(
+        raw.bos
+      );
+
+    }
+
+
+    return "RANGE";
+
+  }
+
+
+  /* String fallback */
+
+  return String(raw);
 
 }
 
@@ -1194,70 +1937,102 @@ function setAnalysisValue(
    DECISION STYLE
    ===================================================== */
 
+
 function decisionStyle(
   direction
 ){
 
-  if(direction==="BUY"){
+  if(
+    direction === "BUY"
+  ){
 
     return {
+
       cls:"buy",
+
       banner:"buy",
+
       text:
         "EXECUTE · Strict BUY conditions confirmed"
+
     };
 
   }
 
-  if(direction==="SELL"){
-
-    return {
-      cls:"sell",
-      banner:"sell",
-      text:
-        "EXECUTE · Strict SELL conditions confirmed"
-    };
-
-  }
 
   if(
-    direction===
+    direction === "SELL"
+  ){
+
+    return {
+
+      cls:"sell",
+
+      banner:"sell",
+
+      text:
+        "EXECUTE · Strict SELL conditions confirmed"
+
+    };
+
+  }
+
+
+  if(
+    direction ===
     "WATCH — BUY SETUP"
   ){
 
     return {
-      cls:"watch-buy watch-pulse",
-      banner:"watch-buy",
+
+      cls:
+        "watch-buy watch-pulse",
+
+      banner:
+        "watch-buy",
+
       text:
         "WAIT FOR CONFIRMATION · Bullish setup developing"
+
     };
 
   }
 
+
   if(
-    direction===
+    direction ===
     "WATCH — SELL SETUP"
   ){
 
     return {
-      cls:"watch-sell watch-pulse",
-      banner:"watch-sell",
+
+      cls:
+        "watch-sell watch-pulse",
+
+      banner:
+        "watch-sell",
+
       text:
         "WAIT FOR CONFIRMATION · Bearish setup developing"
+
     };
 
   }
 
+
   return {
 
-    cls:"no-trade",
+    cls:
+      "no-trade",
 
-    banner:"no-trade",
+    banner:
+      "no-trade",
 
     text:
       "STAY OUT · No valid executable setup"
 
   };
+
 }
 
 
@@ -1265,25 +2040,37 @@ function decisionStyle(
    RISK PLAN
    ===================================================== */
 
+
 function renderRisk(
   decision,
   risk
 ){
 
   const executable =
-    decision==="BUY" ||
-    decision==="SELL";
+    decision === "BUY" ||
+    decision === "SELL";
+
 
   if(
     !executable ||
     !risk
   ){
 
-    $("entry").textContent="—";
-    $("sl").textContent="—";
-    $("tp1").textContent="—";
-    $("tp2").textContent="—";
-    $("rr").textContent="—";
+    $("entry").textContent =
+      "—";
+
+    $("sl").textContent =
+      "—";
+
+    $("tp1").textContent =
+      "—";
+
+    $("tp2").textContent =
+      "—";
+
+    $("rr").textContent =
+      "—";
+
 
     $("entry").className =
       "metric-value muted";
@@ -1300,25 +2087,44 @@ function renderRisk(
     $("rr").className =
       "metric-value muted";
 
+
     return;
+
   }
 
+
   $("entry").textContent =
-    safe(risk.entry);
+    safe(
+      risk.entry
+    );
+
 
   $("sl").textContent =
-    safe(risk.stopLoss);
+    safe(
+      risk.stopLoss
+    );
+
 
   $("tp1").textContent =
-    safe(risk.takeProfit1);
+    safe(
+      risk.takeProfit1
+    );
+
 
   $("tp2").textContent =
-    safe(risk.takeProfit2);
+    safe(
+      risk.takeProfit2
+    );
+
 
   $("rr").textContent =
-    risk.rrToTP1 !== null
+    risk.rrToTP1 !== null &&
+    risk.rrToTP1 !== undefined
+
       ? `${risk.rrToTP1}R / ${risk.rrToTP2}R`
+
       : "—";
+
 
   $("entry").className =
     "metric-value";
@@ -1334,12 +2140,14 @@ function renderRisk(
 
   $("rr").className =
     "metric-value";
+
 }
 
 
 /* =====================================================
    TIMEFRAME RENDER
    ===================================================== */
+
 
 function renderTF(
   elementId,
@@ -1348,6 +2156,7 @@ function renderTF(
 
   const element =
     $(elementId);
+
 
   if(!tf){
 
@@ -1358,17 +2167,22 @@ function renderTF(
       "tf-bias value-gray";
 
     return;
+
   }
+
 
   const bias =
     tf.score?.bias ||
     "NEUTRAL";
 
+
   element.textContent =
     bias;
 
+
   element.className =
     `tf-bias ${biasClass(bias)}`;
+
 }
 
 
@@ -1376,26 +2190,38 @@ function renderTF(
    FRESHNESS
    ===================================================== */
 
+
 function allFresh(
   freshness
 ){
 
   if(!freshness){
+
     return false;
+
   }
+
 
   const values =
     Object.values(
       freshness
     );
 
-  if(!values.length){
+
+  if(
+    !values.length
+  ){
+
     return false;
+
   }
 
+
   return values.every(
-    x => x?.fresh === true
+    x =>
+      x?.fresh === true
   );
+
 }
 
 
@@ -1403,14 +2229,17 @@ function allFresh(
    MAIN RENDER
    ===================================================== */
 
+
 function render(data){
 
   const decision =
     data?.decision?.direction ||
     "NO TRADE";
 
+
   const score =
     data?.decision?.setupScore;
+
 
   const style =
     decisionStyle(
@@ -1418,114 +2247,200 @@ function render(data){
     );
 
 
-  /* PRICE */
+  /* =================================================
+     PRICE
+     ================================================= */
+
 
   const m1 =
     data?.timeframes?.["1min"];
 
+
   const currentPrice =
     m1?.price;
 
+
   $("price").textContent =
-    safe(currentPrice);
+    safe(
+      currentPrice
+    );
 
 
-  /* DECISION */
+  /* =================================================
+     DECISION
+     ================================================= */
+
 
   $("decision").textContent =
     decision;
 
+
   $("decision").className =
     `decision ${style.cls}`;
 
+
   $("score").textContent =
-    safe(score);
+    safe(
+      score
+    );
 
 
-  /* STATUS */
+  /* =================================================
+     STATUS BANNER
+     ================================================= */
+
 
   $("statusBanner").textContent =
     style.text;
+
 
   $("statusBanner").className =
     `status-banner ${style.banner}`;
 
 
+  /* =================================================
+     EXECUTION STATUS
+     ================================================= */
+
+
+  let statusClass =
+    "muted";
+
+
+  if(
+    decision === "BUY"
+  ){
+
+    statusClass =
+      "value-green";
+
+  }
+
+
+  if(
+    decision === "SELL"
+  ){
+
+    statusClass =
+      "value-red";
+
+  }
+
+
+  if(
+    decision ===
+    "WATCH — BUY SETUP"
+  ){
+
+    statusClass =
+      "value-yellow";
+
+  }
+
+
+  if(
+    decision ===
+    "WATCH — SELL SETUP"
+  ){
+
+    statusClass =
+      "value-orange";
+
+  }
+
+
   $("status").textContent =
     decision;
 
+
   $("status").className =
-    `metric-value ${
-      decision==="BUY"
-        ? "value-green"
-        : decision==="SELL"
-          ? "value-red"
-          : decision==="WATCH — BUY SETUP"
-            ? "value-yellow"
-            : decision==="WATCH — SELL SETUP"
-              ? "value-orange"
-              : "muted"
-    }`;
+    `metric-value ${statusClass}`;
 
 
-  /* RISK */
+  /* =================================================
+     RISK
+     ================================================= */
+
 
   renderRisk(
+
     decision,
+
     data?.riskPlan
+
   );
 
 
-  /* M1 */
+  /* =================================================
+     TIMEFRAMES
+     ================================================= */
+
 
   renderTF(
+
     "tf1",
+
     data?.timeframes?.["1min"]
+
   );
 
 
-  /* M5 */
-
   renderTF(
+
     "tf5",
+
     data?.timeframes?.["5min"]
+
   );
 
 
-  /* M15 */
-
   renderTF(
+
     "tf15",
+
     data?.timeframes?.["15min"]
+
   );
 
 
-  /* H1 */
-
   renderTF(
+
     "tf60",
+
     data?.timeframes?.["1h"]
+
   );
 
-
-  /* H4 */
 
   renderTF(
+
     "tf240",
+
     data?.timeframes?.["4h"]
+
   );
 
 
-  /* TOP ANALYSIS */
+  /* =================================================
+     TOP ANALYSIS DATA
+     ================================================= */
+
 
   const h1 =
     data?.timeframes?.["1h"];
 
+
   const h4 =
     data?.timeframes?.["4h"];
 
+
   const m5Data =
     data?.timeframes?.["5min"];
+
+
+  /* =================================================
+     TREND
+     ================================================= */
 
 
   const trend =
@@ -1533,21 +2448,59 @@ function render(data){
     h4?.trend ||
     "NEUTRAL";
 
+
   setAnalysisValue(
+
     $("trend"),
+
     trend
+
   );
+
+
+  /* =================================================
+     STRUCTURE
+
+     IMPORTANT FIX:
+
+     OLD:
+
+     h1?.structure
+
+     returned an OBJECT.
+
+     That caused:
+
+     [object Object]
+
+     NEW:
+
+     structureValue(h1)
+
+     extracts the actual structure string.
+     ================================================= */
 
 
   const structure =
-    h1?.structure ||
-    h4?.structure ||
-    "RANGE";
+    structureValue(h1) !== "RANGE"
+
+      ? structureValue(h1)
+
+      : structureValue(h4);
+
 
   setAnalysisValue(
+
     $("structure"),
+
     structure
+
   );
+
+
+  /* =================================================
+     MOMENTUM
+     ================================================= */
 
 
   const momentum =
@@ -1555,14 +2508,24 @@ function render(data){
       m5Data
     );
 
+
   setAnalysisValue(
+
     $("momentum"),
+
     momentum
+
   );
+
+
+  /* =================================================
+     LIQUIDITY
+     ================================================= */
 
 
   let liquidity =
     "NONE";
+
 
   const sweeps =
     Object.values(
@@ -1584,7 +2547,9 @@ function render(data){
     liquidity =
       "SELL-SIDE SWEEP";
 
-  }else if(
+  }
+
+  else if(
     sweeps.includes(
       "BUY_SIDE_SWEEP"
     )
@@ -1592,91 +2557,127 @@ function render(data){
 
     liquidity =
       "BUY-SIDE SWEEP";
+
   }
 
 
   let liquidityDot =
     "gray";
 
-  if(
-    liquidity==="SELL-SIDE SWEEP"
-  ){
-    liquidityDot =
-      "green";
-  }
 
   if(
-    liquidity==="BUY-SIDE SWEEP"
+    liquidity ===
+    "SELL-SIDE SWEEP"
   ){
+
+    liquidityDot =
+      "green";
+
+  }
+
+
+  if(
+    liquidity ===
+    "BUY-SIDE SWEEP"
+  ){
+
     liquidityDot =
       "red";
+
   }
+
 
   $("liquidity").className =
     "analysis-value";
+
 
   $("liquidity").innerHTML =
     `<span class="dot ${liquidityDot}"></span>${liquidity}`;
 
 
-  /* NEWS */
+  /* =================================================
+     NEWS
+     ================================================= */
+
 
   const newsRisk =
     data?.safety?.newsRisk ||
     "NOT CHECKED";
 
+
   $("news").className =
     "analysis-value";
+
 
   $("news").innerHTML =
     `<span class="dot gray"></span>${newsRisk}`;
 
 
-  /* DATA */
+  /* =================================================
+     DATA FRESHNESS
+     ================================================= */
+
 
   const fresh =
     allFresh(
       data?.freshness
     );
 
+
   if(fresh){
 
     $("dataStatus").textContent =
       "FRESH";
 
+
     $("dataStatus").className =
       "tf-bias value-green";
+
 
     $("freshnessText").textContent =
       "FRESH";
 
+
     $("freshnessText").className =
       "data-fresh";
 
-  }else{
+  }
+
+  else{
 
     $("dataStatus").textContent =
       "STALE";
 
+
     $("dataStatus").className =
       "tf-bias value-red";
+
 
     $("freshnessText").textContent =
       "STALE / CHECK DATA";
 
+
     $("freshnessText").className =
       "data-stale";
+
   }
+
+
+  /* =================================================
+     UPDATED
+     ================================================= */
 
 
   $("updated").textContent =
     `Analysis updated · ${new Date().toLocaleTimeString()}`;
+
 }
 
 
 /* =====================================================
    ERROR
    ===================================================== */
+
 
 function showError(
   message
@@ -1685,8 +2686,10 @@ function showError(
   $("error").style.display =
     "block";
 
+
   $("error").textContent =
     message;
+
 }
 
 
@@ -1695,8 +2698,10 @@ function clearError(){
   $("error").style.display =
     "none";
 
+
   $("error").textContent =
     "";
+
 }
 
 
@@ -1704,18 +2709,23 @@ function clearError(){
    ANALYZE
    ===================================================== */
 
+
 async function analyze(){
 
   const button =
     $("analyzeBtn");
 
+
   clearError();
+
 
   button.disabled =
     true;
 
+
   $("loading").style.display =
     "block";
+
 
   $("updated").textContent =
     "Analyzing live market data…";
@@ -1723,28 +2733,39 @@ async function analyze(){
 
   try{
 
+
     const response =
       await fetch(
+
         `${API_URL}/api/analyze`,
+
         {
+
           method:"GET",
+
           cache:"no-store"
+
         }
+
       );
 
 
     let data;
+
 
     try{
 
       data =
         await response.json();
 
-    }catch{
+    }
+
+    catch{
 
       throw new Error(
         "Invalid response from XAU AI API."
       );
+
     }
 
 
@@ -1754,42 +2775,59 @@ async function analyze(){
     ){
 
       throw new Error(
+
         data?.message ||
         data?.error ||
         "Analysis request failed."
+
       );
+
     }
 
 
     render(data);
 
 
-  }catch(error){
+  }
+
+  catch(error){
 
     console.error(
+
       "XAU AI error:",
+
       error
+
     );
 
+
     showError(
+
       `Analysis failed: ${
         error?.message ||
         "Unknown error"
       }`
+
     );
+
 
     $("updated").textContent =
       "Analysis failed";
 
+  }
 
-  }finally{
+
+  finally{
 
     button.disabled =
       false;
 
+
     $("loading").style.display =
       "none";
+
   }
+
 }
 
 
@@ -1797,8 +2835,11 @@ async function analyze(){
    NAVIGATION
    ===================================================== */
 
+
 $("chartNav").addEventListener(
+
   "click",
+
   () => {
 
     alert(
@@ -1806,11 +2847,14 @@ $("chartNav").addEventListener(
     );
 
   }
+
 );
 
 
 $("aiNav").addEventListener(
+
   "click",
+
   () => {
 
     alert(
@@ -1818,11 +2862,14 @@ $("aiNav").addEventListener(
     );
 
   }
+
 );
 
 
 $("journalNav").addEventListener(
+
   "click",
+
   () => {
 
     alert(
@@ -1830,16 +2877,21 @@ $("journalNav").addEventListener(
     );
 
   }
+
 );
 
 
 /* =====================================================
-   BUTTON
+   ANALYZE BUTTON
    ===================================================== */
 
+
 $("analyzeBtn").addEventListener(
+
   "click",
+
   analyze
+
 );
 
 
@@ -1847,26 +2899,39 @@ $("analyzeBtn").addEventListener(
    SERVICE WORKER
    ===================================================== */
 
+
 if(
   "serviceWorker" in navigator
 ){
 
   window.addEventListener(
+
     "load",
+
     () => {
 
       navigator.serviceWorker
+
         .register("sw.js")
+
         .catch(
+
           error =>
+
             console.log(
+
               "Service worker registration failed:",
+
               error
+
             )
+
         );
 
     }
+
   );
+
 }
 
 
@@ -1874,16 +2939,21 @@ if(
    INITIAL LOAD
    ===================================================== */
 
+
 window.addEventListener(
+
   "load",
+
   () => {
 
     analyze();
 
   }
+
 );
 
 </script>
+
 
 </body>
 </html>
