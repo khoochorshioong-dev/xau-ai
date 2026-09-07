@@ -124,10 +124,8 @@ button {
   background: #0b0f14;
   border: 1px solid #202a35;
   color: #8793a3;
-
   border-radius: 17px;
   padding: 13px 7px;
-
   font-weight: 700;
   font-size: 15px;
 }
@@ -241,8 +239,7 @@ button {
   letter-spacing: .5px;
 }
 
-.decision.buy,
-.decision.sell {
+.decision.buy {
   color: #35df9b;
 }
 
@@ -317,7 +314,7 @@ button {
 }
 
 /* =========================================================
-   TIMEFRAME GRID
+   TIMEFRAME
 ========================================================= */
 
 .tf-grid {
@@ -692,10 +689,6 @@ button {
 
 <div class="app">
 
-<!-- =======================================================
-     HEADER
-======================================================= -->
-
 <header class="header">
 
   <div class="header-row">
@@ -725,10 +718,6 @@ button {
 
 </header>
 
-
-<!-- =======================================================
-     NAV
-======================================================= -->
 
 <nav class="nav">
 
@@ -769,555 +758,593 @@ button {
   class="page active"
 >
 
-  <!-- HERO -->
+<section class="card">
 
-  <section class="card">
+  <div class="hero">
 
-    <div class="hero">
+    <div>
 
-      <div>
-
-        <div class="symbol">
-          XAU / USD
-        </div>
-
-        <div
-          id="price"
-          class="price"
-        >
-          —
-        </div>
-
-        <div class="price-label">
-          MARKET PRICE
-        </div>
-
-      </div>
-
-
-      <div class="decision-box">
-
-        <div
-          id="decision"
-          class="decision no-trade"
-        >
-          NO TRADE
-        </div>
-
-        <div
-          id="decisionReasons"
-          class="decision-reasons"
-        >
-          Waiting for analysis...
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <!-- SCORE -->
-
-    <div class="score-wrap">
-
-      <div class="score-row">
-
-        <div class="score-label">
-          SETUP SCORE
-        </div>
-
-        <div
-          id="score"
-          class="score-value"
-        >
-          —
-        </div>
-
-      </div>
-
-      <div class="score-bar">
-
-        <div
-          id="scoreFill"
-          class="score-fill"
-        ></div>
-
-      </div>
-
-    </div>
-
-
-    <!-- TIMEFRAMES -->
-
-    <div
-      id="tfGrid"
-      class="tf-grid"
-    >
-
-      <div class="tf">
-        <div class="tf-name">M1</div>
-        <div id="tf1m" class="tf-value neutral">—</div>
-      </div>
-
-      <div class="tf">
-        <div class="tf-name">M5</div>
-        <div id="tf5m" class="tf-value neutral">—</div>
-      </div>
-
-      <div class="tf">
-        <div class="tf-name">M15</div>
-        <div id="tf15m" class="tf-value neutral">—</div>
-      </div>
-
-      <div class="tf">
-        <div class="tf-name">H1</div>
-        <div id="tf1h" class="tf-value neutral">—</div>
-      </div>
-
-      <div class="tf">
-        <div class="tf-name">H4</div>
-        <div id="tf4h" class="tf-value neutral">—</div>
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- STRICT DIAGNOSTICS -->
-
-  <section class="card">
-
-    <div class="card-title">
-      STRICT DIAGNOSTICS
-    </div>
-
-    <div class="card-subtitle">
-      Multi-timeframe execution filters
-    </div>
-
-
-    <div class="diagnostic-list">
-
-      <div class="diagnostic-row">
-        <div class="diagnostic-label">
-          H4 Direction
-        </div>
-
-        <div
-          id="diagH4"
-          class="diagnostic-value status-neutral"
-        >
-          —
-        </div>
-      </div>
-
-
-      <div class="diagnostic-row">
-        <div class="diagnostic-label">
-          H1 Direction
-        </div>
-
-        <div
-          id="diagH1"
-          class="diagnostic-value status-neutral"
-        >
-          —
-        </div>
-      </div>
-
-
-      <div class="diagnostic-row">
-        <div class="diagnostic-label">
-          M15 Direction
-        </div>
-
-        <div
-          id="diagM15"
-          class="diagnostic-value status-neutral"
-        >
-          —
-        </div>
-      </div>
-
-
-      <div class="diagnostic-row">
-        <div class="diagnostic-label">
-          M5 Direction
-        </div>
-
-        <div
-          id="diagM5"
-          class="diagnostic-value status-neutral"
-        >
-          —
-        </div>
-      </div>
-
-
-      <div class="diagnostic-row">
-        <div class="diagnostic-label">
-          M1 Direction
-        </div>
-
-        <div
-          id="diagM1"
-          class="diagnostic-value status-neutral"
-        >
-          —
-        </div>
-      </div>
-
-
-      <div class="diagnostic-row">
-        <div class="diagnostic-label">
-          M15 Structure
-        </div>
-
-        <div
-          id="diagStructure"
-          class="diagnostic-value status-neutral"
-        >
-          —
-        </div>
-      </div>
-
-
-      <div class="diagnostic-row">
-        <div class="diagnostic-label">
-          M15 BOS
-        </div>
-
-        <div
-          id="diagBOS"
-          class="diagnostic-value status-neutral"
-        >
-          —
-        </div>
-      </div>
-
-
-      <div class="diagnostic-row">
-        <div class="diagnostic-label">
-          M15 CHoCH
-        </div>
-
-        <div
-          id="diagCHoCH"
-          class="diagnostic-value status-neutral"
-        >
-          —
-        </div>
-      </div>
-
-
-      <div class="diagnostic-row">
-        <div class="diagnostic-label">
-          M15 Liquidity
-        </div>
-
-        <div
-          id="diagLiquidity"
-          class="diagnostic-value status-neutral"
-        >
-          —
-        </div>
-      </div>
-
-
-      <div class="diagnostic-row">
-        <div class="diagnostic-label">
-          M5 Pullback
-        </div>
-
-        <div
-          id="diagPullback"
-          class="diagnostic-value status-neutral"
-        >
-          —
-        </div>
-      </div>
-
-
-      <div class="diagnostic-row">
-        <div class="diagnostic-label">
-          M1 Confirmation
-        </div>
-
-        <div
-          id="diagConfirmation"
-          class="diagnostic-value status-neutral"
-        >
-          —
-        </div>
-      </div>
-
-
-      <div class="diagnostic-row">
-        <div class="diagnostic-label">
-          Execution Gate
-        </div>
-
-        <div
-          id="diagExecution"
-          class="diagnostic-value status-neutral"
-        >
-          —
-        </div>
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- EXECUTION REASONS -->
-
-  <section class="card">
-
-    <div class="card-title">
-      EXECUTION GATE
-    </div>
-
-    <div class="card-subtitle">
-      Backend execution decision — directly synchronized
-    </div>
-
-    <div
-      id="reasonList"
-      class="reason-list"
-    >
-      <div class="reason">
-        Waiting for backend analysis...
-      </div>
-    </div>
-
-  </section>
-
-
-  <!-- EXECUTION PLAN -->
-
-  <section class="card">
-
-    <div class="plan-header">
-
-      <div class="card-title">
-        EXECUTION PLAN
+      <div class="symbol">
+        XAU / USD
       </div>
 
       <div
-        id="lockBadge"
-        class="lock-badge"
+        id="price"
+        class="price"
       >
-        LOCKED
+        —
+      </div>
+
+      <div class="price-label">
+        MARKET PRICE
       </div>
 
     </div>
 
 
-    <div class="plan-grid">
+    <div class="decision-box">
 
-      <div class="plan-item">
-
-        <div class="plan-label">
-          ENTRY
-        </div>
-
-        <div
-          id="entry"
-          class="plan-value"
-        >
-          —
-        </div>
-
+      <div
+        id="decision"
+        class="decision no-trade"
+      >
+        NO TRADE
       </div>
 
-
-      <div class="plan-item">
-
-        <div class="plan-label">
-          STOP LOSS
-        </div>
-
-        <div
-          id="sl"
-          class="plan-value"
-        >
-          —
-        </div>
-
-      </div>
-
-
-      <div class="plan-item">
-
-        <div class="plan-label">
-          TAKE PROFIT
-        </div>
-
-        <div
-          id="tp"
-          class="plan-value"
-        >
-          —
-        </div>
-
-      </div>
-
-
-      <div class="plan-item">
-
-        <div class="plan-label">
-          R:R
-        </div>
-
-        <div
-          id="rr"
-          class="plan-value"
-        >
-          —
-        </div>
-
+      <div
+        id="decisionReasons"
+        class="decision-reasons"
+      >
+        Waiting for analysis...
       </div>
 
     </div>
 
-  </section>
+  </div>
 
 
-  <!-- MARKET STATUS -->
+  <div class="score-wrap">
 
-  <section class="card">
+    <div class="score-row">
+
+      <div class="score-label">
+        SETUP SCORE
+      </div>
+
+      <div
+        id="score"
+        class="score-value"
+      >
+        —
+      </div>
+
+    </div>
+
+    <div class="score-bar">
+
+      <div
+        id="scoreFill"
+        class="score-fill"
+      ></div>
+
+    </div>
+
+  </div>
+
+
+  <div
+    id="tfGrid"
+    class="tf-grid"
+  >
+
+    <div class="tf">
+      <div class="tf-name">M1</div>
+      <div
+        id="tf1m"
+        class="tf-value neutral"
+      >
+        —
+      </div>
+    </div>
+
+    <div class="tf">
+      <div class="tf-name">M5</div>
+      <div
+        id="tf5m"
+        class="tf-value neutral"
+      >
+        —
+      </div>
+    </div>
+
+    <div class="tf">
+      <div class="tf-name">M15</div>
+      <div
+        id="tf15m"
+        class="tf-value neutral"
+      >
+        —
+      </div>
+    </div>
+
+    <div class="tf">
+      <div class="tf-name">H1</div>
+      <div
+        id="tf1h"
+        class="tf-value neutral"
+      >
+        —
+      </div>
+    </div>
+
+    <div class="tf">
+      <div class="tf-name">H4</div>
+      <div
+        id="tf4h"
+        class="tf-value neutral"
+      >
+        —
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     STRICT DIAGNOSTICS
+======================================================= -->
+
+<section class="card">
+
+  <div class="card-title">
+    STRICT DIAGNOSTICS
+  </div>
+
+  <div class="card-subtitle">
+    Multi-timeframe execution filters
+  </div>
+
+
+  <div class="diagnostic-list">
+
+    <div class="diagnostic-row">
+      <div class="diagnostic-label">
+        H4 Direction
+      </div>
+
+      <div
+        id="diagH4"
+        class="diagnostic-value status-neutral"
+      >
+        —
+      </div>
+    </div>
+
+
+    <div class="diagnostic-row">
+      <div class="diagnostic-label">
+        H1 Direction
+      </div>
+
+      <div
+        id="diagH1"
+        class="diagnostic-value status-neutral"
+      >
+        —
+      </div>
+    </div>
+
+
+    <div class="diagnostic-row">
+      <div class="diagnostic-label">
+        M15 Direction
+      </div>
+
+      <div
+        id="diagM15"
+        class="diagnostic-value status-neutral"
+      >
+        —
+      </div>
+    </div>
+
+
+    <div class="diagnostic-row">
+      <div class="diagnostic-label">
+        M5 Direction
+      </div>
+
+      <div
+        id="diagM5"
+        class="diagnostic-value status-neutral"
+      >
+        —
+      </div>
+    </div>
+
+
+    <div class="diagnostic-row">
+      <div class="diagnostic-label">
+        M1 Direction
+      </div>
+
+      <div
+        id="diagM1"
+        class="diagnostic-value status-neutral"
+      >
+        —
+      </div>
+    </div>
+
+
+    <div class="diagnostic-row">
+      <div class="diagnostic-label">
+        M15 Structure
+      </div>
+
+      <div
+        id="diagStructure"
+        class="diagnostic-value status-neutral"
+      >
+        —
+      </div>
+    </div>
+
+
+    <div class="diagnostic-row">
+      <div class="diagnostic-label">
+        M15 BOS
+      </div>
+
+      <div
+        id="diagBOS"
+        class="diagnostic-value status-neutral"
+      >
+        —
+      </div>
+    </div>
+
+
+    <div class="diagnostic-row">
+      <div class="diagnostic-label">
+        M15 CHoCH
+      </div>
+
+      <div
+        id="diagCHoCH"
+        class="diagnostic-value status-neutral"
+      >
+        —
+      </div>
+    </div>
+
+
+    <div class="diagnostic-row">
+      <div class="diagnostic-label">
+        M15 Liquidity
+      </div>
+
+      <div
+        id="diagLiquidity"
+        class="diagnostic-value status-neutral"
+      >
+        —
+      </div>
+    </div>
+
+
+    <div class="diagnostic-row">
+      <div class="diagnostic-label">
+        M5 Pullback
+      </div>
+
+      <div
+        id="diagPullback"
+        class="diagnostic-value status-neutral"
+      >
+        —
+      </div>
+    </div>
+
+
+    <div class="diagnostic-row">
+      <div class="diagnostic-label">
+        M1 Confirmation
+      </div>
+
+      <div
+        id="diagConfirmation"
+        class="diagnostic-value status-neutral"
+      >
+        —
+      </div>
+    </div>
+
+
+    <div class="diagnostic-row">
+      <div class="diagnostic-label">
+        Execution Gate
+      </div>
+
+      <div
+        id="diagExecution"
+        class="diagnostic-value status-neutral"
+      >
+        —
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     EXECUTION GATE
+======================================================= -->
+
+<section class="card">
+
+  <div class="card-title">
+    EXECUTION GATE
+  </div>
+
+  <div class="card-subtitle">
+    Backend execution decision — directly synchronized
+  </div>
+
+  <div
+    id="reasonList"
+    class="reason-list"
+  >
+
+    <div class="reason">
+      Waiting for backend analysis...
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     EXECUTION PLAN
+======================================================= -->
+
+<section class="card">
+
+  <div class="plan-header">
 
     <div class="card-title">
-      DATA & MARKET STATUS
-    </div>
-
-    <div class="status-grid">
-
-      <div class="status-box">
-
-        <div class="status-box-label">
-          SESSION
-        </div>
-
-        <div
-          id="session"
-          class="status-box-value"
-        >
-          —
-        </div>
-
-      </div>
-
-
-      <div class="status-box">
-
-        <div class="status-box-label">
-          VOLATILITY
-        </div>
-
-        <div
-          id="volatility"
-          class="status-box-value"
-        >
-          —
-        </div>
-
-      </div>
-
-
-      <div class="status-box">
-
-        <div class="status-box-label">
-          MARKET CONDITION
-        </div>
-
-        <div
-          id="marketCondition"
-          class="status-box-value"
-        >
-          —
-        </div>
-
-      </div>
-
-
-      <div class="status-box">
-
-        <div class="status-box-label">
-          NEWS RISK
-        </div>
-
-        <div
-          id="newsRisk"
-          class="status-box-value"
-        >
-          —
-        </div>
-
-      </div>
-
-
-      <div class="status-box">
-
-        <div class="status-box-label">
-          SPREAD
-        </div>
-
-        <div
-          id="spread"
-          class="status-box-value"
-        >
-          —
-        </div>
-
-      </div>
-
-
-      <div class="status-box">
-
-        <div class="status-box-label">
-          SLIPPAGE
-        </div>
-
-        <div
-          id="slippage"
-          class="status-box-value"
-        >
-          —
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- DATA FRESHNESS -->
-
-  <section class="card">
-
-    <div class="card-title">
-      DATA FRESHNESS
-    </div>
-
-    <div class="card-subtitle">
-      Market-data protection layer
+      EXECUTION PLAN
     </div>
 
     <div
-      id="freshnessList"
-      class="diagnostic-list"
+      id="lockBadge"
+      class="lock-badge"
     >
-      <div class="diagnostic-row">
-        <div class="diagnostic-label">Status</div>
-        <div class="diagnostic-value">—</div>
+      LOCKED
+    </div>
+
+  </div>
+
+
+  <div class="plan-grid">
+
+    <div class="plan-item">
+
+      <div class="plan-label">
+        ENTRY
+      </div>
+
+      <div
+        id="entry"
+        class="plan-value"
+      >
+        —
+      </div>
+
+    </div>
+
+
+    <div class="plan-item">
+
+      <div class="plan-label">
+        STOP LOSS
+      </div>
+
+      <div
+        id="sl"
+        class="plan-value"
+      >
+        —
+      </div>
+
+    </div>
+
+
+    <div class="plan-item">
+
+      <div class="plan-label">
+        TAKE PROFIT
+      </div>
+
+      <div
+        id="tp"
+        class="plan-value"
+      >
+        —
+      </div>
+
+    </div>
+
+
+    <div class="plan-item">
+
+      <div class="plan-label">
+        R:R
+      </div>
+
+      <div
+        id="rr"
+        class="plan-value"
+      >
+        —
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     MARKET STATUS
+======================================================= -->
+
+<section class="card">
+
+  <div class="card-title">
+    DATA & MARKET STATUS
+  </div>
+
+  <div class="status-grid">
+
+    <div class="status-box">
+
+      <div class="status-box-label">
+        SESSION
+      </div>
+
+      <div
+        id="session"
+        class="status-box-value"
+      >
+        —
+      </div>
+
+    </div>
+
+
+    <div class="status-box">
+
+      <div class="status-box-label">
+        VOLATILITY
+      </div>
+
+      <div
+        id="volatility"
+        class="status-box-value"
+      >
+        —
+      </div>
+
+    </div>
+
+
+    <div class="status-box">
+
+      <div class="status-box-label">
+        MARKET CONDITION
+      </div>
+
+      <div
+        id="marketCondition"
+        class="status-box-value"
+      >
+        —
+      </div>
+
+    </div>
+
+
+    <div class="status-box">
+
+      <div class="status-box-label">
+        NEWS RISK
+      </div>
+
+      <div
+        id="newsRisk"
+        class="status-box-value"
+      >
+        —
+      </div>
+
+    </div>
+
+
+    <div class="status-box">
+
+      <div class="status-box-label">
+        SPREAD
+      </div>
+
+      <div
+        id="spread"
+        class="status-box-value"
+      >
+        —
+      </div>
+
+    </div>
+
+
+    <div class="status-box">
+
+      <div class="status-box-label">
+        SLIPPAGE
+      </div>
+
+      <div
+        id="slippage"
+        class="status-box-value"
+      >
+        —
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     DATA FRESHNESS
+======================================================= -->
+
+<section class="card">
+
+  <div class="card-title">
+    DATA FRESHNESS
+  </div>
+
+  <div class="card-subtitle">
+    Market-data protection layer
+  </div>
+
+  <div
+    id="freshnessList"
+    class="diagnostic-list"
+  >
+
+    <div class="diagnostic-row">
+      <div class="diagnostic-label">
+        Status
+      </div>
+
+      <div class="diagnostic-value">
+        —
       </div>
     </div>
 
-  </section>
+  </div>
+
+</section>
 
 </main>
 
@@ -1331,38 +1358,38 @@ button {
   class="page"
 >
 
-  <section class="card">
+<section class="card">
 
-    <div class="card-title">
-      XAU / USD CHART
+  <div class="card-title">
+    XAU / USD CHART
+  </div>
+
+  <div class="card-subtitle">
+    1-minute market structure
+  </div>
+
+  <div class="chart-wrap">
+
+    <canvas
+      id="chartCanvas"
+    ></canvas>
+
+    <div
+      id="chartLoading"
+      class="chart-loading"
+    >
+      Loading market data...
     </div>
 
-    <div class="card-subtitle">
-      1-minute market structure
-    </div>
+  </div>
 
-    <div class="chart-wrap">
-
-      <canvas
-        id="chartCanvas"
-      ></canvas>
-
-      <div
-        id="chartLoading"
-        class="chart-loading"
-      >
-        Loading market data...
-      </div>
-
-    </div>
-
-  </section>
+</section>
 
 </main>
 
 
 <!-- =======================================================
-     AI ANALYSIS
+     AI
 ======================================================= -->
 
 <main
@@ -1370,32 +1397,32 @@ button {
   class="page"
 >
 
-  <section class="card">
+<section class="card">
 
-    <div class="card-title">
-      AI ANALYSIS
+  <div class="card-title">
+    AI ANALYSIS
+  </div>
+
+  <div class="card-subtitle">
+    Strict execution interpretation
+  </div>
+
+  <div class="ai-box">
+
+    <div class="ai-title">
+      Current System Assessment
     </div>
 
-    <div class="card-subtitle">
-      Strict execution interpretation
+    <div
+      id="aiText"
+      class="ai-text"
+    >
+      Waiting for live market analysis...
     </div>
 
-    <div class="ai-box">
+  </div>
 
-      <div class="ai-title">
-        Current System Assessment
-      </div>
-
-      <div
-        id="aiText"
-        class="ai-text"
-      >
-        Waiting for live market analysis...
-      </div>
-
-    </div>
-
-  </section>
+</section>
 
 </main>
 
@@ -1409,35 +1436,31 @@ button {
   class="page"
 >
 
-  <section class="card">
+<section class="card">
 
-    <div class="card-title">
-      TRADE JOURNAL
-    </div>
+  <div class="card-title">
+    TRADE JOURNAL
+  </div>
 
-    <div class="card-subtitle">
-      Execution history
-    </div>
+  <div class="card-subtitle">
+    Execution history
+  </div>
 
-    <div class="journal-empty">
+  <div class="journal-empty">
 
-      <strong>
-        Journal module
-      </strong>
+    <strong>
+      Journal module
+    </strong>
 
-      Trade journaling will be connected
-      to the execution system in a later version.
+    Trade journaling will be connected
+    to the execution system in a later version.
 
-    </div>
+  </div>
 
-  </section>
+</section>
 
 </main>
 
-
-<!-- =======================================================
-     FOOTER
-======================================================= -->
 
 <footer class="footer">
 
@@ -1475,15 +1498,13 @@ const REFRESH_MS =
    GLOBAL
 ========================================================= */
 
-let latestData =
-  null;
+let latestData = null;
 
-let refreshTimer =
-  null;
+let refreshTimer = null;
 
 
 /* =========================================================
-   HELPERS
+   BASIC HELPERS
 ========================================================= */
 
 function byId(id) {
@@ -1491,7 +1512,10 @@ function byId(id) {
 }
 
 
-function safeText(value, fallback = "—") {
+function safeText(
+  value,
+  fallback = "—"
+) {
 
   if (
     value === null ||
@@ -1520,7 +1544,14 @@ function formatPrice(value) {
 }
 
 
-function getTF(data, tf) {
+/* =========================================================
+   TIMEFRAME HELPERS
+========================================================= */
+
+function getTF(
+  data,
+  tf
+) {
 
   return (
     data?.analysis?.[tf] ||
@@ -1529,7 +1560,10 @@ function getTF(data, tf) {
 }
 
 
-function getDirection(data, tf) {
+function getDirection(
+  data,
+  tf
+) {
 
   return (
     getTF(data, tf)?.bias ||
@@ -1542,9 +1576,10 @@ function getDirection(data, tf) {
 function structureState(data) {
 
   return (
-    getTF(data, "15min")
-      ?.structure
-      ?.state ||
+    getTF(
+      data,
+      "15min"
+    )?.structure?.state ||
     "UNKNOWN"
   );
 }
@@ -1553,9 +1588,10 @@ function structureState(data) {
 function structureBOS(data) {
 
   return (
-    getTF(data, "15min")
-      ?.structure
-      ?.bos ||
+    getTF(
+      data,
+      "15min"
+    )?.structure?.bos ||
     "NONE"
   );
 }
@@ -1564,9 +1600,10 @@ function structureBOS(data) {
 function structureCHoCH(data) {
 
   return (
-    getTF(data, "15min")
-      ?.structure
-      ?.choch ||
+    getTF(
+      data,
+      "15min"
+    )?.structure?.choch ||
     "NONE"
   );
 }
@@ -1575,16 +1612,18 @@ function structureCHoCH(data) {
 function liquidityState(data) {
 
   return (
-    getTF(data, "15min")
-      ?.liquidity ||
+    getTF(
+      data,
+      "15min"
+    )?.liquidity ||
     "NONE"
   );
 }
 
 
 /* =========================================================
-   IMPORTANT:
-   READ BACKEND ENTRY DIAGNOSTICS DIRECTLY
+   M5 PULLBACK
+   DIRECT BACKEND DATA
 ========================================================= */
 
 function getPullback(data) {
@@ -1596,6 +1635,7 @@ function getPullback(data) {
       ?.pullback;
 
   if (!pullback) {
+
     return {
       state: "NOT CHECKED",
       valid: false
@@ -1605,6 +1645,7 @@ function getPullback(data) {
   if (
     pullback.valid === true
   ) {
+
     return {
       state: "VALID",
       valid: true,
@@ -1624,6 +1665,11 @@ function getPullback(data) {
 }
 
 
+/* =========================================================
+   M1 CONFIRMATION
+   DIRECT BACKEND DATA
+========================================================= */
+
 function getConfirmation(data) {
 
   const confirmation =
@@ -1633,6 +1679,7 @@ function getConfirmation(data) {
       ?.confirmation;
 
   if (!confirmation) {
+
     return {
       state: "NOT CHECKED",
       confirmed: false
@@ -1642,6 +1689,7 @@ function getConfirmation(data) {
   if (
     confirmation.confirmed === true
   ) {
+
     return {
       state: "CONFIRMED",
       confirmed: true,
@@ -1659,7 +1707,6 @@ function getConfirmation(data) {
 
 /* =========================================================
    EXECUTION GATE
-   DIRECT BACKEND SOURCE
 ========================================================= */
 
 function getExecutionGate(data) {
@@ -1668,6 +1715,7 @@ function getExecutionGate(data) {
     data?.executionGate ||
     {
       passed: false,
+
       reasons: [
         "NO_EXECUTION_GATE_DATA"
       ]
@@ -1679,7 +1727,9 @@ function getExecutionGate(data) {
 function getExecutionReasons(data) {
 
   const gate =
-    getExecutionGate(data);
+    getExecutionGate(
+      data
+    );
 
   if (
     !Array.isArray(
@@ -1694,7 +1744,7 @@ function getExecutionReasons(data) {
 
 
 /* =========================================================
-   STATUS CLASS
+   STATUS
 ========================================================= */
 
 function directionClass(value) {
@@ -1777,93 +1827,7 @@ function setApiStatus(
 
 
 /* =========================================================
-   DECISION
-========================================================= */
-
-function renderDecision(data) {
-
-  const el =
-    byId("decision");
-
-  const reasonsEl =
-    byId("decisionReasons");
-
-  if (!el) {
-    return;
-  }
-
-  const decision =
-    data?.decision ||
-    "NO TRADE";
-
-  el.textContent =
-    decision;
-
-  el.className =
-    "decision";
-
-  if (
-    decision === "BUY"
-  ) {
-
-    el.classList.add(
-      "buy"
-    );
-
-  } else if (
-    decision === "SELL"
-  ) {
-
-    el.classList.add(
-      "sell"
-    );
-
-  } else if (
-    decision.startsWith(
-      "WAIT"
-    )
-  ) {
-
-    el.classList.add(
-      "wait"
-    );
-
-  } else {
-
-    el.classList.add(
-      "no-trade"
-    );
-  }
-
-
-  const reasons =
-    getExecutionReasons(
-      data
-    );
-
-  if (!reasonsEl) {
-    return;
-  }
-
-  if (
-    reasons.length
-  ) {
-
-    reasonsEl.textContent =
-      reasons
-        .map(formatReason)
-        .join(" · ");
-
-  } else {
-
-    reasonsEl.textContent =
-      "NO EXECUTION RESTRICTIONS";
-  }
-}
-
-
-/* =========================================================
-   REASON FORMATTER
+   REASON FORMAT
 ========================================================= */
 
 function formatReason(reason) {
@@ -1952,6 +1916,98 @@ function formatReason(reason) {
 
 
 /* =========================================================
+   DECISION
+========================================================= */
+
+function renderDecision(data) {
+
+  const el =
+    byId("decision");
+
+  const reasonsEl =
+    byId("decisionReasons");
+
+  if (!el) {
+    return;
+  }
+
+  const decision =
+    data?.decision ||
+    "NO TRADE";
+
+  el.textContent =
+    decision;
+
+  el.className =
+    "decision";
+
+
+  if (
+    decision === "BUY"
+  ) {
+
+    el.classList.add(
+      "buy"
+    );
+
+  } else if (
+    decision === "SELL"
+  ) {
+
+    el.classList.add(
+      "sell"
+    );
+
+  } else if (
+    decision.startsWith(
+      "WAIT"
+    )
+  ) {
+
+    el.classList.add(
+      "wait"
+    );
+
+  } else {
+
+    el.classList.add(
+      "no-trade"
+    );
+  }
+
+
+  const reasons =
+    getExecutionReasons(
+      data
+    );
+
+  if (!reasonsEl) {
+    return;
+  }
+
+
+  if (
+    reasons.length
+  ) {
+
+    reasonsEl.textContent =
+      reasons
+        .map(
+          formatReason
+        )
+        .join(
+          " · "
+        );
+
+  } else {
+
+    reasonsEl.textContent =
+      "NO EXECUTION RESTRICTIONS";
+  }
+}
+
+
+/* =========================================================
    SCORE
 ========================================================= */
 
@@ -1968,22 +2024,31 @@ function renderScore(data) {
           0,
           Math.min(
             100,
-            Math.round(score)
+            Math.round(
+              score
+            )
           )
         )
       : 0;
 
-  byId("score").textContent =
+
+  byId(
+    "score"
+  ).textContent =
     `${value}/100`;
 
+
   const fill =
-    byId("scoreFill");
+    byId(
+      "scoreFill"
+    );
 
   fill.style.width =
     `${value}%`;
 
   fill.className =
     "score-fill";
+
 
   if (
     value >= 70
@@ -2027,6 +2092,7 @@ function renderTimeframes(data) {
     "4h":
       "tf4h"
   };
+
 
   Object.entries(
     mapping
@@ -2072,6 +2138,7 @@ function renderDiagnostics(data) {
     )
   );
 
+
   setDiagnostic(
     "diagH1",
     getDirection(
@@ -2079,6 +2146,7 @@ function renderDiagnostics(data) {
       "1h"
     )
   );
+
 
   setDiagnostic(
     "diagM15",
@@ -2088,6 +2156,7 @@ function renderDiagnostics(data) {
     )
   );
 
+
   setDiagnostic(
     "diagM5",
     getDirection(
@@ -2096,24 +2165,29 @@ function renderDiagnostics(data) {
     )
   );
 
+
+  /* FIXED */
+
   setDiagnostic(
     "diagM1",
     getDirection(
       data,
       "1min"
-    );
+    )
+  );
 
 
-  const structure =
-    structureState(
-      data
-    );
+  /* M15 STRUCTURE */
 
   setDiagnostic(
     "diagStructure",
-    structure
+    structureState(
+      data
+    )
   );
 
+
+  /* M15 BOS */
 
   setDiagnostic(
     "diagBOS",
@@ -2123,6 +2197,8 @@ function renderDiagnostics(data) {
   );
 
 
+  /* M15 CHoCH */
+
   setDiagnostic(
     "diagCHoCH",
     structureCHoCH(
@@ -2131,12 +2207,17 @@ function renderDiagnostics(data) {
   );
 
 
+  /* M15 LIQUIDITY */
+
   setDiagnostic(
     "diagLiquidity",
     liquidityState(
       data
-    );
+    )
+  );
 
+
+  /* M5 PULLBACK */
 
   const pullback =
     getPullback(
@@ -2148,8 +2229,10 @@ function renderDiagnostics(data) {
       "diagPullback"
     );
 
+
   pullbackEl.textContent =
     pullback.state;
+
 
   pullbackEl.className =
     `diagnostic-value ${
@@ -2158,6 +2241,8 @@ function renderDiagnostics(data) {
         : "status-bad"
     }`;
 
+
+  /* M1 CONFIRMATION */
 
   const confirmation =
     getConfirmation(
@@ -2169,8 +2254,10 @@ function renderDiagnostics(data) {
       "diagConfirmation"
     );
 
+
   confirmationEl.textContent =
     confirmation.state;
+
 
   confirmationEl.className =
     `diagnostic-value ${
@@ -2179,6 +2266,8 @@ function renderDiagnostics(data) {
         : "status-bad"
     }`;
 
+
+  /* EXECUTION */
 
   const gate =
     getExecutionGate(
@@ -2190,10 +2279,12 @@ function renderDiagnostics(data) {
       "diagExecution"
     );
 
+
   executionEl.textContent =
     gate.passed
       ? "PASSED"
       : "LOCKED";
+
 
   executionEl.className =
     `diagnostic-value ${
@@ -2205,7 +2296,7 @@ function renderDiagnostics(data) {
 
 
 /* =========================================================
-   REASONS
+   EXECUTION REASONS
 ========================================================= */
 
 function renderReasons(data) {
@@ -2219,6 +2310,7 @@ function renderReasons(data) {
     return;
   }
 
+
   const gate =
     getExecutionGate(
       data
@@ -2228,6 +2320,7 @@ function renderReasons(data) {
     getExecutionReasons(
       data
     );
+
 
   container.innerHTML =
     "";
@@ -2243,6 +2336,7 @@ function renderReasons(data) {
         : [
             "EXECUTION GATE PASSED"
           ];
+
 
     successReasons.forEach(
       reason => {
@@ -2331,12 +2425,17 @@ function renderPlan(data) {
   const plan =
     data?.riskPlan;
 
+
   const lock =
     byId(
       "lockBadge"
     );
 
-  if (executable && plan) {
+
+  if (
+    executable &&
+    plan
+  ) {
 
     lock.textContent =
       "EXECUTABLE";
@@ -2345,26 +2444,34 @@ function renderPlan(data) {
       "unlocked"
     );
 
-    byId("entry")
-      .textContent =
+
+    byId(
+      "entry"
+    ).textContent =
       formatPrice(
         plan.entry
       );
 
-    byId("sl")
-      .textContent =
+
+    byId(
+      "sl"
+    ).textContent =
       formatPrice(
         plan.sl
       );
 
-    byId("tp")
-      .textContent =
+
+    byId(
+      "tp"
+    ).textContent =
       formatPrice(
         plan.tp
       );
 
-    byId("rr")
-      .textContent =
+
+    byId(
+      "rr"
+    ).textContent =
       `1:${Number(
         plan.rr || 2
       ).toFixed(0)}`;
@@ -2378,20 +2485,25 @@ function renderPlan(data) {
       "unlocked"
     );
 
-    byId("entry")
-      .textContent =
+
+    byId(
+      "entry"
+    ).textContent =
       "—";
 
-    byId("sl")
-      .textContent =
+    byId(
+      "sl"
+    ).textContent =
       "—";
 
-    byId("tp")
-      .textContent =
+    byId(
+      "tp"
+    ).textContent =
       "—";
 
-    byId("rr")
-      .textContent =
+    byId(
+      "rr"
+    ).textContent =
       "—";
   }
 }
@@ -2401,9 +2513,7 @@ function renderPlan(data) {
    MARKET STATUS
 ========================================================= */
 
-function renderMarketStatus(
-  data
-) {
+function renderMarketStatus(data) {
 
   const safety =
     data?.safety ||
@@ -2412,6 +2522,7 @@ function renderMarketStatus(
 
   const session =
     safety?.session;
+
 
   byId(
     "session"
@@ -2427,6 +2538,7 @@ function renderMarketStatus(
 
   const volatility =
     safety?.volatility;
+
 
   byId(
     "volatility"
@@ -2482,9 +2594,7 @@ function renderMarketStatus(
    FRESHNESS
 ========================================================= */
 
-function renderFreshness(
-  data
-) {
+function renderFreshness(data) {
 
   const container =
     byId(
@@ -2495,9 +2605,11 @@ function renderFreshness(
     return;
   }
 
+
   const freshness =
     data?.freshness ||
     {};
+
 
   const order = [
     ["1min", "M1"],
@@ -2506,6 +2618,7 @@ function renderFreshness(
     ["1h", "H1"],
     ["4h", "H4"]
   ];
+
 
   container.innerHTML =
     "";
@@ -2516,6 +2629,7 @@ function renderFreshness(
 
       const item =
         freshness[tf];
+
 
       const row =
         document.createElement(
@@ -2561,7 +2675,10 @@ function renderFreshness(
         right.textContent =
           item.fresh
             ? `FRESH · ${item.ageMinutes}m`
-            : `STALE · ${item.ageMinutes ?? "?"}m`;
+            : `STALE · ${
+                item.ageMinutes ??
+                "?"
+              }m`;
       }
 
 
@@ -2572,6 +2689,7 @@ function renderFreshness(
       row.appendChild(
         right
       );
+
 
       container.appendChild(
         row
@@ -2585,9 +2703,7 @@ function renderFreshness(
    AI INTERPRETATION
 ========================================================= */
 
-function renderAI(
-  data
-) {
+function renderAI(data) {
 
   const el =
     byId(
@@ -2598,21 +2714,26 @@ function renderAI(
     return;
   }
 
+
   const decision =
     data?.decision ||
     "NO TRADE";
 
+
   const score =
     data?.setupScore;
+
 
   const direction =
     data?.multiTimeframeBias ||
     "MIXED";
 
+
   const gate =
     getExecutionGate(
       data
     );
+
 
   const reasons =
     getExecutionReasons(
@@ -2673,25 +2794,20 @@ function renderAI(
 
 
 /* =========================================================
-   MAIN DATA RENDER
+   MAIN DASHBOARD
 ========================================================= */
 
-function renderDashboard(
-  data
-) {
+function renderDashboard(data) {
 
   latestData =
     data;
 
 
-  const price =
-    data?.price;
-
   byId(
     "price"
   ).textContent =
     formatPrice(
-      price
+      data?.price
     );
 
 
@@ -2762,6 +2878,7 @@ async function fetchAnalysis() {
     if (
       !response.ok
     ) {
+
       throw new Error(
         `HTTP ${response.status}`
       );
@@ -2776,6 +2893,7 @@ async function fetchAnalysis() {
       !data ||
       data.ok !== true
     ) {
+
       throw new Error(
         data?.error ||
         "Invalid API response"
@@ -2802,19 +2920,23 @@ async function fetchAnalysis() {
       error
     );
 
+
     setApiStatus(
       false
     );
+
 
     byId(
       "decision"
     ).textContent =
       "NO TRADE";
 
+
     byId(
       "decisionReasons"
     ).textContent =
       "API / DATA ERROR";
+
 
     byId(
       "score"
@@ -2835,7 +2957,9 @@ async function fetchChart() {
       "chartLoading"
     );
 
+
   if (loading) {
+
     loading.style.display =
       "flex";
   }
@@ -2856,6 +2980,7 @@ async function fetchChart() {
     if (
       !response.ok
     ) {
+
       throw new Error(
         `HTTP ${response.status}`
       );
@@ -2869,6 +2994,7 @@ async function fetchChart() {
     if (
       !data?.candles?.length
     ) {
+
       throw new Error(
         "No candles"
       );
@@ -2881,6 +3007,7 @@ async function fetchChart() {
 
 
     if (loading) {
+
       loading.style.display =
         "none";
     }
@@ -2895,6 +3022,7 @@ async function fetchChart() {
       error
     );
 
+
     if (loading) {
 
       loading.textContent =
@@ -2908,7 +3036,7 @@ async function fetchChart() {
 
 
 /* =========================================================
-   EMA FOR CHART
+   CHART EMA
 ========================================================= */
 
 function chartEMA(
@@ -2922,13 +3050,16 @@ function chartEMA(
     return [];
   }
 
+
   const k =
     2 /
     (period + 1);
 
+
   const output = [
     values[0]
   ];
+
 
   for (
     let i = 1;
@@ -2943,22 +3074,22 @@ function chartEMA(
     );
   }
 
+
   return output;
 }
 
 
 /* =========================================================
-   CHART
+   DRAW CHART
 ========================================================= */
 
-function drawChart(
-  candles
-) {
+function drawChart(candles) {
 
   const canvas =
     byId(
       "chartCanvas"
     );
+
 
   if (!canvas) {
     return;
@@ -2968,6 +3099,7 @@ function drawChart(
   const rect =
     canvas.getBoundingClientRect();
 
+
   const dpr =
     window.devicePixelRatio ||
     1;
@@ -2976,6 +3108,7 @@ function drawChart(
   canvas.width =
     rect.width *
     dpr;
+
 
   canvas.height =
     rect.height *
@@ -2987,6 +3120,7 @@ function drawChart(
       "2d"
     );
 
+
   ctx.scale(
     dpr,
     dpr
@@ -2995,6 +3129,7 @@ function drawChart(
 
   const width =
     rect.width;
+
 
   const height =
     rect.height;
@@ -3077,6 +3212,7 @@ function drawChart(
       ...allValues
     );
 
+
   const max =
     Math.max(
       ...allValues
@@ -3109,9 +3245,11 @@ function drawChart(
       padLeft +
       i *
         (
-          (width -
+          (
+            width -
             padLeft -
-            padRight) /
+            padRight
+          ) /
           Math.max(
             visible.length - 1,
             1
@@ -3139,8 +3277,6 @@ function drawChart(
   }
 
 
-  /* Background */
-
   ctx.clearRect(
     0,
     0,
@@ -3149,7 +3285,7 @@ function drawChart(
   );
 
 
-  /* Grid */
+  /* GRID */
 
   ctx.lineWidth =
     1;
@@ -3191,7 +3327,7 @@ function drawChart(
   }
 
 
-  /* Candles */
+  /* CANDLES */
 
   const candleWidth =
     Math.max(
@@ -3253,15 +3389,17 @@ function drawChart(
         x(i);
 
 
-      /* Wick */
+      /* WICK */
 
       ctx.strokeStyle =
         bullish
           ? "rgba(53,223,155,.8)"
           : "rgba(255,92,112,.8)";
 
+
       ctx.lineWidth =
         1;
+
 
       ctx.beginPath();
 
@@ -3278,7 +3416,7 @@ function drawChart(
       ctx.stroke();
 
 
-      /* Body */
+      /* BODY */
 
       const top =
         y(
@@ -3287,6 +3425,7 @@ function drawChart(
             close
           )
         );
+
 
       const bottom =
         y(
@@ -3318,6 +3457,8 @@ function drawChart(
   );
 
 
+  /* LINE */
+
   function drawLine(
     values,
     stroke,
@@ -3331,6 +3472,7 @@ function drawChart(
 
     ctx.strokeStyle =
       stroke;
+
 
     let started =
       false;
@@ -3373,7 +3515,7 @@ function drawChart(
   }
 
 
-  /* EMA lines */
+  /* EMA20 */
 
   drawLine(
     ema20,
@@ -3381,11 +3523,17 @@ function drawChart(
     1.5
   );
 
+
+  /* EMA50 */
+
   drawLine(
     ema50,
     "#8f9baa",
     1.2
   );
+
+
+  /* EMA200 */
 
   drawLine(
     ema200,
@@ -3448,7 +3596,9 @@ function setupNavigation() {
               page
             );
 
+
           if (target) {
+
             target.classList.add(
               "active"
             );
@@ -3458,6 +3608,7 @@ function setupNavigation() {
           if (
             page === "chart"
           ) {
+
             fetchChart();
           }
         }
@@ -3476,6 +3627,7 @@ async function startApp() {
   setupNavigation();
 
   await fetchAnalysis();
+
 
   refreshTimer =
     setInterval(
