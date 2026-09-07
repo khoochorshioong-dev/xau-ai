@@ -10,18 +10,26 @@
 <title>XAU AI — STRICT EXECUTION SYSTEM</title>
 
 <style>
+
 *{
   box-sizing:border-box;
   -webkit-tap-highlight-color:transparent;
 }
 
-html,body{
+html,
+body{
   margin:0;
   padding:0;
   background:#08090c;
   color:#f4f5f7;
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",
-  "SF Pro Text",Inter,Arial,sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "SF Pro Text",
+    Inter,
+    Arial,
+    sans-serif;
 }
 
 body{
@@ -31,6 +39,7 @@ body{
 
 button{
   font:inherit;
+  cursor:pointer;
 }
 
 .app{
@@ -108,10 +117,21 @@ button{
   margin-top:8px;
 }
 
-.green{color:#27d17f}
-.red{color:#ff5b68}
-.yellow{color:#ffc857}
-.muted{color:#8f96a5}
+.green{
+  color:#27d17f;
+}
+
+.red{
+  color:#ff5b68;
+}
+
+.yellow{
+  color:#ffc857;
+}
+
+.muted{
+  color:#8f96a5;
+}
 
 .score{
   font-size:48px;
@@ -168,6 +188,11 @@ button{
   gap:10px;
   overflow-x:auto;
   padding-bottom:3px;
+  scrollbar-width:none;
+}
+
+.button-row::-webkit-scrollbar{
+  display:none;
 }
 
 .tf-btn{
@@ -215,6 +240,7 @@ button{
   position:relative;
   width:100%;
   height:430px;
+  margin-top:5px;
   border-radius:24px;
   background:#080a0e;
   border:1px solid #292e38;
@@ -300,6 +326,7 @@ canvas{
   display:flex;
   justify-content:space-between;
   align-items:center;
+  gap:10px;
   margin-bottom:13px;
 }
 
@@ -420,7 +447,21 @@ canvas{
   color:#737a88;
 }
 
+.chart-error{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  text-align:center;
+  color:#ff5b68;
+  font-size:13px;
+  pointer-events:none;
+}
+
 @media(max-width:520px){
+
   .app{
     padding-left:16px;
     padding-right:16px;
@@ -442,13 +483,17 @@ canvas{
   .price{
     font-size:36px;
   }
+
 }
+
 </style>
 </head>
+
 
 <body>
 
 <div class="app">
+
 
 <!-- ========================================================= -->
 <!-- DASHBOARD -->
@@ -457,69 +502,140 @@ canvas{
 <section id="dashboardPage" class="page active">
 
   <div class="header">
+
     <h1>XAU AI</h1>
+
     <p>STRICT EXECUTION SYSTEM</p>
+
   </div>
+
 
   <div class="card">
 
-    <div class="section-label">MARKET DECISION</div>
+    <div class="section-label">
+      MARKET DECISION
+    </div>
 
     <div class="price-row">
+
       <div>
-        <div id="dashPrice" class="price">—</div>
-        <div id="dashDecision" class="decision muted">LOADING</div>
+
+        <div id="dashPrice" class="price">
+          —
+        </div>
+
+        <div id="dashDecision"
+             class="decision muted">
+          LOADING
+        </div>
+
       </div>
 
+
       <div class="status">
-        <div id="dashFresh">—</div>
-        <div id="dashTime">—</div>
+
+        <div id="dashFresh">
+          —
+        </div>
+
+        <div id="dashTime">
+          —
+        </div>
+
       </div>
+
     </div>
+
 
     <div style="margin-top:20px">
 
-      <div class="section-label">SETUP SCORE</div>
+      <div class="section-label">
+        SETUP SCORE
+      </div>
 
-      <div id="dashScore" class="score">—</div>
+      <div id="dashScore"
+           class="score">
+        —
+      </div>
 
     </div>
 
   </div>
 
+
   <div class="card">
 
-    <div class="section-label">MARKET STATE</div>
+    <div class="section-label">
+      MARKET STATE
+    </div>
 
     <div class="grid2">
 
       <div class="metric">
-        <div class="metric-label">Trend</div>
-        <div id="dashTrend" class="metric-value">—</div>
+
+        <div class="metric-label">
+          Trend
+        </div>
+
+        <div id="dashTrend"
+             class="metric-value">
+          —
+        </div>
+
       </div>
 
-      <div class="metric">
-        <div class="metric-label">Structure</div>
-        <div id="dashStructure" class="metric-value">—</div>
-      </div>
 
       <div class="metric">
-        <div class="metric-label">Momentum</div>
-        <div id="dashMomentum" class="metric-value">—</div>
+
+        <div class="metric-label">
+          Structure
+        </div>
+
+        <div id="dashStructure"
+             class="metric-value">
+          —
+        </div>
+
       </div>
 
+
       <div class="metric">
-        <div class="metric-label">Liquidity</div>
-        <div id="dashLiquidity" class="metric-value">—</div>
+
+        <div class="metric-label">
+          Momentum
+        </div>
+
+        <div id="dashMomentum"
+             class="metric-value">
+          —
+        </div>
+
+      </div>
+
+
+      <div class="metric">
+
+        <div class="metric-label">
+          Liquidity
+        </div>
+
+        <div id="dashLiquidity"
+             class="metric-value">
+          —
+        </div>
+
       </div>
 
     </div>
 
   </div>
 
+
   <div class="card">
 
-    <div class="section-label">STRICT DIAGNOSTICS</div>
+    <div class="section-label">
+      STRICT DIAGNOSTICS
+    </div>
 
     <div class="diagnostic">
 
@@ -577,40 +693,80 @@ canvas{
 
   </div>
 
+
   <div class="card">
 
-    <div class="section-label">EXECUTION PLAN</div>
+    <div class="section-label">
+      EXECUTION PLAN
+    </div>
 
     <div class="execution">
 
       <div class="execution-title">
 
-        <strong>STRICT EXECUTION</strong>
+        <strong>
+          STRICT EXECUTION
+        </strong>
 
-        <span id="planBadge" class="badge">WAIT</span>
+        <span id="planBadge"
+              class="badge">
+          WAIT
+        </span>
 
       </div>
+
 
       <div class="execution-grid">
 
         <div class="execution-item">
-          <span>Entry</span>
-          <strong id="planEntry">—</strong>
+
+          <span>
+            Entry
+          </span>
+
+          <strong id="planEntry">
+            —
+          </strong>
+
         </div>
 
-        <div class="execution-item">
-          <span>Stop Loss</span>
-          <strong id="planSL">—</strong>
-        </div>
 
         <div class="execution-item">
-          <span>Take Profit</span>
-          <strong id="planTP">—</strong>
+
+          <span>
+            Stop Loss
+          </span>
+
+          <strong id="planSL">
+            —
+          </strong>
+
         </div>
 
+
         <div class="execution-item">
-          <span>R:R</span>
-          <strong id="planRR">—</strong>
+
+          <span>
+            Take Profit
+          </span>
+
+          <strong id="planTP">
+            —
+          </strong>
+
+        </div>
+
+
+        <div class="execution-item">
+
+          <span>
+            R:R
+          </span>
+
+          <strong id="planRR">
+            —
+          </strong>
+
         </div>
 
       </div>
@@ -623,178 +779,378 @@ canvas{
 
 
 <!-- ========================================================= -->
-<!-- CHART V2 -->
+<!-- CHART -->
 <!-- ========================================================= -->
 
-<section id="chartPage" class="page">
+<section id="chartPage"
+         class="page">
 
   <div class="header">
+
     <h1>CHART</h1>
-    <p>TRADING GRADE XAUUSD</p>
+
+    <p>
+      TRADING GRADE XAUUSD
+    </p>
+
   </div>
+
 
   <div class="card">
 
-    <div class="section-label">TIMEFRAME</div>
+    <div class="section-label">
+      TIMEFRAME
+    </div>
+
 
     <div class="button-row">
 
-      <button class="tf-btn active" data-tf="1min">M1</button>
-      <button class="tf-btn" data-tf="5min">M5</button>
-      <button class="tf-btn" data-tf="15min">M15</button>
-      <button class="tf-btn" data-tf="1h">H1</button>
-      <button class="tf-btn" data-tf="4h">H4</button>
+      <button class="tf-btn active"
+              data-tf="1min">
+        M1
+      </button>
+
+      <button class="tf-btn"
+              data-tf="5min">
+        M5
+      </button>
+
+      <button class="tf-btn"
+              data-tf="15min">
+        M15
+      </button>
+
+      <button class="tf-btn"
+              data-tf="1h">
+        H1
+      </button>
+
+      <button class="tf-btn"
+              data-tf="4h">
+        H4
+      </button>
 
     </div>
+
 
     <div style="margin-top:20px">
 
       <div class="price-row">
 
-        <div id="chartPrice" class="price">—</div>
+        <div id="chartPrice"
+             class="price">
+          —
+        </div>
+
 
         <div class="status">
-          <div id="chartFresh">—</div>
-          <div id="chartCandles">—</div>
+
+          <div id="chartFresh">
+            —
+          </div>
+
+          <div id="chartCandles">
+            —
+          </div>
+
         </div>
 
       </div>
 
     </div>
 
-    <div class="chart-toolbar" style="margin-top:18px">
+
+    <div class="chart-toolbar"
+         style="margin-top:18px">
 
       <div class="chart-toolbar-left">
 
-        <span id="chartTrendBadge" class="badge">TREND —</span>
-        <span id="chartGateBadge" class="badge">GATE —</span>
+        <span id="chartTrendBadge"
+              class="badge">
+          TREND —
+        </span>
+
+        <span id="chartGateBadge"
+              class="badge">
+          GATE —
+        </span>
 
       </div>
 
     </div>
 
+
     <div class="chart-wrap">
+
       <canvas id="chartCanvas"></canvas>
+
+      <div id="chartError"
+           class="chart-error"
+           style="display:none">
+      </div>
+
     </div>
+
 
     <div class="legend">
 
       <div class="legend-item">
-        <span class="dot" style="background:#ffc857"></span>
+
+        <span class="dot"
+              style="background:#ffc857"></span>
+
         EMA20
+
       </div>
 
+
       <div class="legend-item">
-        <span class="dot" style="background:#4da3ff"></span>
+
+        <span class="dot"
+              style="background:#4da3ff"></span>
+
         EMA50
+
       </div>
 
+
       <div class="legend-item">
-        <span class="dot" style="background:#d7dbe2"></span>
+
+        <span class="dot"
+              style="background:#d7dbe2"></span>
+
         EMA200
+
       </div>
 
+
       <div class="legend-item">
-        <span class="dot" style="background:#27d17f"></span>
+
+        <span class="dot"
+              style="background:#27d17f"></span>
+
         BOS
+
       </div>
 
+
       <div class="legend-item">
-        <span class="dot" style="background:#ff9f43"></span>
+
+        <span class="dot"
+              style="background:#ff9f43"></span>
+
         CHoCH
+
       </div>
 
+
       <div class="legend-item">
-        <span class="dot" style="background:#c77dff"></span>
+
+        <span class="dot"
+              style="background:#c77dff"></span>
+
         Liquidity
+
       </div>
 
     </div>
 
-    <button id="refreshChart" class="primary-btn">
+
+    <button id="refreshChart"
+            class="primary-btn">
+
       REFRESH CHART
+
     </button>
 
   </div>
 
 
+  <!-- ======================================================= -->
   <!-- EXECUTION LEVELS -->
+  <!-- ======================================================= -->
 
   <div class="card">
 
-    <div class="section-label">EXECUTION LEVELS</div>
+    <div class="section-label">
+      EXECUTION LEVELS
+    </div>
+
 
     <div class="chart-info">
 
       <div class="level-card">
-        <div class="level-title">Entry</div>
-        <div id="chartEntry" class="level-price">—</div>
+
+        <div class="level-title">
+          Entry
+        </div>
+
+        <div id="chartEntry"
+             class="level-price">
+          —
+        </div>
+
       </div>
 
-      <div class="level-card">
-        <div class="level-title">Stop Loss</div>
-        <div id="chartSL" class="level-price red">—</div>
-      </div>
 
       <div class="level-card">
-        <div class="level-title">Take Profit</div>
-        <div id="chartTP" class="level-price green">—</div>
+
+        <div class="level-title">
+          Stop Loss
+        </div>
+
+        <div id="chartSL"
+             class="level-price red">
+          —
+        </div>
+
       </div>
 
+
       <div class="level-card">
-        <div class="level-title">R:R</div>
-        <div id="chartRR" class="level-price">—</div>
+
+        <div class="level-title">
+          Take Profit
+        </div>
+
+        <div id="chartTP"
+             class="level-price green">
+          —
+        </div>
+
+      </div>
+
+
+      <div class="level-card">
+
+        <div class="level-title">
+          R:R
+        </div>
+
+        <div id="chartRR"
+             class="level-price">
+          —
+        </div>
+
       </div>
 
     </div>
 
-    <button id="refreshAnalysis" class="secondary-btn" style="margin-top:12px">
+
+    <button id="refreshAnalysis"
+            class="secondary-btn"
+            style="margin-top:12px">
+
       REFRESH STRICT ANALYSIS
+
     </button>
 
-    <div class="small" style="margin-top:10px">
-      Analysis refresh uses the protected multi-timeframe engine.
+
+    <div class="small"
+         style="margin-top:10px">
+
+      Analysis refresh uses the protected
+      multi-timeframe engine.
+
     </div>
 
   </div>
 
 
-  <!-- MTF -->
+  <!-- ======================================================= -->
+  <!-- MTF SNAPSHOT -->
+  <!-- ======================================================= -->
 
   <div class="card">
 
-    <div class="section-label">MULTI-TIMEFRAME SNAPSHOT</div>
+    <div class="section-label">
+      MULTI-TIMEFRAME SNAPSHOT
+    </div>
+
 
     <div class="grid3">
 
       <div class="metric">
-        <div class="metric-label">H4</div>
-        <div id="chartH4" class="metric-value">—</div>
+
+        <div class="metric-label">
+          H4
+        </div>
+
+        <div id="chartH4"
+             class="metric-value">
+          —
+        </div>
+
       </div>
 
-      <div class="metric">
-        <div class="metric-label">H1</div>
-        <div id="chartH1" class="metric-value">—</div>
-      </div>
 
       <div class="metric">
-        <div class="metric-label">M15</div>
-        <div id="chartM15" class="metric-value">—</div>
+
+        <div class="metric-label">
+          H1
+        </div>
+
+        <div id="chartH1"
+             class="metric-value">
+          —
+        </div>
+
       </div>
 
-      <div class="metric">
-        <div class="metric-label">M5</div>
-        <div id="chartM5" class="metric-value">—</div>
-      </div>
 
       <div class="metric">
-        <div class="metric-label">M1</div>
-        <div id="chartM1" class="metric-value">—</div>
+
+        <div class="metric-label">
+          M15
+        </div>
+
+        <div id="chartM15"
+             class="metric-value">
+          —
+        </div>
+
       </div>
 
+
       <div class="metric">
-        <div class="metric-label">Score</div>
-        <div id="chartScore" class="metric-value">—</div>
+
+        <div class="metric-label">
+          M5
+        </div>
+
+        <div id="chartM5"
+             class="metric-value">
+          —
+        </div>
+
+      </div>
+
+
+      <div class="metric">
+
+        <div class="metric-label">
+          M1
+        </div>
+
+        <div id="chartM1"
+             class="metric-value">
+          —
+        </div>
+
+      </div>
+
+
+      <div class="metric">
+
+        <div class="metric-label">
+          Score
+        </div>
+
+        <div id="chartScore"
+             class="metric-value">
+          —
+        </div>
+
       </div>
 
     </div>
@@ -802,54 +1158,110 @@ canvas{
   </div>
 
 
+  <!-- ======================================================= -->
   <!-- STRICT STATUS -->
+  <!-- ======================================================= -->
 
   <div class="card">
 
-    <div class="section-label">STRICT EXECUTION STATUS</div>
+    <div class="section-label">
+      STRICT EXECUTION STATUS
+    </div>
+
 
     <div class="execution">
 
       <div class="execution-title">
 
-        <strong id="chartDecision">WAIT</strong>
+        <strong id="chartDecision">
+          WAIT
+        </strong>
 
-        <span id="chartScoreBadge" class="badge">
+        <span id="chartScoreBadge"
+              class="badge">
           SCORE —
         </span>
 
       </div>
 
+
       <div class="diagnostic">
 
         <div class="diag">
-          <span>M15 Structure</span>
-          <strong id="chartStructure">—</strong>
+
+          <span>
+            M15 Structure
+          </span>
+
+          <strong id="chartStructure">
+            —
+          </strong>
+
         </div>
 
-        <div class="diag">
-          <span>M15 BOS / CHoCH</span>
-          <strong id="chartBos">—</strong>
-        </div>
 
         <div class="diag">
-          <span>Liquidity</span>
-          <strong id="chartLiquidity">—</strong>
+
+          <span>
+            M15 BOS / CHoCH
+          </span>
+
+          <strong id="chartBos">
+            —
+          </strong>
+
         </div>
 
-        <div class="diag">
-          <span>M5 Pullback</span>
-          <strong id="chartPullback">—</strong>
-        </div>
 
         <div class="diag">
-          <span>M1 Confirmation</span>
-          <strong id="chartConfirm">—</strong>
+
+          <span>
+            Liquidity
+          </span>
+
+          <strong id="chartLiquidity">
+            —
+          </strong>
+
         </div>
 
+
         <div class="diag">
-          <span>Execution Gate</span>
-          <strong id="chartGate">—</strong>
+
+          <span>
+            M5 Pullback
+          </span>
+
+          <strong id="chartPullback">
+            —
+          </strong>
+
+        </div>
+
+
+        <div class="diag">
+
+          <span>
+            M1 Confirmation
+          </span>
+
+          <strong id="chartConfirm">
+            —
+          </strong>
+
+        </div>
+
+
+        <div class="diag">
+
+          <span>
+            Execution Gate
+          </span>
+
+          <strong id="chartGate">
+            —
+          </strong>
+
         </div>
 
       </div>
@@ -860,8 +1272,14 @@ canvas{
 
 
   <div class="notice">
-    Chart signals are visual diagnostics only. BUY/SELL execution remains controlled by the STRICT EXECUTION ENGINE.
-    No signal is created merely because a technical pattern appears on the chart.
+
+    Chart signals are visual diagnostics only.
+    BUY/SELL execution remains controlled by
+    the STRICT EXECUTION ENGINE.
+
+    No signal is created merely because a
+    technical pattern appears on the chart.
+
   </div>
 
 </section>
@@ -871,19 +1289,32 @@ canvas{
 <!-- AI -->
 <!-- ========================================================= -->
 
-<section id="aiPage" class="page">
+<section id="aiPage"
+         class="page">
 
   <div class="header">
+
     <h1>AI</h1>
-    <p>MARKET REASONING</p>
+
+    <p>
+      MARKET REASONING
+    </p>
+
   </div>
+
 
   <div class="card">
 
-    <div class="section-label">AI ANALYSIS</div>
+    <div class="section-label">
+      AI ANALYSIS
+    </div>
+
 
     <div class="empty">
-      AI reasoning module will be connected to the protected analysis engine.
+
+      AI reasoning module will be connected
+      to the protected analysis engine.
+
     </div>
 
   </div>
@@ -895,24 +1326,38 @@ canvas{
 <!-- JOURNAL -->
 <!-- ========================================================= -->
 
-<section id="journalPage" class="page">
+<section id="journalPage"
+         class="page">
 
   <div class="header">
+
     <h1>JOURNAL</h1>
-    <p>TRADE HISTORY</p>
+
+    <p>
+      TRADE HISTORY
+    </p>
+
   </div>
+
 
   <div class="card">
 
-    <div class="section-label">TRADE JOURNAL</div>
+    <div class="section-label">
+      TRADE JOURNAL
+    </div>
+
 
     <div class="empty">
-      Trade journal module will be connected in the next version.
+
+      Trade journal module will be connected
+      in the next version.
+
     </div>
 
   </div>
 
 </section>
+
 
 </div>
 
@@ -925,24 +1370,51 @@ canvas{
 
   <div class="nav-inner">
 
-    <button class="nav-btn active" data-page="dashboardPage">
-      <span class="nav-icon">⌂</span>
+    <button class="nav-btn active"
+            data-page="dashboardPage">
+
+      <span class="nav-icon">
+        ⌂
+      </span>
+
       Dashboard
+
     </button>
 
-    <button class="nav-btn" data-page="chartPage">
-      <span class="nav-icon">⌁</span>
+
+    <button class="nav-btn"
+            data-page="chartPage">
+
+      <span class="nav-icon">
+        ⌁
+      </span>
+
       Chart
+
     </button>
 
-    <button class="nav-btn" data-page="aiPage">
-      <span class="nav-icon">✦</span>
+
+    <button class="nav-btn"
+            data-page="aiPage">
+
+      <span class="nav-icon">
+        ✦
+      </span>
+
       AI
+
     </button>
 
-    <button class="nav-btn" data-page="journalPage">
-      <span class="nav-icon">▣</span>
+
+    <button class="nav-btn"
+            data-page="journalPage">
+
+      <span class="nav-icon">
+        ▣
+      </span>
+
       Journal
+
     </button>
 
   </div>
@@ -952,19 +1424,36 @@ canvas{
 
 <script>
 
+/* ========================================================= */
+/* CONFIG */
+/* ========================================================= */
+
 const API =
   "https://xau-ai-api.khoochorshioong.workers.dev";
 
-const $ = id => document.getElementById(id);
 
-let selectedTF = "1min";
+const $ =
+  id => document.getElementById(id);
 
-let marketData = {};
-let analysisData = null;
 
-let chartCandles = [];
+let selectedTF =
+  "1min";
 
-let dpr = window.devicePixelRatio || 1;
+
+let marketData =
+  {};
+
+
+let analysisData =
+  null;
+
+
+let chartCandles =
+  [];
+
+
+let chartVisible =
+  false;
 
 
 /* ========================================================= */
@@ -973,18 +1462,33 @@ let dpr = window.devicePixelRatio || 1;
 
 function safeNumber(v){
 
-  const n = Number(v);
+  if(
+    v === null ||
+    v === undefined ||
+    v === ""
+  ){
 
-  return Number.isFinite(n) ? n : null;
+    return null;
+
+  }
+
+  const n =
+    Number(v);
+
+  return Number.isFinite(n)
+    ? n
+    : null;
 
 }
 
 
 function fmt(v){
 
-  const n = safeNumber(v);
+  const n =
+    safeNumber(v);
 
-  if(n === null) return "—";
+  if(n === null)
+    return "—";
 
   return n.toFixed(2);
 
@@ -998,7 +1502,7 @@ function direction(tf){
     analysisData?.timeframes?.[tf] ||
     {};
 
-  return (
+  return String(
     x?.score?.bias ||
     x?.bias ||
     x?.direction ||
@@ -1019,39 +1523,56 @@ function getTF(tf){
 }
 
 
-function colorDirection(el,value){
+function colorDirection(
+  el,
+  value
+){
 
-  if(!el) return;
+  if(!el)
+    return;
 
-  el.classList.remove("green","red","yellow","muted");
+  el.classList.remove(
+    "green",
+    "red",
+    "yellow",
+    "muted"
+  );
 
-  const v = String(value || "").toUpperCase();
 
-  if(v.includes("BULL") || v.includes("BUY")){
+  const v =
+    String(value || "")
+      .toUpperCase();
+
+
+  if(
+    v.includes("BULL") ||
+    v.includes("BUY")
+  ){
+
     el.classList.add("green");
+
   }
-  else if(v.includes("BEAR") || v.includes("SELL")){
+  else if(
+    v.includes("BEAR") ||
+    v.includes("SELL")
+  ){
+
     el.classList.add("red");
+
   }
-  else if(v.includes("WAIT") || v.includes("WATCH")){
+  else if(
+    v.includes("WAIT") ||
+    v.includes("WATCH")
+  ){
+
     el.classList.add("yellow");
+
   }
   else{
+
     el.classList.add("muted");
+
   }
-
-}
-
-
-function extractPrice(data){
-
-  return safeNumber(
-    data?.price ??
-    data?.close ??
-    data?.latestPrice ??
-    data?.values?.[0]?.close ??
-    data?.candles?.[0]?.close
-  );
 
 }
 
@@ -1072,23 +1593,50 @@ function extractRiskPlan(data){
 
   ];
 
-  for(const p of candidates){
 
-    if(!p) continue;
+  for(
+    const p of candidates
+  ){
+
+    if(!p)
+      continue;
+
 
     const entry =
-      safeNumber(p.entry ?? p.entryPrice);
+      safeNumber(
+        p.entry ??
+        p.entryPrice
+      );
+
 
     const sl =
-      safeNumber(p.sl ?? p.stopLoss ?? p.stop);
+      safeNumber(
+        p.sl ??
+        p.stopLoss ??
+        p.stop
+      );
+
 
     const tp =
-      safeNumber(p.tp ?? p.takeProfit ?? p.target);
+      safeNumber(
+        p.tp ??
+        p.takeProfit ??
+        p.target
+      );
+
 
     const rr =
-      safeNumber(p.rr ?? p.riskReward);
+      safeNumber(
+        p.rr ??
+        p.riskReward
+      );
 
-    if(entry !== null || sl !== null || tp !== null){
+
+    if(
+      entry !== null ||
+      sl !== null ||
+      tp !== null
+    ){
 
       return {
         entry,
@@ -1100,6 +1648,7 @@ function extractRiskPlan(data){
     }
 
   }
+
 
   return {
     entry:null,
@@ -1113,12 +1662,31 @@ function extractRiskPlan(data){
 
 function extractDecision(data){
 
-  return String(
+  const raw =
     data?.decision ??
     data?.signal ??
     data?.analysis?.decision ??
-    "NO TRADE"
-  ).toUpperCase();
+    "NO TRADE";
+
+
+  if(
+    typeof raw === "object" &&
+    raw !== null
+  ){
+
+    return String(
+      raw.decision ??
+      raw.signal ??
+      raw.status ??
+      raw.state ??
+      "NO TRADE"
+    ).toUpperCase();
+
+  }
+
+
+  return String(raw)
+    .toUpperCase();
 
 }
 
@@ -1136,44 +1704,93 @@ function extractScore(data){
 
 function extractStructure(tf){
 
-  const x = getTF(tf);
+  const x =
+    getTF(tf);
 
-  return (
-    x?.structure?.structure ??
+
+  if(
+    x?.structure &&
+    typeof x.structure === "object"
+  ){
+
+    return String(
+      x.structure.structure ??
+      "RANGE"
+    );
+
+  }
+
+
+  return String(
     x?.structure ??
     "RANGE"
   );
+
 }
 
 
 function extractBOS(tf){
 
-  const x = getTF(tf);
+  const x =
+    getTF(tf);
 
-  return (
-    x?.structure?.bos ??
+
+  if(
+    x?.structure &&
+    typeof x.structure === "object"
+  ){
+
+    return String(
+      x.structure.bos ??
+      x.structure.event ??
+      "NONE"
+    );
+
+  }
+
+
+  return String(
     x?.bos ??
-    x?.structure?.event ??
+    x?.event ??
     "NONE"
   );
+
 }
 
 
 function extractLiquidity(tf){
 
-  const x = getTF(tf);
+  const x =
+    getTF(tf);
 
-  return (
-    x?.liquidity?.type ??
+
+  if(
+    x?.liquidity &&
+    typeof x.liquidity === "object"
+  ){
+
+    return String(
+      x.liquidity.type ??
+      x.liquidity.status ??
+      "NONE"
+    );
+
+  }
+
+
+  return String(
     x?.liquidity ??
     "NONE"
   );
+
 }
 
 
 function extractPullback(){
 
-  const m5 = getTF("5min");
+  const m5 =
+    getTF("5min");
+
 
   return (
     m5?.pullback ??
@@ -1187,7 +1804,9 @@ function extractPullback(){
 
 function extractConfirmation(){
 
-  const m1 = getTF("1min");
+  const m1 =
+    getTF("1min");
+
 
   return (
     m1?.confirmation ??
@@ -1201,23 +1820,108 @@ function extractConfirmation(){
 
 function formatBooleanState(v){
 
-  if(v === true) return "CONFIRMED";
-
-  if(v === false) return "WAIT";
-
-  if(v === null || v === undefined) return "NOT EXPOSED";
-
-  if(typeof v === "object"){
-
-    if(v.confirmed === true) return "CONFIRMED";
-
-    if(v.confirmed === false) return "WAIT";
-
+  if(v === true)
     return "CONFIRMED";
+
+
+  if(v === false)
+    return "WAIT";
+
+
+  if(
+    v === null ||
+    v === undefined
+  ){
+
+    return "NOT EXPOSED";
 
   }
 
-  return String(v).toUpperCase();
+
+  if(
+    typeof v === "object"
+  ){
+
+    if(v === null)
+      return "NOT EXPOSED";
+
+
+    if(v.confirmed === true)
+      return "CONFIRMED";
+
+
+    if(v.confirmed === false)
+      return "WAIT";
+
+
+    if(v.status !== undefined)
+      return String(
+        v.status
+      ).toUpperCase();
+
+
+    if(v.state !== undefined)
+      return String(
+        v.state
+      ).toUpperCase();
+
+
+    return "NOT EXPOSED";
+
+  }
+
+
+  return String(v)
+    .toUpperCase();
+
+}
+
+
+function formatGate(gate){
+
+  if(
+    gate === null ||
+    gate === undefined
+  ){
+
+    return "LOCKED";
+
+  }
+
+
+  if(
+    typeof gate === "string" ||
+    typeof gate === "number" ||
+    typeof gate === "boolean"
+  ){
+
+    return String(gate)
+      .toUpperCase();
+
+  }
+
+
+  if(
+    typeof gate === "object"
+  ){
+
+    if(gate === null)
+      return "LOCKED";
+
+
+    return String(
+      gate.status ??
+      gate.state ??
+      gate.gate ??
+      gate.decision ??
+      gate.reason ??
+      "LOCKED"
+    ).toUpperCase();
+
+  }
+
+
+  return "LOCKED";
 
 }
 
@@ -1228,21 +1932,33 @@ function formatBooleanState(v){
 
 async function fetchJSON(url){
 
+  const separator =
+    url.includes("?")
+      ? "&"
+      : "?";
+
+
   const response =
     await fetch(
-      url + (url.includes("?") ? "&" : "?") + "ts=" + Date.now(),
+      url +
+      separator +
+      "ts=" +
+      Date.now(),
       {
         cache:"no-store"
       }
     );
 
+
   if(!response.ok){
 
     throw new Error(
-      "HTTP " + response.status
+      "HTTP " +
+      response.status
     );
 
   }
+
 
   return await response.json();
 
@@ -1256,7 +1972,10 @@ async function fetchMarket(tf){
       `${API}/api/market?interval=${tf}`
     );
 
-  marketData[tf] = data;
+
+  marketData[tf] =
+    data;
+
 
   return data;
 
@@ -1270,6 +1989,7 @@ async function fetchAnalysis(){
       `${API}/api/analyze`
     );
 
+
   return analysisData;
 
 }
@@ -1281,10 +2001,13 @@ async function fetchAnalysis(){
 
 function renderDashboard(){
 
-  if(!analysisData) return;
+  if(!analysisData)
+    return;
+
 
   const m1 =
     getTF("1min");
+
 
   const price =
     safeNumber(
@@ -1293,89 +2016,135 @@ function renderDashboard(){
       m1?.close
     );
 
+
   const decision =
-    extractDecision(analysisData);
+    extractDecision(
+      analysisData
+    );
+
 
   const score =
-    extractScore(analysisData);
+    extractScore(
+      analysisData
+    );
+
 
   const plan =
-    extractRiskPlan(analysisData);
+    extractRiskPlan(
+      analysisData
+    );
+
 
   const trend =
     analysisData?.trend ??
     m1?.trend ??
     direction("1min");
 
+
   const structure =
     analysisData?.structure ??
     extractStructure("15min");
+
 
   const momentum =
     analysisData?.momentum ??
     m1?.momentum ??
     "NEUTRAL";
 
+
   const liquidity =
     analysisData?.liquidity ??
     extractLiquidity("15min");
 
+
   $("dashPrice").textContent =
-    price === null ? "—" : fmt(price);
+    price === null
+      ? "—"
+      : fmt(price);
+
 
   $("dashDecision").textContent =
     decision;
+
 
   colorDirection(
     $("dashDecision"),
     decision
   );
 
+
   $("dashScore").textContent =
-    score === null ? "—" : Math.round(score);
+    score === null
+      ? "—"
+      : Math.round(score);
+
 
   $("dashTrend").textContent =
-    String(trend).toUpperCase();
+    String(
+      trend
+    ).toUpperCase();
+
 
   $("dashStructure").textContent =
-    String(structure).toUpperCase();
+    String(
+      structure
+    ).toUpperCase();
+
 
   $("dashMomentum").textContent =
-    String(momentum).toUpperCase();
+    String(
+      momentum
+    ).toUpperCase();
+
 
   $("dashLiquidity").textContent =
-    String(liquidity).toUpperCase();
+    String(
+      liquidity
+    ).toUpperCase();
+
 
   $("dH4").textContent =
     direction("4h");
 
+
   $("dH1").textContent =
     direction("1h");
+
 
   $("dM15").textContent =
     direction("15min");
 
+
   $("dM5").textContent =
     direction("5min");
 
+
   $("dStructure").textContent =
-    String(extractStructure("15min")).toUpperCase();
+    extractStructure("15min")
+      .toUpperCase();
+
 
   $("dBos").textContent =
-    String(extractBOS("15min")).toUpperCase();
+    extractBOS("15min")
+      .toUpperCase();
+
 
   $("dLiquidity").textContent =
-    String(extractLiquidity("15min")).toUpperCase();
+    extractLiquidity("15min")
+      .toUpperCase();
+
 
   $("dPullback").textContent =
     formatBooleanState(
       extractPullback()
     );
 
+
   $("dConfirm").textContent =
     formatBooleanState(
       extractConfirmation()
     );
+
 
   const gate =
     analysisData?.executionGate ??
@@ -1383,33 +2152,42 @@ function renderDashboard(){
     analysisData?.execution?.gate ??
     "LOCKED";
 
+
   $("dGate").textContent =
-    String(gate).toUpperCase();
+    formatGate(gate);
+
 
   $("planEntry").textContent =
     fmt(plan.entry);
 
+
   $("planSL").textContent =
     fmt(plan.sl);
 
+
   $("planTP").textContent =
     fmt(plan.tp);
+
 
   $("planRR").textContent =
     plan.rr === null
       ? "—"
       : plan.rr.toFixed(2) + "R";
 
+
   $("planBadge").textContent =
     decision;
+
 
   colorDirection(
     $("planBadge"),
     decision
   );
 
+
   $("dashFresh").textContent =
     "LIVE";
+
 
   $("dashTime").textContent =
     new Date().toLocaleTimeString(
@@ -1425,7 +2203,7 @@ function renderDashboard(){
 
 
 /* ========================================================= */
-/* CHART DATA */
+/* CANDLE NORMALIZATION */
 /* ========================================================= */
 
 function normalizeCandles(data){
@@ -1435,10 +2213,12 @@ function normalizeCandles(data){
     data?.candles ??
     [];
 
+
   return raw
     .map(c => {
 
       return {
+
         time:
           c.datetime ??
           c.time ??
@@ -1472,33 +2252,62 @@ function normalizeCandles(data){
 }
 
 
-function ema(values,period){
+/* ========================================================= */
+/* EMA */
+/* ========================================================= */
 
-  if(values.length < period){
+function ema(
+  values,
+  period
+){
 
-    return values.map(() => null);
+  if(
+    values.length <
+    period
+  ){
+
+    return values.map(
+      () => null
+    );
 
   }
 
+
   const result =
-    new Array(values.length).fill(null);
+    new Array(
+      values.length
+    ).fill(null);
+
 
   const multiplier =
-    2 / (period + 1);
+    2 /
+    (period + 1);
+
 
   let sum = 0;
 
-  for(let i=0;i<period;i++){
 
-    sum += values[i];
+  for(
+    let i=0;
+    i<period;
+    i++
+  ){
+
+    sum +=
+      values[i];
 
   }
+
 
   let previous =
     sum / period;
 
-  result[period - 1] =
+
+  result[
+    period - 1
+  ] =
     previous;
+
 
   for(
     let i=period;
@@ -1508,14 +2317,18 @@ function ema(values,period){
 
     previous =
       (
-        values[i] - previous
-      ) * multiplier +
+        values[i] -
+        previous
+      ) *
+      multiplier +
       previous;
+
 
     result[i] =
       previous;
 
   }
+
 
   return result;
 
@@ -1523,25 +2336,40 @@ function ema(values,period){
 
 
 /* ========================================================= */
-/* STRUCTURE DETECTION */
+/* SWINGS */
 /* ========================================================= */
 
-function detectSwings(candles){
+function detectSwings(
+  candles
+){
 
   const highs = [];
   const lows = [];
 
-  const len = candles.length;
 
-  for(let i=2;i<len-2;i++){
+  const len =
+    candles.length;
 
-    const c = candles[i];
+
+  for(
+    let i=2;
+    i<len-2;
+    i++
+  ){
+
+    const c =
+      candles[i];
+
 
     if(
-      c.high > candles[i-1].high &&
-      c.high > candles[i-2].high &&
-      c.high > candles[i+1].high &&
-      c.high > candles[i+2].high
+      c.high >
+        candles[i-1].high &&
+      c.high >
+        candles[i-2].high &&
+      c.high >
+        candles[i+1].high &&
+      c.high >
+        candles[i+2].high
     ){
 
       highs.push({
@@ -1551,11 +2379,16 @@ function detectSwings(candles){
 
     }
 
+
     if(
-      c.low < candles[i-1].low &&
-      c.low < candles[i-2].low &&
-      c.low < candles[i+1].low &&
-      c.low < candles[i+2].low
+      c.low <
+        candles[i-1].low &&
+      c.low <
+        candles[i-2].low &&
+      c.low <
+        candles[i+1].low &&
+      c.low <
+        candles[i+2].low
     ){
 
       lows.push({
@@ -1567,6 +2400,7 @@ function detectSwings(candles){
 
   }
 
+
   return {
     highs,
     lows
@@ -1575,29 +2409,50 @@ function detectSwings(candles){
 }
 
 
-function detectEvents(candles){
+/* ========================================================= */
+/* BOS / CHOCH / LIQUIDITY */
+/* ========================================================= */
+
+function detectEvents(
+  candles
+){
 
   const swings =
     detectSwings(candles);
 
+
   const events = [];
 
-  let previousHigh = null;
-  let previousLow = null;
 
-  for(let i=0;i<candles.length;i++){
+  let previousHigh =
+    null;
 
-    const c = candles[i];
+
+  let previousLow =
+    null;
+
+
+  for(
+    let i=0;
+    i<candles.length;
+    i++
+  ){
+
+    const c =
+      candles[i];
+
 
     const swingHigh =
       swings.highs.find(
         x => x.index === i
       );
 
+
     const swingLow =
       swings.lows.find(
         x => x.index === i
       );
+
 
     if(swingHigh){
 
@@ -1606,12 +2461,14 @@ function detectEvents(candles){
 
     }
 
+
     if(swingLow){
 
       previousLow =
         swingLow.price;
 
     }
+
 
     if(
       previousHigh !== null &&
@@ -1620,15 +2477,23 @@ function detectEvents(candles){
     ){
 
       events.push({
+
         index:i,
+
         type:"BOS",
+
         direction:"BUY",
+
         price:c.close
+
       });
 
-      previousHigh = null;
+
+      previousHigh =
+        null;
 
     }
+
 
     if(
       previousLow !== null &&
@@ -1637,73 +2502,118 @@ function detectEvents(candles){
     ){
 
       events.push({
+
         index:i,
+
         type:"BOS",
+
         direction:"SELL",
+
         price:c.close
+
       });
 
-      previousLow = null;
+
+      previousLow =
+        null;
 
     }
 
   }
 
-  /* CHoCH approximation */
 
-  for(let i=3;i<candles.length;i++){
+  /* CHoCH */
 
-    const a = candles[i-1];
-    const b = candles[i];
+  for(
+    let i=3;
+    i<candles.length;
+    i++
+  ){
+
+    const a =
+      candles[i-1];
+
+
+    const b =
+      candles[i];
+
+
+    const reference =
+      candles[
+        Math.max(
+          0,
+          i-3
+        )
+      ];
+
 
     if(
       b.close > a.high &&
-      b.close < candles[
-        Math.max(0,i-3)
-      ].close
+      b.close < reference.close
     ){
 
       events.push({
+
         index:i,
+
         type:"CHoCH",
+
         direction:"BUY",
+
         price:b.close
+
       });
 
     }
 
+
     if(
       b.close < a.low &&
-      b.close > candles[
-        Math.max(0,i-3)
-      ].close
+      b.close > reference.close
     ){
 
       events.push({
+
         index:i,
+
         type:"CHoCH",
+
         direction:"SELL",
+
         price:b.close
+
       });
 
     }
 
   }
 
-  /* Liquidity sweep */
 
-  for(let i=5;i<candles.length;i++){
+  /* Liquidity Sweep */
 
-    const c = candles[i];
+  for(
+    let i=5;
+    i<candles.length;
+    i++
+  ){
+
+    const c =
+      candles[i];
+
 
     let priorHigh =
       -Infinity;
 
+
     let priorLow =
       Infinity;
 
+
     for(
-      let j=Math.max(0,i-5);
+      let j=Math.max(
+        0,
+        i-5
+      );
       j<i;
       j++
     ){
@@ -1714,6 +2624,7 @@ function detectEvents(candles){
           candles[j].high
         );
 
+
       priorLow =
         Math.min(
           priorLow,
@@ -1722,19 +2633,26 @@ function detectEvents(candles){
 
     }
 
+
     if(
       c.high > priorHigh &&
       c.close < priorHigh
     ){
 
       events.push({
+
         index:i,
+
         type:"LIQUIDITY",
+
         direction:"SELL",
+
         price:c.high
+
       });
 
     }
+
 
     if(
       c.low < priorLow &&
@@ -1742,15 +2660,21 @@ function detectEvents(candles){
     ){
 
       events.push({
+
         index:i,
+
         type:"LIQUIDITY",
+
         direction:"BUY",
+
         price:c.low
+
       });
 
     }
 
   }
+
 
   return {
     swings,
@@ -1761,7 +2685,7 @@ function detectEvents(candles){
 
 
 /* ========================================================= */
-/* CANVAS */
+/* CANVAS SIZE */
 /* ========================================================= */
 
 function resizeCanvas(){
@@ -1769,23 +2693,67 @@ function resizeCanvas(){
   const canvas =
     $("chartCanvas");
 
+
+  if(!canvas)
+    return;
+
+
   const rect =
     canvas.getBoundingClientRect();
 
+
+  if(
+    rect.width <= 0 ||
+    rect.height <= 0
+  ){
+
+    return;
+
+  }
+
+
+  const ratio =
+    window.devicePixelRatio || 1;
+
+
   canvas.width =
-    Math.floor(
-      rect.width * dpr
+    Math.round(
+      rect.width * ratio
     );
 
+
   canvas.height =
-    Math.floor(
-      rect.height * dpr
+    Math.round(
+      rect.height * ratio
     );
+
+
+  const ctx =
+    canvas.getContext("2d");
+
+
+  if(!ctx)
+    return;
+
+
+  ctx.setTransform(
+    ratio,
+    0,
+    0,
+    ratio,
+    0,
+    0
+  );
+
 
   drawChart();
 
 }
 
+
+/* ========================================================= */
+/* TEXT */
+/* ========================================================= */
 
 function drawText(
   ctx,
@@ -1800,17 +2768,21 @@ function drawText(
   ctx.fillStyle =
     color;
 
+
   ctx.font =
     `${size}px -apple-system,BlinkMacSystemFont,Arial`;
+
 
   ctx.textAlign =
     align;
 
+
   ctx.textBaseline =
     "middle";
 
+
   ctx.fillText(
-    text,
+    String(text),
     x,
     y
   );
@@ -1818,32 +2790,45 @@ function drawText(
 }
 
 
+/* ========================================================= */
+/* DRAW CHART */
+/* ========================================================= */
+
 function drawChart(){
 
   const canvas =
     $("chartCanvas");
 
+
   const ctx =
     canvas.getContext("2d");
 
-  if(!chartCandles.length){
 
-    ctx.clearRect(
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    );
+  if(!ctx)
+    return;
+
+
+  const rect =
+    canvas.getBoundingClientRect();
+
+
+  const W =
+    rect.width;
+
+
+  const H =
+    rect.height;
+
+
+  if(
+    W <= 0 ||
+    H <= 0
+  ){
 
     return;
 
   }
 
-  const W =
-    canvas.width;
-
-  const H =
-    canvas.height;
 
   ctx.clearRect(
     0,
@@ -1852,131 +2837,222 @@ function drawChart(){
     H
   );
 
-  const padding = {
-    left:45*dpr,
-    right:55*dpr,
-    top:22*dpr,
-    bottom:28*dpr
-  };
+
+  if(
+    !chartCandles.length
+  ){
+
+    return;
+
+  }
+
 
   const visible =
-    chartCandles.slice(-120);
+    chartCandles.slice(
+      -120
+    );
+
+
+  if(
+    visible.length === 0
+  ){
+
+    return;
+
+  }
+
 
   const highs =
-    visible.map(c => c.high);
+    visible.map(
+      c => c.high
+    );
+
 
   const lows =
-    visible.map(c => c.low);
+    visible.map(
+      c => c.low
+    );
+
 
   let maxPrice =
-    Math.max(...highs);
+    Math.max(
+      ...highs
+    );
+
 
   let minPrice =
-    Math.min(...lows);
+    Math.min(
+      ...lows
+    );
+
 
   const priceRange =
-    maxPrice - minPrice || 1;
+    maxPrice -
+    minPrice ||
+    1;
+
 
   const extra =
-    priceRange * .08;
+    priceRange *
+    0.08;
 
-  maxPrice += extra;
-  minPrice -= extra;
+
+  maxPrice +=
+    extra;
+
+
+  minPrice -=
+    extra;
+
+
+  const padding = {
+
+    left:45,
+
+    right:55,
+
+    top:22,
+
+    bottom:28
+
+  };
+
 
   const plotW =
     W -
     padding.left -
     padding.right;
 
+
   const plotH =
     H -
     padding.top -
     padding.bottom;
 
+
+  if(
+    plotW <= 0 ||
+    plotH <= 0
+  ){
+
+    return;
+
+  }
+
+
   const xStep =
     plotW /
     visible.length;
+
 
   function x(index){
 
     return (
       padding.left +
-      index * xStep +
-      xStep/2
+      index *
+      xStep +
+      xStep / 2
     );
 
   }
+
 
   function y(price){
 
     return (
       padding.top +
       (
-        maxPrice - price
+        maxPrice -
+        price
       ) /
       (
-        maxPrice - minPrice
+        maxPrice -
+        minPrice
       ) *
       plotH
     );
 
   }
 
-  /* Grid */
+
+  /* ======================================================= */
+  /* GRID */
+  /* ======================================================= */
 
   ctx.strokeStyle =
     "#1b2029";
 
-  ctx.lineWidth =
-    1*dpr;
 
-  for(let i=0;i<6;i++){
+  ctx.lineWidth =
+    1;
+
+
+  for(
+    let i=0;
+    i<6;
+    i++
+  ){
 
     const gy =
       padding.top +
       (
-        plotH/5
+        plotH / 5
       ) * i;
 
+
     ctx.beginPath();
+
 
     ctx.moveTo(
       padding.left,
       gy
     );
 
+
     ctx.lineTo(
-      W-padding.right,
+      W -
+      padding.right,
       gy
     );
 
+
     ctx.stroke();
 
-    const price =
+
+    const gridPrice =
       maxPrice -
       (
-        maxPrice-minPrice
-      ) * i/5;
+        maxPrice -
+        minPrice
+      ) *
+      i / 5;
+
 
     drawText(
       ctx,
-      price.toFixed(2),
-      W-padding.right+6*dpr,
+      gridPrice.toFixed(2),
+      W -
+      padding.right +
+      6,
       gy,
-      10*dpr,
+      10,
       "#727987",
       "left"
     );
 
   }
 
-  /* Candles */
+
+  /* ======================================================= */
+  /* CANDLES */
+  /* ======================================================= */
 
   const candleWidth =
     Math.max(
-      2*dpr,
-      xStep*.58
+      2,
+      xStep * 0.58
     );
+
 
   visible.forEach(
     (c,i) => {
@@ -1984,52 +3060,64 @@ function drawChart(){
       const cx =
         x(i);
 
+
       const openY =
         y(c.open);
+
 
       const closeY =
         y(c.close);
 
+
       const highY =
         y(c.high);
+
 
       const lowY =
         y(c.low);
 
+
       const bullish =
         c.close >= c.open;
 
-      ctx.strokeStyle =
+
+      const candleColor =
         bullish
           ? "#22d889"
           : "#ff5261";
+
+
+      ctx.strokeStyle =
+        candleColor;
+
 
       ctx.fillStyle =
-        bullish
-          ? "#22d889"
-          : "#ff5261";
+        candleColor;
+
 
       ctx.lineWidth =
-        Math.max(
-          1,
-          dpr
-        );
+        1;
+
 
       /* Wick */
 
       ctx.beginPath();
+
 
       ctx.moveTo(
         cx,
         highY
       );
 
+
       ctx.lineTo(
         cx,
         lowY
       );
 
+
       ctx.stroke();
+
 
       /* Body */
 
@@ -2039,16 +3127,20 @@ function drawChart(){
           closeY
         );
 
+
       const bodyHeight =
         Math.max(
-          1*dpr,
+          1,
           Math.abs(
-            closeY-openY
+            closeY -
+            openY
           )
         );
 
+
       ctx.fillRect(
-        cx-candleWidth/2,
+        cx -
+        candleWidth / 2,
         bodyTop,
         candleWidth,
         bodyHeight
@@ -2058,37 +3150,93 @@ function drawChart(){
   );
 
 
-  /* EMA */
+  /* ======================================================= */
+  /* EMA — CALCULATE FROM FULL DATASET */
+  /* ======================================================= */
 
-  const closes =
-    visible.map(
+  const allCloses =
+    chartCandles.map(
       c => c.close
     );
 
+
+  const allE20 =
+    ema(
+      allCloses,
+      20
+    );
+
+
+  const allE50 =
+    ema(
+      allCloses,
+      50
+    );
+
+
+  const allE200 =
+    ema(
+      allCloses,
+      200
+    );
+
+
+  const firstIndex =
+    chartCandles.length -
+    visible.length;
+
+
+  function visibleEMA(
+    values
+  ){
+
+    return visible.map(
+      (_,i) =>
+        values[
+          firstIndex + i
+        ] ?? null
+    );
+
+  }
+
+
   const e20 =
-    ema(closes,20);
+    visibleEMA(
+      allE20
+    );
+
 
   const e50 =
-    ema(closes,50);
+    visibleEMA(
+      allE50
+    );
+
 
   const e200 =
-    ema(closes,200);
+    visibleEMA(
+      allE200
+    );
 
 
   function drawLine(
     values,
-    color
+    lineColor
   ){
 
     ctx.strokeStyle =
-      color;
+      lineColor;
+
 
     ctx.lineWidth =
-      2*dpr;
+      2;
+
 
     ctx.beginPath();
 
-    let started = false;
+
+    let started =
+      false;
+
 
     values.forEach(
       (v,i) => {
@@ -2096,11 +3244,14 @@ function drawChart(){
         if(v === null)
           return;
 
+
         const px =
           x(i);
 
+
         const py =
           y(v);
+
 
         if(!started){
 
@@ -2109,7 +3260,9 @@ function drawChart(){
             py
           );
 
-          started = true;
+
+          started =
+            true;
 
         }
         else{
@@ -2124,7 +3277,9 @@ function drawChart(){
       }
     );
 
-    ctx.stroke();
+
+    if(started)
+      ctx.stroke();
 
   }
 
@@ -2134,10 +3289,12 @@ function drawChart(){
     "#ffc857"
   );
 
+
   drawLine(
     e50,
     "#4da3ff"
   );
+
 
   drawLine(
     e200,
@@ -2145,36 +3302,51 @@ function drawChart(){
   );
 
 
-  /* Current price */
+  /* ======================================================= */
+  /* CURRENT PRICE */
+  /* ======================================================= */
 
   const current =
     visible[
-      visible.length-1
+      visible.length - 1
     ].close;
+
 
   const currentY =
     y(current);
 
+
   ctx.strokeStyle =
     "#717886";
 
+
+  ctx.lineWidth =
+    1;
+
+
   ctx.setLineDash(
-    [7*dpr,5*dpr]
+    [7,5]
   );
 
+
   ctx.beginPath();
+
 
   ctx.moveTo(
     padding.left,
     currentY
   );
 
+
   ctx.lineTo(
-    W-padding.right,
+    W -
+    padding.right,
     currentY
   );
 
+
   ctx.stroke();
+
 
   ctx.setLineDash([]);
 
@@ -2182,225 +3354,298 @@ function drawChart(){
   drawText(
     ctx,
     current.toFixed(2),
-    W-padding.right+5*dpr,
+    W -
+    padding.right +
+    5,
     currentY,
-    11*dpr,
+    11,
     "#f4f5f7",
     "left"
   );
 
 
-  /* Structure events */
+  /* ======================================================= */
+  /* EVENTS */
+  /* ======================================================= */
 
   const structure =
     detectEvents(
       chartCandles
     );
 
-  const firstIndex =
-    chartCandles.length -
-    visible.length;
-
 
   structure.events
-    .forEach(event => {
+    .forEach(
+      event => {
 
-      if(
-        event.index <
-        firstIndex
-      ) return;
+        if(
+          event.index <
+          firstIndex
+        ){
 
-      const vi =
-        event.index -
-        firstIndex;
+          return;
 
-      if(
-        vi < 0 ||
-        vi >= visible.length
-      ) return;
+        }
 
-      const px =
-        x(vi);
 
-      const py =
-        y(event.price);
+        const vi =
+          event.index -
+          firstIndex;
 
-      let color =
-        "#27d17f";
 
-      if(
-        event.type === "CHoCH"
-      ){
+        if(
+          vi < 0 ||
+          vi >= visible.length
+        ){
 
-        color =
-          "#ff9f43";
+          return;
+
+        }
+
+
+        const px =
+          x(vi);
+
+
+        const py =
+          y(event.price);
+
+
+        let eventColor =
+          "#27d17f";
+
+
+        if(
+          event.type === "CHoCH"
+        ){
+
+          eventColor =
+            "#ff9f43";
+
+        }
+
+
+        if(
+          event.type === "LIQUIDITY"
+        ){
+
+          eventColor =
+            "#c77dff";
+
+        }
+
+
+        ctx.fillStyle =
+          eventColor;
+
+
+        ctx.beginPath();
+
+
+        ctx.arc(
+          px,
+          py,
+          4,
+          0,
+          Math.PI * 2
+        );
+
+
+        ctx.fill();
+
+
+        let label =
+          event.type;
+
+
+        if(
+          event.type ===
+          "LIQUIDITY"
+        ){
+
+          label =
+            "LIQ";
+
+        }
+
+
+        const above =
+          event.direction ===
+          "SELL";
+
+
+        drawText(
+          ctx,
+          label,
+          px,
+          py +
+          (
+            above
+              ? -14
+              : 14
+          ),
+          9,
+          eventColor,
+          "center"
+        );
 
       }
-
-      if(
-        event.type === "LIQUIDITY"
-      ){
-
-        color =
-          "#c77dff";
-
-      }
-
-      ctx.fillStyle =
-        color;
-
-      ctx.beginPath();
-
-      ctx.arc(
-        px,
-        py,
-        4*dpr,
-        0,
-        Math.PI*2
-      );
-
-      ctx.fill();
-
-      let label =
-        event.type;
-
-      if(
-        event.type === "LIQUIDITY"
-      ){
-
-        label =
-          "LIQ";
-
-      }
-
-      const above =
-        event.direction === "SELL";
-
-      drawText(
-        ctx,
-        label,
-        px,
-        py + (
-          above
-            ? -14*dpr
-            : 14*dpr
-        ),
-        9*dpr,
-        color,
-        "center"
-      );
-
-    });
+    );
 
 
-  /* Swing markers */
+  /* ======================================================= */
+  /* SWINGS */
+  /* ======================================================= */
 
   structure.swings.highs
     .slice(-12)
-    .forEach(s => {
+    .forEach(
+      s => {
 
-      if(
-        s.index < firstIndex
-      ) return;
+        if(
+          s.index <
+          firstIndex
+        ){
 
-      const vi =
-        s.index -
-        firstIndex;
+          return;
 
-      drawText(
-        ctx,
-        "H",
-        x(vi),
-        y(s.price)-10*dpr,
-        8*dpr,
-        "#6e7481",
-        "center"
-      );
+        }
 
-    });
+
+        const vi =
+          s.index -
+          firstIndex;
+
+
+        drawText(
+          ctx,
+          "H",
+          x(vi),
+          y(s.price) - 10,
+          8,
+          "#6e7481",
+          "center"
+        );
+
+      }
+    );
+
 
   structure.swings.lows
     .slice(-12)
-    .forEach(s => {
+    .forEach(
+      s => {
 
-      if(
-        s.index < firstIndex
-      ) return;
+        if(
+          s.index <
+          firstIndex
+        ){
 
-      const vi =
-        s.index -
-        firstIndex;
+          return;
 
-      drawText(
-        ctx,
-        "L",
-        x(vi),
-        y(s.price)+10*dpr,
-        8*dpr,
-        "#6e7481",
-        "center"
-      );
-
-    });
+        }
 
 
-  /* Execution levels */
+        const vi =
+          s.index -
+          firstIndex;
+
+
+        drawText(
+          ctx,
+          "L",
+          x(vi),
+          y(s.price) + 10,
+          8,
+          "#6e7481",
+          "center"
+        );
+
+      }
+    );
+
+
+  /* ======================================================= */
+  /* EXECUTION LEVELS */
+  /* ======================================================= */
 
   const plan =
     extractRiskPlan(
       analysisData || {}
     );
 
+
   function drawLevel(
     price,
-    color,
+    levelColor,
     label
   ){
 
-    if(price === null)
+    if(
+      price === null
+    ){
+
       return;
+
+    }
+
 
     if(
       price < minPrice ||
       price > maxPrice
-    ) return;
+    ){
+
+      return;
+
+    }
+
 
     const py =
       y(price);
 
+
     ctx.strokeStyle =
-      color;
+      levelColor;
+
 
     ctx.lineWidth =
-      1.5*dpr;
+      1.5;
+
 
     ctx.setLineDash(
-      [10*dpr,6*dpr]
+      [10,6]
     );
 
+
     ctx.beginPath();
+
 
     ctx.moveTo(
       padding.left,
       py
     );
 
+
     ctx.lineTo(
-      W-padding.right,
+      W -
+      padding.right,
       py
     );
 
+
     ctx.stroke();
 
+
     ctx.setLineDash([]);
+
 
     drawText(
       ctx,
       `${label} ${price.toFixed(2)}`,
-      padding.left+6*dpr,
-      py-9*dpr,
-      10*dpr,
-      color,
+      padding.left + 6,
+      py - 9,
+      10,
+      levelColor,
       "left"
     );
 
@@ -2413,11 +3658,13 @@ function drawChart(){
     "SL"
   );
 
+
   drawLevel(
     plan.entry,
     "#f4f5f7",
     "ENTRY"
   );
+
 
   drawLevel(
     plan.tp,
@@ -2434,38 +3681,52 @@ function drawChart(){
 
 function renderChart(){
 
-  if(!chartCandles.length)
+  if(
+    !chartCandles.length
+  ){
+
     return;
+
+  }
+
 
   const latest =
     chartCandles[
-      chartCandles.length-1
+      chartCandles.length - 1
     ];
+
 
   const price =
     latest.close;
 
+
   $("chartPrice").textContent =
     fmt(price);
+
 
   $("chartCandles").textContent =
     `${chartCandles.length} candles`;
 
+
   $("chartFresh").textContent =
     "FRESH";
+
 
   const dir =
     direction(
       selectedTF
     );
 
+
   $("chartTrendBadge").textContent =
     dir;
+
 
   colorDirection(
     $("chartTrendBadge"),
     dir
   );
+
 
   if(analysisData){
 
@@ -2474,87 +3735,109 @@ function renderChart(){
         analysisData
       );
 
+
     const score =
       extractScore(
         analysisData
       );
 
+
     $("chartDecision").textContent =
       decision;
+
 
     colorDirection(
       $("chartDecision"),
       decision
     );
 
+
     $("chartScoreBadge").textContent =
       score === null
         ? "SCORE —"
         : `SCORE ${Math.round(score)}`;
+
 
     const plan =
       extractRiskPlan(
         analysisData
       );
 
+
     $("chartEntry").textContent =
       fmt(plan.entry);
+
 
     $("chartSL").textContent =
       fmt(plan.sl);
 
+
     $("chartTP").textContent =
       fmt(plan.tp);
+
 
     $("chartRR").textContent =
       plan.rr === null
         ? "—"
-        : plan.rr.toFixed(2)+"R";
+        : plan.rr.toFixed(2) +
+          "R";
+
 
     $("chartH4").textContent =
       direction("4h");
 
+
     $("chartH1").textContent =
       direction("1h");
+
 
     $("chartM15").textContent =
       direction("15min");
 
+
     $("chartM5").textContent =
       direction("5min");
 
+
     $("chartM1").textContent =
       direction("1min");
+
 
     $("chartScore").textContent =
       score === null
         ? "—"
         : Math.round(score);
 
+
     $("chartStructure").textContent =
-      String(
-        extractStructure("15min")
+      extractStructure(
+        "15min"
       ).toUpperCase();
+
 
     $("chartBos").textContent =
-      String(
-        extractBOS("15min")
+      extractBOS(
+        "15min"
       ).toUpperCase();
 
+
     $("chartLiquidity").textContent =
-      String(
-        extractLiquidity("15min")
+      extractLiquidity(
+        "15min"
       ).toUpperCase();
+
 
     $("chartPullback").textContent =
       formatBooleanState(
         extractPullback()
       );
 
+
     $("chartConfirm").textContent =
       formatBooleanState(
         extractConfirmation()
       );
+
 
     const gate =
       analysisData?.executionGate ??
@@ -2562,15 +3845,22 @@ function renderChart(){
       analysisData?.execution?.gate ??
       "LOCKED";
 
+
     $("chartGate").textContent =
-      String(gate).toUpperCase();
+      formatGate(gate);
+
 
     $("chartGateBadge").textContent =
-      String(gate).toUpperCase();
+      formatGate(gate);
 
   }
 
-  drawChart();
+
+  $("chartError").style.display =
+    "none";
+
+
+  resizeCanvas();
 
 }
 
@@ -2583,30 +3873,71 @@ async function loadChart(
   tf = selectedTF
 ){
 
-  selectedTF = tf;
+  selectedTF =
+    tf;
+
 
   document
     .querySelectorAll(".tf-btn")
-    .forEach(btn => {
+    .forEach(
+      btn => {
 
-      btn.classList.toggle(
-        "active",
-        btn.dataset.tf === tf
-      );
+        btn.classList.toggle(
+          "active",
+          btn.dataset.tf === tf
+        );
 
-    });
+      }
+    );
+
 
   try{
 
+    $("chartFresh").textContent =
+      "LOADING";
+
+
     const data =
       await fetchMarket(tf);
+
 
     chartCandles =
       normalizeCandles(
         data
       );
 
+
+    if(
+      !chartCandles.length
+    ){
+
+      throw new Error(
+        "No candle data returned"
+      );
+
+    }
+
+
     renderChart();
+
+
+    requestAnimationFrame(
+      () => {
+
+        resizeCanvas();
+
+
+        setTimeout(
+          () => {
+
+            resizeCanvas();
+
+          },
+          150
+        );
+
+      }
+    );
 
   }
   catch(error){
@@ -2616,8 +3947,18 @@ async function loadChart(
       error
     );
 
+
     $("chartFresh").textContent =
       "DATA ERROR";
+
+
+    $("chartError").textContent =
+      "Chart rendering error: " +
+      error.message;
+
+
+    $("chartError").style.display =
+      "flex";
 
   }
 
@@ -2632,16 +3973,27 @@ async function loadAnalysis(){
 
   try{
 
-    $("refreshAnalysis").textContent =
-      "ANALYZING...";
+    if(
+      $("refreshAnalysis")
+    ){
+
+      $("refreshAnalysis")
+        .textContent =
+        "ANALYZING...";
+
+    }
+
 
     const data =
       await fetchAnalysis();
 
+
     analysisData =
       data;
 
+
     renderDashboard();
+
 
     renderChart();
 
@@ -2653,16 +4005,24 @@ async function loadAnalysis(){
       error
     );
 
-    alert(
-      "Strict analysis unavailable: " +
+
+    console.warn(
+      "Strict analysis unavailable:",
       error.message
     );
 
   }
   finally{
 
-    $("refreshAnalysis").textContent =
-      "REFRESH STRICT ANALYSIS";
+    if(
+      $("refreshAnalysis")
+    ){
+
+      $("refreshAnalysis")
+        .textContent =
+        "REFRESH STRICT ANALYSIS";
+
+    }
 
   }
 
@@ -2675,69 +4035,135 @@ async function loadAnalysis(){
 
 document
   .querySelectorAll(".nav-btn")
-  .forEach(btn => {
+  .forEach(
+    btn => {
 
-    btn.addEventListener(
-      "click",
-      async () => {
+      btn.addEventListener(
+        "click",
+        async () => {
 
-        const page =
-          btn.dataset.page;
+          const page =
+            btn.dataset.page;
 
-        document
-          .querySelectorAll(".page")
-          .forEach(p => {
 
-            p.classList.toggle(
-              "active",
-              p.id === page
+          document
+            .querySelectorAll(".page")
+            .forEach(
+              p => {
+
+                p.classList.toggle(
+                  "active",
+                  p.id === page
+                );
+
+              }
             );
 
-          });
 
-        document
-          .querySelectorAll(".nav-btn")
-          .forEach(b => {
+          document
+            .querySelectorAll(".nav-btn")
+            .forEach(
+              b => {
 
-            b.classList.toggle(
-              "active",
-              b === btn
+                b.classList.toggle(
+                  "active",
+                  b === btn
+                );
+
+              }
             );
 
-          });
 
-        if(page === "chartPage"){
+          if(
+            page ===
+            "chartPage"
+          ){
 
-          if(!chartCandles.length){
+            chartVisible =
+              true;
 
-            await loadChart(
-              selectedTF
+
+            /*
+              The Chart page was previously
+              display:none.
+
+              Wait until browser has performed
+              layout before touching Canvas.
+            */
+
+            await new Promise(
+              resolve =>
+                requestAnimationFrame(
+                  resolve
+                )
+            );
+
+
+            if(
+              !chartCandles.length
+            ){
+
+              await loadChart(
+                selectedTF
+              );
+
+            }
+
+
+            if(
+              !analysisData
+            ){
+
+              await loadAnalysis();
+
+            }
+
+
+            requestAnimationFrame(
+              () => {
+
+                resizeCanvas();
+
+
+                setTimeout(
+                  () => {
+
+                    resizeCanvas();
+
+                  },
+                  150
+                );
+
+              }
             );
 
           }
 
-          if(!analysisData){
 
-            await loadAnalysis();
+          if(
+            page ===
+            "dashboardPage"
+          ){
+
+            chartVisible =
+              false;
+
+
+            if(
+              !analysisData
+            ){
+
+              await loadAnalysis();
+
+            }
 
           }
 
         }
+      );
 
-        if(page === "dashboardPage"){
-
-          if(!analysisData){
-
-            await loadAnalysis();
-
-          }
-
-        }
-
-      }
-    );
-
-  });
+    }
+  );
 
 
 /* ========================================================= */
@@ -2746,24 +4172,26 @@ document
 
 document
   .querySelectorAll(".tf-btn")
-  .forEach(btn => {
+  .forEach(
+    btn => {
 
-    btn.addEventListener(
-      "click",
-      async () => {
+      btn.addEventListener(
+        "click",
+        async () => {
 
-        await loadChart(
-          btn.dataset.tf
-        );
+          await loadChart(
+            btn.dataset.tf
+          );
 
-      }
-    );
+        }
+      );
 
-  });
+    }
+  );
 
 
 /* ========================================================= */
-/* REFRESH */
+/* REFRESH CHART */
 /* ========================================================= */
 
 $("refreshChart")
@@ -2779,6 +4207,10 @@ $("refreshChart")
   );
 
 
+/* ========================================================= */
+/* REFRESH ANALYSIS */
+/* ========================================================= */
+
 $("refreshAnalysis")
   .addEventListener(
     "click",
@@ -2786,19 +4218,72 @@ $("refreshAnalysis")
 
       await loadAnalysis();
 
+      if(
+        chartVisible
+      ){
+
+        requestAnimationFrame(
+          () => {
+
+            resizeCanvas();
+
+          }
+        );
+
+      }
+
     }
   );
 
 
 /* ========================================================= */
-/* RESIZE */
+/* WINDOW RESIZE */
 /* ========================================================= */
 
 window.addEventListener(
   "resize",
   () => {
 
-    resizeCanvas();
+    if(
+      chartVisible
+    ){
+
+      requestAnimationFrame(
+        () => {
+
+          resizeCanvas();
+
+        }
+      );
+
+    }
+
+  }
+);
+
+
+/* ========================================================= */
+/* ORIENTATION */
+/* ========================================================= */
+
+window.addEventListener(
+  "orientationchange",
+  () => {
+
+    setTimeout(
+      () => {
+
+        if(
+          chartVisible
+        ){
+
+          resizeCanvas();
+
+        }
+
+      },
+      300
+    );
 
   }
 );
@@ -2815,20 +4300,22 @@ window.addEventListener(
     await loadAnalysis();
 
   }
-  catch(e){
+  catch(error){
 
-    console.error(e);
+    console.error(
+      error
+    );
 
   }
 
-  await loadChart(
-    selectedTF
-  );
 
-  setTimeout(
-    resizeCanvas,
-    100
-  );
+  /*
+    We intentionally do not force
+    Canvas rendering while Dashboard
+    is hidden.
+
+    Chart will initialize when opened.
+  */
 
 })();
 
