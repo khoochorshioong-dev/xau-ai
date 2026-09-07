@@ -28,21 +28,27 @@ const CONFIG = {
   lowVolatilityPct: 0.05
 };
 
-/* =========================
-   BASIC HELPERS
-========================= */
+/* =========================================================
+   BASIC
+========================================================= */
 
 function json(data, status = 200) {
-  return new Response(JSON.stringify(data, null, 2), {
-    status,
-    headers: {
-      "content-type": "application/json; charset=UTF-8",
-      "cache-control": "no-store",
-      "access-control-allow-origin": "*",
-      "access-control-allow-methods": "GET,OPTIONS",
-      "access-control-allow-headers": "Content-Type"
+  return new Response(
+    JSON.stringify(data, null, 2),
+    {
+      status,
+      headers: {
+        "content-type":
+          "application/json; charset=UTF-8",
+        "cache-control": "no-store",
+        "access-control-allow-origin": "*",
+        "access-control-allow-methods":
+          "GET,OPTIONS",
+        "access-control-allow-headers":
+          "Content-Type"
+      }
     }
-  });
+  );
 }
 
 function num(v, fallback = null) {
@@ -53,90 +59,136 @@ function num(v, fallback = null) {
 function round(v, d = 2) {
   const n = num(v);
   if (n === null) return null;
+
   const p = 10 ** d;
   return Math.round(n * p) / p;
 }
 
 function average(values) {
-  const a = values.filter(Number.isFinite);
+  const a = values.filter(
+    v => Number.isFinite(v)
+  );
+
   return a.length
     ? a.reduce((x, y) => x + y, 0) / a.length
     : 0;
 }
 
-/* =========================
+/* =========================================================
    INDICATORS
-========================= */
+========================================================= */
 
 function ema(values, period) {
   if (!values.length) return [];
 
   const k = 2 / (period + 1);
-  const out = [values[0]];
+  const output = [values[0]];
 
   for (let i = 1; i < values.length; i++) {
-    out.push(
+    output.push(
       values[i] * k +
-      out[i - 1] * (1 - k)
+      output[i - 1] * (1 - k)
     );
   }
 
-  return out;
+  return output;
 }
 
 function rsi(values, period = 14) {
-  if (values.length < period + 1) return 50;
+  if (values.length < period + 1) {
+    return 50;
+  }
 
   let gain = 0;
   let loss = 0;
 
   for (let i = 1; i <= period; i++) {
-    const diff = values[i] - values[i - 1];
+    const diff =
+      values[i] - values[i - 1];
 
-    if (diff > 0) gain += diff;
-    else loss -= diff;
+    if (diff > 0) {
+      gain += diff;
+    } else {
+      loss -= diff;
+    }
   }
 
   let avgGain = gain / period;
   let avgLoss = loss / period;
 
-  for (let i = period + 1; i < values.length; i++) {
-    const diff = values[i] - values[i - 1];
-    const g = Math.max(diff, 0);
-    const l = Math.max(-diff, 0);
+  for (
+    let i = period + 1;
+    i < values.length;
+    i++
+  ) {
+    const diff =
+      values[i] - values[i - 1];
+
+    const currentGain =
+      Math.max(diff, 0);
+
+    const currentLoss =
+      Math.max(-diff, 0);
 
     avgGain =
-      (avgGain * (period - 1) + g) / period;
+      (
+        avgGain * (period - 1) +
+        currentGain
+      ) / period;
 
     avgLoss =
-      (avgLoss * (period - 1) + l) / period;
+      (
+        avgLoss * (period - 1) +
+        currentLoss
+      ) / period;
   }
 
-  if (avgLoss === 0) return 100;
+  if (avgLoss === 0) {
+    return 100;
+  }
 
-  const rs = avgGain / avgLoss;
+  const rs =
+    avgGain / avgLoss;
+
   return 100 - 100 / (1 + rs);
 }
 
 function atr(candles, period = 14) {
-  if (candles.length < 2) return 0;
+  if (candles.length < 2) {
+    return 0;
+  }
 
   const trs = [];
 
-  for (let i = 1; i < candles.length; i++) {
-    const c = candles[i];
-    const p = candles[i - 1];
+  for (
+    let i = 1;
+    i < candles.length;
+    i++
+  ) {
+    const current =
+      candles[i];
+
+    const previous =
+      candles[i - 1];
 
     trs.push(
       Math.max(
-        c.high - c.low,
-        Math.abs(c.high - p.close),
-        Math.abs(c.low - p.close)
+        current.high - current.low,
+        Math.abs(
+          current.high -
+          previous.close
+        ),
+        Math.abs(
+          current.low -
+          previous.close
+        )
       )
     );
   }
 
-  return average(trs.slice(-period));
+  return average(
+    trs.slice(-period)
+  );
 }
 
 function macd(values) {
@@ -148,17 +200,26 @@ function macd(values) {
     };
   }
 
-  const fast = ema(values, 12);
-  const slow = ema(values, 26);
+  const fast =
+    ema(values, 12);
 
-  const line = values.map(
-    (_, i) => fast[i] - slow[i]
-  );
+  const slow =
+    ema(values, 26);
 
-  const signal = ema(line, 9);
+  const line =
+    values.map(
+      (_, i) =>
+        fast[i] - slow[i]
+    );
 
-  const m = line.at(-1) || 0;
-  const s = signal.at(-1) || 0;
+  const signal =
+    ema(line, 9);
+
+  const m =
+    line.at(-1) || 0;
+
+  const s =
+    signal.at(-1) || 0;
 
   return {
     macd: m,
@@ -167,14 +228,15 @@ function macd(values) {
   };
 }
 
-/* =========================
-   DATA NORMALIZATION
-========================= */
+/* =========================================================
+   DATA
+========================================================= */
 
 function normalizeCandles(raw) {
-  const values = Array.isArray(raw?.values)
-    ? raw.values
-    : [];
+  const values =
+    Array.isArray(raw?.values)
+      ? raw.values
+      : [];
 
   return values
     .map(x => ({
@@ -198,12 +260,13 @@ function normalizeCandles(raw) {
     );
 }
 
-/* =========================
-   SESSION / MARKET STATE
-========================= */
+/* =========================================================
+   SESSION
+========================================================= */
 
 function tradingSession() {
-  const hour = new Date().getUTCHours();
+  const hour =
+    new Date().getUTCHours();
 
   if (hour < 7) {
     return {
@@ -221,7 +284,8 @@ function tradingSession() {
 
   if (hour < 16) {
     return {
-      name: "LONDON / NEW YORK OVERLAP",
+      name:
+        "LONDON / NEW YORK OVERLAP",
       quality: "BEST"
     };
   }
@@ -240,13 +304,15 @@ function tradingSession() {
 }
 
 function isWeekend() {
-  const day = new Date().getUTCDay();
+  const day =
+    new Date().getUTCDay();
+
   return day === 0 || day === 6;
 }
 
-/* =========================
+/* =========================================================
    MARKET STRUCTURE
-========================= */
+========================================================= */
 
 function structure(candles) {
   if (candles.length < 30) {
@@ -259,28 +325,45 @@ function structure(candles) {
     };
   }
 
-  const lookback = candles.slice(-30);
+  const lookback =
+    candles.slice(-30);
 
-  const previous = lookback.slice(0, 15);
-  const current = lookback.slice(15);
+  const previous =
+    lookback.slice(0, 15);
 
-  const previousHigh = Math.max(
-    ...previous.map(x => x.high)
-  );
+  const current =
+    lookback.slice(15);
 
-  const previousLow = Math.min(
-    ...previous.map(x => x.low)
-  );
+  const previousHigh =
+    Math.max(
+      ...previous.map(
+        x => x.high
+      )
+    );
 
-  const currentHigh = Math.max(
-    ...current.map(x => x.high)
-  );
+  const previousLow =
+    Math.min(
+      ...previous.map(
+        x => x.low
+      )
+    );
 
-  const currentLow = Math.min(
-    ...current.map(x => x.low)
-  );
+  const currentHigh =
+    Math.max(
+      ...current.map(
+        x => x.high
+      )
+    );
 
-  const price = candles.at(-1).close;
+  const currentLow =
+    Math.min(
+      ...current.map(
+        x => x.low
+      )
+    );
+
+  const price =
+    candles.at(-1).close;
 
   let state = "RANGE";
 
@@ -300,7 +383,9 @@ function structure(candles) {
 
   if (price > previousHigh) {
     bos = "BULLISH";
-  } else if (price < previousLow) {
+  } else if (
+    price < previousLow
+  ) {
     bos = "BEARISH";
   }
 
@@ -325,45 +410,61 @@ function structure(candles) {
     bos,
     choch,
     swingHigh: round(
-      Math.max(previousHigh, currentHigh),
+      Math.max(
+        previousHigh,
+        currentHigh
+      ),
       2
     ),
     swingLow: round(
-      Math.min(previousLow, currentLow),
+      Math.min(
+        previousLow,
+        currentLow
+      ),
       2
     )
   };
 }
 
-/* =========================
+/* =========================================================
    LIQUIDITY
-========================= */
+========================================================= */
 
 function liquiditySweep(candles) {
-  if (candles.length < 25) return "NONE";
+  if (candles.length < 25) {
+    return "NONE";
+  }
 
-  const previous = candles.slice(-21, -1);
+  const previous =
+    candles.slice(-21, -1);
 
-  const high = Math.max(
-    ...previous.map(x => x.high)
-  );
+  const high =
+    Math.max(
+      ...previous.map(
+        x => x.high
+      )
+    );
 
-  const low = Math.min(
-    ...previous.map(x => x.low)
-  );
+  const low =
+    Math.min(
+      ...previous.map(
+        x => x.low
+      )
+    );
 
-  const c = candles.at(-1);
+  const current =
+    candles.at(-1);
 
   if (
-    c.high > high &&
-    c.close < high
+    current.high > high &&
+    current.close < high
   ) {
     return "BEARISH_SWEEP";
   }
 
   if (
-    c.low < low &&
-    c.close > low
+    current.low < low &&
+    current.close > low
   ) {
     return "BULLISH_SWEEP";
   }
@@ -371,9 +472,9 @@ function liquiditySweep(candles) {
   return "NONE";
 }
 
-/* =========================
-   CANDLE ANALYSIS
-========================= */
+/* =========================================================
+   CANDLE
+========================================================= */
 
 function candleInfo(candles) {
   if (candles.length < 2) {
@@ -385,32 +486,44 @@ function candleInfo(candles) {
     };
   }
 
-  const c = candles.at(-1);
+  const c =
+    candles.at(-1);
 
-  const body = Math.abs(
-    c.close - c.open
-  );
+  const body =
+    Math.abs(
+      c.close - c.open
+    );
 
-  const range = Math.max(
-    c.high - c.low,
-    0.00001
-  );
+  const range =
+    Math.max(
+      c.high - c.low,
+      0.00001
+    );
 
   const upper =
     c.high -
-    Math.max(c.open, c.close);
+    Math.max(
+      c.open,
+      c.close
+    );
 
   const lower =
-    Math.min(c.open, c.close) -
+    Math.min(
+      c.open,
+      c.close
+    ) -
     c.low;
 
-  let direction = "NEUTRAL";
+  let direction =
+    "NEUTRAL";
 
-  if (c.close > c.open)
+  if (c.close > c.open) {
     direction = "BULLISH";
+  }
 
-  if (c.close < c.open)
+  if (c.close < c.open) {
     direction = "BEARISH";
+  }
 
   const impulse =
     body / range >= 0.65;
@@ -426,9 +539,13 @@ function candleInfo(candles) {
   let pattern = "NORMAL";
 
   if (bullishRejection) {
-    pattern = "BULLISH_REJECTION";
-  } else if (bearishRejection) {
-    pattern = "BEARISH_REJECTION";
+    pattern =
+      "BULLISH_REJECTION";
+  } else if (
+    bearishRejection
+  ) {
+    pattern =
+      "BEARISH_REJECTION";
   } else if (impulse) {
     pattern =
       direction === "BULLISH"
@@ -448,9 +565,9 @@ function candleInfo(candles) {
   };
 }
 
-/* =========================
-   TIMEFRAME ENGINE
-========================= */
+/* =========================================================
+   TIMEFRAME ANALYSIS
+========================================================= */
 
 function analyzeTimeframe(candles) {
   if (candles.length < 50) {
@@ -458,54 +575,107 @@ function analyzeTimeframe(candles) {
       bias: "NEUTRAL",
       setupScore: 0,
       trend: "NEUTRAL",
-      structure: structure(candles),
+      structure:
+        structure(candles),
       liquidity: "NONE",
+
       momentum: {
         rsi: 50,
         macd: 0,
         signal: 0,
         histogram: 0
       },
+
       atr: 0,
-      price: candles.at(-1)?.close || null,
+
+      price:
+        candles.at(-1)?.close ||
+        null,
+
       candleTime:
-        candles.at(-1)?.datetime || null
+        candles.at(-1)?.datetime ||
+        null
     };
   }
 
-  const closes = candles.map(x => x.close);
+  const closes =
+    candles.map(
+      x => x.close
+    );
 
-  const e20 = ema(closes, 20).at(-1);
-  const e50 = ema(closes, 50).at(-1);
-  const e200 = ema(closes, 200).at(-1);
+  const e20 =
+    ema(
+      closes,
+      20
+    ).at(-1);
 
-  const price = closes.at(-1);
+  const e50 =
+    ema(
+      closes,
+      50
+    ).at(-1);
 
-  const r = rsi(closes);
-  const m = macd(closes);
-  const a = atr(candles);
+  const e200 =
+    ema(
+      closes,
+      200
+    ).at(-1);
 
-  const s = structure(candles);
-  const l = liquiditySweep(candles);
-  const c = candleInfo(candles);
+  const price =
+    closes.at(-1);
+
+  const r =
+    rsi(closes);
+
+  const m =
+    macd(closes);
+
+  const a =
+    atr(candles);
+
+  const s =
+    structure(candles);
+
+  const l =
+    liquiditySweep(candles);
+
+  const c =
+    candleInfo(candles);
 
   let bull = 0;
   let bear = 0;
 
-  if (price > e20) bull++;
-  else bear++;
+  if (price > e20) {
+    bull++;
+  } else {
+    bear++;
+  }
 
-  if (e20 > e50) bull++;
-  else bear++;
+  if (e20 > e50) {
+    bull++;
+  } else {
+    bear++;
+  }
 
-  if (e50 > e200) bull++;
-  else bear++;
+  if (e50 > e200) {
+    bull++;
+  } else {
+    bear++;
+  }
 
-  if (r > 52) bull++;
-  else if (r < 48) bear++;
+  if (r > 52) {
+    bull++;
+  } else if (r < 48) {
+    bear++;
+  }
 
-  if (m.histogram > 0) bull++;
-  else if (m.histogram < 0) bear++;
+  if (m.histogram > 0) {
+    bull++;
+  } else if (
+    m.histogram < 0
+  ) {
+    bear++;
+  }
 
   if (
     s.state === "HH_HL" ||
@@ -525,23 +695,35 @@ function analyzeTimeframe(candles) {
 
   let bias = "NEUTRAL";
 
-  if (bull >= bear + 2)
+  if (bull >= bear + 2) {
     bias = "BULLISH";
-
-  if (bear >= bull + 2)
+  } else if (
+    bear >= bull + 2
+  ) {
     bias = "BEARISH";
+  }
 
   const rawScore =
     50 +
     (bull - bear) * 8 +
-    (s.bos !== "NONE" ? 5 : 0);
+    (s.bos !== "NONE"
+      ? 5
+      : 0);
 
   return {
     bias,
-    setupScore: Math.max(
-      0,
-      Math.min(100, Math.round(rawScore))
-    ),
+
+    setupScore:
+      Math.max(
+        0,
+        Math.min(
+          100,
+          Math.round(
+            rawScore
+          )
+        )
+      ),
+
     trend: bias,
 
     structure: s,
@@ -550,31 +732,62 @@ function analyzeTimeframe(candles) {
 
     momentum: {
       rsi: round(r, 2),
-      macd: round(m.macd, 4),
-      signal: round(m.signal, 4),
-      histogram: round(
-        m.histogram,
+      macd: round(
+        m.macd,
         4
-      )
+      ),
+      signal: round(
+        m.signal,
+        4
+      ),
+      histogram:
+        round(
+          m.histogram,
+          4
+        )
     },
 
-    atr: round(a, 3),
-    price: round(price, 2),
+    atr: round(
+      a,
+      3
+    ),
 
-    ema20: round(e20, 2),
-    ema50: round(e50, 2),
-    ema200: round(e200, 2),
+    price:
+      round(
+        price,
+        2
+      ),
+
+    ema20:
+      round(
+        e20,
+        2
+      ),
+
+    ema50:
+      round(
+        e50,
+        2
+      ),
+
+    ema200:
+      round(
+        e200,
+        2
+      ),
 
     candleTime:
-      candles.at(-1)?.datetime || null,
+      candles.at(-1)?.datetime ||
+      null,
 
-    candleMetrics: c
+    candleMetrics:
+      c
   };
 }
 
-/* =========================
-   SCORE
-========================= */
+/* =========================================================
+   WEIGHTED SCORE
+========================================================= */
 
 function weightedScore(scores) {
   const weights = {
@@ -588,33 +801,52 @@ function weightedScore(scores) {
   let total = 0;
   let weight = 0;
 
-  for (const tf of Object.keys(weights)) {
-    if (!scores[tf]) continue;
+  for (
+    const tf of Object.keys(
+      weights
+    )
+  ) {
+    if (!scores[tf]) {
+      continue;
+    }
 
     total +=
       scores[tf].setupScore *
       weights[tf];
 
-    weight += weights[tf];
+    weight +=
+      weights[tf];
   }
 
   return Math.round(
-    weight ? total / weight : 0
+    weight
+      ? total / weight
+      : 0
   );
 }
 
-/* =========================
+/* =========================================================
    HIGHER TIMEFRAME DIRECTION
-========================= */
+========================================================= */
 
 function higherDirection(scores) {
-  const h4 = scores["4h"]?.bias;
-  const h1 = scores["1h"]?.bias;
-  const m15 = scores["15min"]?.bias;
+  const h4 =
+    scores["4h"]?.bias;
+
+  const h1 =
+    scores["1h"]?.bias;
+
+  const m15 =
+    scores["15min"]?.bias;
 
   /*
-    FINAL ENGINE:
-    H4 + H1 + M15 must agree.
+    STRICT FINAL RULE:
+
+    BUY:
+    H4 + H1 + M15 = BULLISH
+
+    SELL:
+    H4 + H1 + M15 = BEARISH
   */
 
   if (
@@ -636,17 +868,20 @@ function higherDirection(scores) {
   return "NONE";
 }
 
-/* =========================
+/* =========================================================
    M15 STRUCTURE GATE
-========================= */
+========================================================= */
 
 function m15StructureGate(
   m15,
   direction
 ) {
-  if (!m15) return false;
+  if (!m15) {
+    return false;
+  }
 
-  const s = m15.structure;
+  const s =
+    m15.structure;
 
   if (direction === "BUY") {
     return (
@@ -663,18 +898,23 @@ function m15StructureGate(
   );
 }
 
-/* =========================
-   M15 LIQUIDITY GATE
-========================= */
+/* =========================================================
+   M15 LIQUIDITY / BOS
+========================================================= */
 
 function m15LiquidityGate(
   m15,
   direction
 ) {
-  if (!m15) return false;
+  if (!m15) {
+    return false;
+  }
 
-  const s = m15.structure;
-  const l = m15.liquidity;
+  const s =
+    m15.structure;
+
+  const l =
+    m15.liquidity;
 
   if (direction === "BUY") {
     return (
@@ -691,9 +931,9 @@ function m15LiquidityGate(
   );
 }
 
-/* =========================
-   M5 PULLBACK ENGINE
-========================= */
+/* =========================================================
+   M5 PULLBACK
+========================================================= */
 
 function m5Pullback(
   candles,
@@ -706,56 +946,66 @@ function m5Pullback(
   ) {
     return {
       valid: false,
-      state: "INSUFFICIENT_DATA",
+      state:
+        "INSUFFICIENT_DATA",
       depthATR: null
     };
   }
 
-  const recent = candles.slice(-12);
+  /*
+    Last 12 candles:
+    first 6 = impulse
+    last 6 = pullback
+  */
 
-  const impulseCandles =
+  const recent =
+    candles.slice(-12);
+
+  const impulse =
     recent.slice(0, 6);
 
-  const pullbackCandles =
-    recent.slice(6);
-
   const impulseStart =
-    impulseCandles[0].close;
+    impulse[0].close;
 
   const impulseEnd =
-    impulseCandles.at(-1).close;
+    impulse.at(-1).close;
 
   const impulseMove =
     direction === "BUY"
-      ? impulseEnd - impulseStart
-      : impulseStart - impulseEnd;
-
-  /*
-    There must first be a directional
-    M5 impulse.
-  */
+      ? impulseEnd -
+        impulseStart
+      : impulseStart -
+        impulseEnd;
 
   const impulseValid =
-    impulseMove >= atrValue * 0.35;
+    impulseMove >=
+    atrValue * 0.35;
 
   if (!impulseValid) {
     return {
       valid: false,
-      state: "NO_M5_IMPULSE",
-      depthATR: null
+      state:
+        "NO_M5_IMPULSE",
+      depthATR: null,
+      impulseATR: round(
+        Math.abs(
+          impulseMove
+        ) / atrValue,
+        2
+      )
     };
   }
 
   const impulseHigh =
     Math.max(
-      ...impulseCandles.map(
+      ...impulse.map(
         x => x.high
       )
     );
 
   const impulseLow =
     Math.min(
-      ...impulseCandles.map(
+      ...impulse.map(
         x => x.low
       )
     );
@@ -769,49 +1019,63 @@ function m5Pullback(
     depth =
       Math.max(
         0,
-        impulseHigh - current
+        impulseHigh -
+        current
       ) / atrValue;
   } else {
     depth =
       Math.max(
         0,
-        current - impulseLow
+        current -
+        impulseLow
       ) / atrValue;
   }
 
-  const valid =
-    depth >=
-      CONFIG.m5MinPullbackATR &&
-    depth <=
-      CONFIG.m5MaxPullbackATR;
+  let state =
+    "VALID_PULLBACK";
 
-  let state = "VALID_PULLBACK";
-
-  if (depth <
-      CONFIG.m5MinPullbackATR) {
+  if (
+    depth <
+    CONFIG.m5MinPullbackATR
+  ) {
     state = "CHASING";
   }
 
-  if (depth >
-      CONFIG.m5MaxPullbackATR) {
+  if (
+    depth >
+    CONFIG.m5MaxPullbackATR
+  ) {
     state = "DEEP_PULLBACK";
   }
 
   return {
-    valid,
+    valid:
+      depth >=
+        CONFIG.m5MinPullbackATR &&
+      depth <=
+        CONFIG.m5MaxPullbackATR,
+
     state,
-    depthATR: round(depth, 2),
-    impulseATR: round(
-      Math.abs(impulseMove) /
-      atrValue,
-      2
-    )
+
+    depthATR:
+      round(
+        depth,
+        2
+      ),
+
+    impulseATR:
+      round(
+        Math.abs(
+          impulseMove
+        ) / atrValue,
+        2
+      )
   };
 }
 
-/* =========================
-   M1 MICRO CONFIRMATION
-========================= */
+/* =========================================================
+   M1 CONFIRMATION
+========================================================= */
 
 function m1Confirmation(
   candles,
@@ -820,8 +1084,11 @@ function m1Confirmation(
   if (candles.length < 8) {
     return {
       confirmed: false,
-      reason: "INSUFFICIENT_DATA",
-      pattern: "NONE"
+      microBOS: false,
+      candleConfirmation: false,
+      pattern: "NONE",
+      reason:
+        "INSUFFICIENT_DATA"
     };
   }
 
@@ -833,37 +1100,45 @@ function m1Confirmation(
 
   const previousHigh =
     Math.max(
-      ...previous.map(x => x.high)
+      ...previous.map(
+        x => x.high
+      )
     );
 
   const previousLow =
     Math.min(
-      ...previous.map(x => x.low)
+      ...previous.map(
+        x => x.low
+      )
     );
 
-  const c =
+  const candle =
     candleInfo(candles);
 
   const microBOS =
     direction === "BUY"
-      ? current.close > previousHigh
-      : current.close < previousLow;
+      ? current.close >
+        previousHigh
+      : current.close <
+        previousLow;
 
   const candleConfirmation =
     direction === "BUY"
       ? (
-          c.direction === "BULLISH" &&
+          candle.direction ===
+            "BULLISH" &&
           (
-            c.impulse ||
-            c.pattern ===
+            candle.impulse ||
+            candle.pattern ===
               "BULLISH_REJECTION"
           )
         )
       : (
-          c.direction === "BEARISH" &&
+          candle.direction ===
+            "BEARISH" &&
           (
-            c.impulse ||
-            c.pattern ===
+            candle.impulse ||
+            candle.pattern ===
               "BEARISH_REJECTION"
           )
         );
@@ -876,21 +1151,29 @@ function m1Confirmation(
     confirmed,
     microBOS,
     candleConfirmation,
-    pattern: c.pattern,
-    reason: confirmed
-      ? "M1_CONFIRMATION_CONFIRMED"
-      : "NO_M1_CONFIRMATION"
+    pattern:
+      candle.pattern,
+
+    reason:
+      confirmed
+        ? "M1_CONFIRMATION_CONFIRMED"
+        : "NO_M1_CONFIRMATION"
   };
 }
 
-/* =========================
+/* =========================================================
    VOLATILITY
-========================= */
+========================================================= */
 
 function volatilityStatus(scores) {
-  const h1 = scores["1h"];
+  const h1 =
+    scores["1h"];
 
-  if (!h1 || !h1.price || !h1.atr) {
+  if (
+    !h1 ||
+    !h1.price ||
+    !h1.atr
+  ) {
     return {
       state: "UNKNOWN",
       atrPercent: null,
@@ -899,7 +1182,8 @@ function volatilityStatus(scores) {
   }
 
   const pct =
-    (h1.atr / h1.price) * 100;
+    (h1.atr / h1.price) *
+    100;
 
   if (
     pct >=
@@ -907,7 +1191,8 @@ function volatilityStatus(scores) {
   ) {
     return {
       state: "HIGH",
-      atrPercent: round(pct, 3),
+      atrPercent:
+        round(pct, 3),
       warning: true
     };
   }
@@ -918,21 +1203,23 @@ function volatilityStatus(scores) {
   ) {
     return {
       state: "LOW",
-      atrPercent: round(pct, 3),
+      atrPercent:
+        round(pct, 3),
       warning: true
     };
   }
 
   return {
     state: "NORMAL",
-    atrPercent: round(pct, 3),
+    atrPercent:
+      round(pct, 3),
     warning: false
   };
 }
 
-/* =========================
+/* =========================================================
    MARKET CONDITION
-========================= */
+========================================================= */
 
 function marketCondition(scores) {
   const values =
@@ -940,32 +1227,40 @@ function marketCondition(scores) {
 
   const bull =
     values.filter(
-      x => x.bias === "BULLISH"
+      x =>
+        x.bias ===
+        "BULLISH"
     ).length;
 
   const bear =
     values.filter(
-      x => x.bias === "BEARISH"
+      x =>
+        x.bias ===
+        "BEARISH"
     ).length;
 
-  if (bull >= 4)
+  if (bull >= 4) {
     return "STRONG_BULLISH";
+  }
 
-  if (bear >= 4)
+  if (bear >= 4) {
     return "STRONG_BEARISH";
+  }
 
-  if (bull >= 3)
+  if (bull >= 3) {
     return "BULLISH";
+  }
 
-  if (bear >= 3)
+  if (bear >= 3) {
     return "BEARISH";
+  }
 
   return "MIXED";
 }
 
-/* =========================
+/* =========================================================
    RISK PLAN
-========================= */
+========================================================= */
 
 function buildRiskPlan(
   direction,
@@ -997,32 +1292,34 @@ function buildRiskPlan(
   if (direction === "BUY") {
     sl =
       s.swingLow -
-      atrValue * CONFIG.slATRBuffer;
+      atrValue *
+      CONFIG.slATRBuffer;
 
-    /*
-      SL must actually be below entry.
-    */
     if (sl >= entry) {
       return null;
     }
   } else {
     sl =
       s.swingHigh +
-      atrValue * CONFIG.slATRBuffer;
+      atrValue *
+      CONFIG.slATRBuffer;
 
-    /*
-      SL must actually be above entry.
-    */
     if (sl <= entry) {
       return null;
     }
   }
 
   const risk =
-    Math.abs(entry - sl);
+    Math.abs(
+      entry - sl
+    );
 
-  if (!risk || risk <= 0)
+  if (
+    !risk ||
+    risk <= 0
+  ) {
     return null;
+  }
 
   const tp =
     direction === "BUY"
@@ -1030,25 +1327,49 @@ function buildRiskPlan(
       : entry - risk * 2;
 
   return {
-    entry: round(entry, 2),
-    sl: round(sl, 2),
-    tp: round(tp, 2),
-    riskDistance: round(risk, 2),
-    rewardDistance: round(
-      risk * 2,
-      2
-    ),
+    entry:
+      round(
+        entry,
+        2
+      ),
+
+    sl:
+      round(
+        sl,
+        2
+      ),
+
+    tp:
+      round(
+        tp,
+        2
+      ),
+
+    riskDistance:
+      round(
+        risk,
+        2
+      ),
+
+    rewardDistance:
+      round(
+        risk * 2,
+        2
+      ),
+
     rr: 2,
+
     method:
       "M15_STRUCTURE + ATR_BUFFER",
+
     note:
       "Position size must be calculated from account risk."
   };
 }
 
-/* =========================
-   MARKET DATA
-========================= */
+/* =========================================================
+   TWELVE DATA
+========================================================= */
 
 async function getMarket(
   env,
@@ -1058,14 +1379,15 @@ async function getMarket(
     env.TWELVE_DATA_API_KEY;
 
   if (!apiKey) {
-    const e = new Error(
-      "TWELVE_DATA_API_KEY missing"
-    );
+    const error =
+      new Error(
+        "TWELVE_DATA_API_KEY missing"
+      );
 
-    e.code =
+    error.code =
       "CONFIG_ERROR";
 
-    throw e;
+    throw error;
   }
 
   const cache =
@@ -1077,7 +1399,9 @@ async function getMarket(
     );
 
   const cached =
-    await cache.match(cacheKey);
+    await cache.match(
+      cacheKey
+    );
 
   if (cached) {
     return await cached.json();
@@ -1121,33 +1445,37 @@ async function getMarket(
 
   if (
     !response.ok ||
-    data?.status === "error"
+    data?.status ===
+      "error"
   ) {
-    const e =
+    const error =
       new Error(
         data?.message ||
         `Twelve Data HTTP ${response.status}`
       );
 
-    e.code =
+    error.code =
       data?.code ||
       response.status;
 
-    throw e;
+    throw error;
   }
 
   const candles =
-    normalizeCandles(data);
+    normalizeCandles(
+      data
+    );
 
   if (!candles.length) {
-    const e =
+    const error =
       new Error(
         "No market data returned"
       );
 
-    e.code = "NO_DATA";
+    error.code =
+      "NO_DATA";
 
-    throw e;
+    throw error;
   }
 
   const result = {
@@ -1175,9 +1503,9 @@ async function getMarket(
   return result;
 }
 
-/* =========================
+/* =========================================================
    FRESHNESS
-========================= */
+========================================================= */
 
 function freshness(
   candles,
@@ -1190,7 +1518,8 @@ function freshness(
     return {
       fresh: false,
       ageMinutes: null,
-      reason: "NO_TIMESTAMP"
+      reason:
+        "NO_TIMESTAMP"
     };
   }
 
@@ -1210,8 +1539,10 @@ function freshness(
     Math.max(
       0,
       Math.round(
-        (Date.now() - time) /
-        60000
+        (
+          Date.now() -
+          time
+        ) / 60000
       )
     );
 
@@ -1221,8 +1552,12 @@ function freshness(
   return {
     fresh:
       ageMinutes <= limit,
+
     ageMinutes,
-    limitMinutes: limit,
+
+    limitMinutes:
+      limit,
+
     reason:
       ageMinutes <= limit
         ? "FRESH"
@@ -1230,37 +1565,49 @@ function freshness(
   };
 }
 
-/* =========================
-   ANALYSIS ENGINE
-========================= */
+/* =========================================================
+   FINAL ANALYSIS
+========================================================= */
 
 async function runAnalysis(env) {
-  /*
-    WEEKEND PROTECTION
-  */
+  /* -------------------------------------------------------
+     WEEKEND
+  ------------------------------------------------------- */
 
   if (isWeekend()) {
     return {
       ok: true,
-      engine: ENGINE_VERSION,
-      symbol: SYMBOL,
 
-      decision: "NO TRADE",
+      engine:
+        ENGINE_VERSION,
+
+      symbol:
+        SYMBOL,
+
+      decision:
+        "NO TRADE",
+
       setupScore: 0,
+
       price: null,
 
       multiTimeframeBias:
         "NONE",
 
       analysis: {},
+
       freshness: {},
 
-      dataStatus: "WEEKEND",
+      dataStatus:
+        "WEEKEND",
+
       unavailable: [],
 
       safety: {
         weekend: true,
-        session: tradingSession(),
+
+        session:
+          tradingSession(),
 
         volatility: {
           state: "N/A",
@@ -1281,17 +1628,26 @@ async function runAnalysis(env) {
           "NOT CHECKED"
       },
 
-      entryConfirmation: null,
-      riskPlan: null,
+      entryConfirmation:
+        null,
+
+      riskPlan:
+        null,
 
       execution: {
-        state: "NO_TRADE",
-        executable: false
+        state:
+          "NO_TRADE",
+
+        executable:
+          false
       },
 
       executionGate: {
         passed: false,
-        reasons: ["WEEKEND"]
+
+        reasons: [
+          "WEEKEND"
+        ]
       },
 
       generatedAt:
@@ -1299,12 +1655,14 @@ async function runAnalysis(env) {
     };
   }
 
-  /*
-    GET ALL FIVE TIMEFRAMES
-  */
+  /* -------------------------------------------------------
+     FETCH FIVE TIMEFRAMES
+  ------------------------------------------------------- */
 
   const tfNames =
-    Object.keys(TIMEFRAMES);
+    Object.keys(
+      TIMEFRAMES
+    );
 
   const results =
     await Promise.allSettled(
@@ -1317,9 +1675,9 @@ async function runAnalysis(env) {
             );
 
           return {
-            tf,
             candles:
               data.candles,
+
             freshness:
               freshness(
                 data.candles,
@@ -1331,7 +1689,7 @@ async function runAnalysis(env) {
     );
 
   const scores = {};
-  const candleStore = {};
+  const candles = {};
   const freshState = {};
   const unavailable = [];
 
@@ -1352,33 +1710,42 @@ async function runAnalysis(env) {
     ) {
       unavailable.push({
         timeframe: tf,
+
         code:
           result.reason?.code ||
           "DATA_ERROR",
+
         error:
           result.reason?.message ||
-          String(result.reason)
+          String(
+            result.reason
+          )
       });
 
       continue;
     }
 
-    candleStore[tf] =
+    candles[tf] =
       result.value.candles;
 
     freshState[tf] =
       result.value.freshness;
 
     if (
-      !result.value.freshness.fresh
+      !result.value
+        .freshness
+        .fresh
     ) {
       unavailable.push({
         timeframe: tf,
+
         code:
           "STALE_DATA",
+
         error:
           result.value
-            .freshness.reason
+            .freshness
+            .reason
       });
 
       continue;
@@ -1397,10 +1764,9 @@ async function runAnalysis(env) {
         true
     );
 
-  /*
-    Missing or stale data
-    immediately kills execution.
-  */
+  /* -------------------------------------------------------
+     DATA PROTECTION
+  ------------------------------------------------------- */
 
   if (
     !allFresh ||
@@ -1408,12 +1774,20 @@ async function runAnalysis(env) {
   ) {
     return {
       ok: true,
-      engine: ENGINE_VERSION,
-      symbol: SYMBOL,
 
-      decision: "NO TRADE",
+      engine:
+        ENGINE_VERSION,
+
+      symbol:
+        SYMBOL,
+
+      decision:
+        "NO TRADE",
+
       setupScore:
-        weightedScore(scores),
+        weightedScore(
+          scores
+        ),
 
       price:
         scores["1min"]?.price ||
@@ -1423,21 +1797,32 @@ async function runAnalysis(env) {
       multiTimeframeBias:
         "MIXED",
 
-      analysis: scores,
-      freshness: freshState,
+      analysis:
+        scores,
 
-      dataStatus: "DEGRADED",
+      freshness:
+        freshState,
+
+      dataStatus:
+        "DEGRADED",
+
       unavailable,
 
       safety: {
         weekend: false,
-        session: tradingSession(),
+
+        session:
+          tradingSession(),
 
         volatility:
-          volatilityStatus(scores),
+          volatilityStatus(
+            scores
+          ),
 
         marketCondition:
-          marketCondition(scores),
+          marketCondition(
+            scores
+          ),
 
         newsRisk:
           "NOT CHECKED",
@@ -1449,16 +1834,23 @@ async function runAnalysis(env) {
           "NOT CHECKED"
       },
 
-      entryConfirmation: null,
-      riskPlan: null,
+      entryConfirmation:
+        null,
+
+      riskPlan:
+        null,
 
       execution: {
-        state: "NO_TRADE",
-        executable: false
+        state:
+          "NO_TRADE",
+
+        executable:
+          false
       },
 
       executionGate: {
         passed: false,
+
         reasons: [
           "DATA_NOT_FRESH_OR_UNAVAILABLE"
         ]
@@ -1469,67 +1861,91 @@ async function runAnalysis(env) {
     };
   }
 
-  /* =========================
-     FINAL DIRECTION
-  ========================= */
-
-  const direction =
-    higherDirection(scores);
+  /* -------------------------------------------------------
+     GLOBAL VALUES
+  ------------------------------------------------------- */
 
   const score =
-    weightedScore(scores);
+    weightedScore(
+      scores
+    );
 
-  const m15 =
-    scores["15min"];
-
-  const m5 =
-    scores["5min"];
-
-  const m1 =
-    scores["1min"];
-
-  const volatility =
-    volatilityStatus(scores);
-
-  const condition =
-    marketCondition(scores);
+  const direction =
+    higherDirection(
+      scores
+    );
 
   const price =
-    m1.price;
+    scores["1min"]?.price ||
+    null;
 
-  /*
-    No H4/H1/M15 alignment
-    = no directional trade.
-  */
+  const volatility =
+    volatilityStatus(
+      scores
+    );
 
-  if (direction === "NONE") {
+  const condition =
+    marketCondition(
+      scores
+    );
+
+  /* -------------------------------------------------------
+     NO HIGHER-TF ALIGNMENT
+  ------------------------------------------------------- */
+
+  if (
+    direction === "NONE"
+  ) {
     return {
       ok: true,
-      engine: ENGINE_VERSION,
-      symbol: SYMBOL,
+
+      engine:
+        ENGINE_VERSION,
+
+      symbol:
+        SYMBOL,
+
+      /*
+        IMPORTANT:
+        This is NOT a BUY/SELL setup.
+
+        H4/H1/M15 are conflicting.
+      */
 
       decision:
         score >= 50
-          ? "WATCH"
+          ? "WAIT — MARKET CONFLICT"
           : "NO TRADE",
 
-      setupScore: score,
+      setupScore:
+        score,
+
       price,
 
       multiTimeframeBias:
         "MIXED",
 
-      analysis: scores,
-      freshness: freshState,
+      analysis:
+        scores,
 
-      dataStatus: "FRESH",
+      freshness:
+        freshState,
+
+      dataStatus:
+        "FRESH",
+
       unavailable: [],
 
       safety: {
         weekend: false,
-        session: tradingSession(),
+
+        session:
+          tradingSession(),
+
         volatility,
-        marketCondition: condition,
+
+        marketCondition:
+          condition,
 
         newsRisk:
           "NOT CHECKED",
@@ -1541,16 +1957,23 @@ async function runAnalysis(env) {
           "NOT CHECKED"
       },
 
-      entryConfirmation: null,
-      riskPlan: null,
+      entryConfirmation:
+        null,
+
+      riskPlan:
+        null,
 
       execution: {
-        state: "WATCH",
-        executable: false
+        state:
+          "WAIT_CONFLICT",
+
+        executable:
+          false
       },
 
       executionGate: {
         passed: false,
+
         reasons: [
           "H4_H1_M15_NOT_ALIGNED"
         ]
@@ -1561,82 +1984,80 @@ async function runAnalysis(env) {
     };
   }
 
-  /* =========================
-     M15 STRUCTURE
-  ========================= */
+  /* -------------------------------------------------------
+     M15
+  ------------------------------------------------------- */
 
-  const structurePassed =
+  const m15 =
+    scores["15min"];
+
+  const m15StructurePassed =
     m15StructureGate(
       m15,
       direction
     );
 
-  /* =========================
-     M15 LIQUIDITY / BOS
-  ========================= */
-
-  const liquidityPassed =
+  const m15LiquidityPassed =
     m15LiquidityGate(
       m15,
       direction
     );
 
-  /* =========================
-     M5 PULLBACK
-  ========================= */
+  /* -------------------------------------------------------
+     M5
+  ------------------------------------------------------- */
+
+  const m5 =
+    scores["5min"];
 
   const pullback =
     m5Pullback(
-      candleStore["5min"],
+      candles["5min"],
       direction,
       m5.atr
     );
-
-  /* =========================
-     M1 FINAL CONFIRMATION
-  ========================= */
-
-  const confirmation =
-    m1Confirmation(
-      candleStore["1min"],
-      direction
-    );
-
-  /* =========================
-     M5 DIRECTION
-  ========================= */
 
   const m5Aligned =
     direction === "BUY"
       ? m5.bias === "BULLISH"
       : m5.bias === "BEARISH";
 
-  /* =========================
-     M1 DIRECTION
-  ========================= */
+  /* -------------------------------------------------------
+     M1
+  ------------------------------------------------------- */
+
+  const m1 =
+    scores["1min"];
+
+  const confirmation =
+    m1Confirmation(
+      candles["1min"],
+      direction
+    );
 
   const m1Aligned =
     direction === "BUY"
       ? m1.bias !== "BEARISH"
       : m1.bias !== "BULLISH";
 
-  /* =========================
+  /* -------------------------------------------------------
      SCORE
-  ========================= */
+  ------------------------------------------------------- */
 
   const scorePassed =
-    score >= CONFIG.minScore;
+    score >=
+    CONFIG.minScore;
 
-  /* =========================
+  /* -------------------------------------------------------
      VOLATILITY
-  ========================= */
+  ------------------------------------------------------- */
 
   const volatilityPassed =
     !volatility.warning;
 
-  /* =========================
-     RISK PLAN
-  ========================= */
+  /* -------------------------------------------------------
+     RISK
+  ------------------------------------------------------- */
 
   const plan =
     buildRiskPlan(
@@ -1648,21 +2069,22 @@ async function runAnalysis(env) {
 
   const rrPassed =
     !!plan &&
-    plan.rr >= CONFIG.minRR;
+    plan.rr >=
+      CONFIG.minRR;
 
-  /* =========================
+  /* -------------------------------------------------------
      EXECUTION GATE
-  ========================= */
+  ------------------------------------------------------- */
 
   const reasons = [];
 
-  if (!structurePassed) {
+  if (!m15StructurePassed) {
     reasons.push(
       "M15_STRUCTURE_FAILED"
     );
   }
 
-  if (!liquidityPassed) {
+  if (!m15LiquidityPassed) {
     reasons.push(
       "M15_LIQUIDITY_OR_BOS_FAILED"
     );
@@ -1710,9 +2132,13 @@ async function runAnalysis(env) {
     );
   }
 
+  /*
+    FINAL EXECUTION CONDITION
+  */
+
   const executable =
-    structurePassed &&
-    liquidityPassed &&
+    m15StructurePassed &&
+    m15LiquidityPassed &&
     pullback.valid &&
     confirmation.confirmed &&
     m5Aligned &&
@@ -1721,23 +2147,30 @@ async function runAnalysis(env) {
     volatilityPassed &&
     rrPassed;
 
-  /*
-    Important:
-    News / spread / slippage are NOT
-    fabricated. They are explicitly
-    marked NOT CHECKED.
-  */
+  /* -------------------------------------------------------
+     DECISION
+  ------------------------------------------------------- */
 
-  const decision =
-    executable
-      ? direction
-      : score >= 50
-        ? (
-            direction === "BUY"
-              ? "WATCH — BUY SETUP"
-              : "WATCH — SELL SETUP"
-          )
-        : "NO TRADE";
+  let decision;
+
+  if (executable) {
+    decision =
+      direction;
+  } else if (
+    score >= 50
+  ) {
+    decision =
+      direction === "BUY"
+        ? "WAIT — BUY SETUP"
+        : "WAIT — SELL SETUP";
+  } else {
+    decision =
+      "NO TRADE";
+  }
+
+  /*
+    WATCH / WAIT IS NEVER EXECUTABLE.
+  */
 
   const executionState =
     executable
@@ -1746,23 +2179,31 @@ async function runAnalysis(env) {
             ? "TRADE_BUY"
             : "TRADE_SELL"
         )
-      : decision.startsWith("WATCH")
-        ? "WATCH"
-        : "NO_TRADE";
+      : decision ===
+          "WAIT — BUY SETUP"
+        ? "WAIT_BUY"
+        : decision ===
+            "WAIT — SELL SETUP"
+          ? "WAIT_SELL"
+          : "NO_TRADE";
 
-  /*
-    Entry information is diagnostic
-    unless the complete gate passes.
-  */
+  /* -------------------------------------------------------
+     ENTRY DIAGNOSTICS
+  ------------------------------------------------------- */
 
   const entryConfirmation = {
     direction,
 
     m15: {
-      structurePassed,
-      liquidityPassed,
+      structurePassed:
+        m15StructurePassed,
+
+      liquidityPassed:
+        m15LiquidityPassed,
+
       structure:
         m15.structure,
+
       liquidity:
         m15.liquidity
     },
@@ -1770,22 +2211,30 @@ async function runAnalysis(env) {
     m5: {
       aligned:
         m5Aligned,
+
       pullback
     },
 
     m1: {
       aligned:
         m1Aligned,
+
       confirmation
     },
 
     scorePassed,
+
     volatilityPassed,
+
     rrPassed,
 
     confirmed:
       executable
   };
+
+  /* -------------------------------------------------------
+     FINAL RESPONSE
+  ------------------------------------------------------- */
 
   return {
     ok: true,
@@ -1802,7 +2251,10 @@ async function runAnalysis(env) {
       score,
 
     price:
-      round(price, 2),
+      round(
+        price,
+        2
+      ),
 
     multiTimeframeBias:
       direction === "BUY"
@@ -1831,6 +2283,11 @@ async function runAnalysis(env) {
       marketCondition:
         condition,
 
+      /*
+        These are deliberately
+        NOT fabricated.
+      */
+
       newsRisk:
         "NOT CHECKED",
 
@@ -1844,8 +2301,9 @@ async function runAnalysis(env) {
     entryConfirmation,
 
     /*
-      Never provide an executable
-      risk plan for WATCH / NO TRADE.
+      Only genuine BUY/SELL
+      receives an executable
+      risk plan.
     */
 
     riskPlan:
@@ -1884,37 +2342,50 @@ async function runAnalysis(env) {
   };
 }
 
-/* =========================
-   CLOUDFLARE ROUTER
-========================= */
+/* =========================================================
+   CLOUDFLARE WORKER
+========================================================= */
 
 export default {
-  async fetch(request, env) {
+  async fetch(
+    request,
+    env
+  ) {
     const url =
-      new URL(request.url);
+      new URL(
+        request.url
+      );
 
-    /* CORS */
+    /* -------------------------------------------------------
+       CORS
+    ------------------------------------------------------- */
 
     if (
       request.method ===
       "OPTIONS"
     ) {
-      return new Response(null, {
-        status: 204,
-        headers: {
-          "access-control-allow-origin":
-            "*",
-          "access-control-allow-methods":
-            "GET,OPTIONS",
-          "access-control-allow-headers":
-            "Content-Type"
+      return new Response(
+        null,
+        {
+          status: 204,
+
+          headers: {
+            "access-control-allow-origin":
+              "*",
+
+            "access-control-allow-methods":
+              "GET,OPTIONS",
+
+            "access-control-allow-headers":
+              "Content-Type"
+          }
         }
-      });
+      );
     }
 
-    /* =========================
+    /* -------------------------------------------------------
        HEALTH
-    ========================= */
+    ------------------------------------------------------- */
 
     if (
       url.pathname ===
@@ -1940,9 +2411,9 @@ export default {
       });
     }
 
-    /* =========================
+    /* -------------------------------------------------------
        MARKET
-    ========================= */
+    ------------------------------------------------------- */
 
     if (
       url.pathname ===
@@ -1957,11 +2428,14 @@ export default {
       if (
         !Object.values(
           TIMEFRAMES
-        ).includes(interval)
+        ).includes(
+          interval
+        )
       ) {
         return json(
           {
             ok: false,
+
             error:
               "INVALID_INTERVAL",
 
@@ -2036,6 +2510,7 @@ export default {
               error?.message ||
               String(error)
           },
+
           code === 429
             ? 429
             : 502
@@ -2043,17 +2518,22 @@ export default {
       }
     }
 
-    /* =========================
-       FINAL ANALYSIS
-    ========================= */
+    /* -------------------------------------------------------
+       ANALYZE
+    ------------------------------------------------------- */
 
     if (
       url.pathname ===
       "/api/analyze"
     ) {
       try {
+        const result =
+          await runAnalysis(
+            env
+          );
+
         return json(
-          await runAnalysis(env)
+          result
         );
       } catch (error) {
         return json(
@@ -2074,22 +2554,27 @@ export default {
               error?.message ||
               String(error)
           },
+
           502
         );
       }
     }
 
-    /* =========================
+    /* -------------------------------------------------------
        404
-    ========================= */
+    ------------------------------------------------------- */
 
     return json(
       {
         ok: false,
-        error: "NOT_FOUND",
+
+        error:
+          "NOT_FOUND",
+
         engine:
           ENGINE_VERSION
       },
+
       404
     );
   }
