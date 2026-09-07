@@ -3,27 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport"
-      content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#07080b">
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#08090c">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>XAU AI — Strict Execution System</title>
+<title>XAU AI — STRICT EXECUTION SYSTEM</title>
 
 <style>
-:root{
-  --bg:#07080b;
-  --panel:#101217;
-  --panel2:#0d0f14;
-  --line:#252a34;
-  --text:#f4f5f7;
-  --muted:#9298a7;
-  --green:#22d889;
-  --red:#ff5d68;
-  --yellow:#f5ca4f;
-  --blue:#5da9ff;
-  --shadow:0 14px 35px rgba(0,0,0,.35);
-}
-
 *{
   box-sizing:border-box;
   -webkit-tap-highlight-color:transparent;
@@ -32,10 +18,10 @@
 html,body{
   margin:0;
   padding:0;
-  background:var(--bg);
-  color:var(--text);
+  background:#08090c;
+  color:#f4f5f7;
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",
-               "SF Pro Text",Arial,sans-serif;
+  "SF Pro Text",Inter,Arial,sans-serif;
 }
 
 body{
@@ -51,451 +37,410 @@ button{
   width:100%;
   max-width:900px;
   margin:0 auto;
-  padding:
-    calc(env(safe-area-inset-top) + 24px)
-    18px
-    120px;
+  padding:30px 18px 120px;
 }
 
-/* HEADER */
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
+}
 
 .header{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  margin-bottom:28px;
+  padding:15px 0 35px;
 }
 
-.logo{
-  font-size:48px;
+.header h1{
+  margin:0;
+  font-size:54px;
+  line-height:.95;
   font-weight:800;
   letter-spacing:-2px;
-  line-height:1;
 }
 
-.subtitle{
-  margin-top:12px;
-  color:var(--muted);
-  font-size:14px;
+.header p{
+  margin:16px 0 0;
+  color:#9aa0ad;
+  font-size:15px;
   letter-spacing:5px;
-}
-
-.symbol{
-  margin-top:30px;
-  color:#a4a9b5;
-  font-size:18px;
-}
-
-.settings{
-  width:64px;
-  height:64px;
-  border:1px solid var(--line);
-  border-radius:20px;
-  background:#0d0f14;
-  color:#ddd;
-  font-size:30px;
-}
-
-/* COMMON */
-
-.section-title{
-  margin:34px 4px 14px;
-  color:#9ba1b0;
-  font-size:13px;
-  letter-spacing:4px;
-  text-transform:uppercase;
 }
 
 .card{
-  background:linear-gradient(180deg,#111319,#0e1015);
-  border:1px solid var(--line);
-  border-radius:24px;
-  box-shadow:var(--shadow);
+  background:#101217;
+  border:1px solid #292e38;
+  border-radius:28px;
+  padding:22px;
+  margin-bottom:18px;
+  box-shadow:0 15px 45px rgba(0,0,0,.18);
 }
 
-.muted{
-  color:var(--muted);
-}
-
-.green{
-  color:var(--green)!important;
-}
-
-.red{
-  color:var(--red)!important;
-}
-
-.yellow{
-  color:var(--yellow)!important;
-}
-
-/* DECISION */
-
-.decision-card{
-  padding:34px 24px;
-  text-align:center;
-}
-
-.decision-label{
-  color:#8d93a1;
+.section-label{
+  color:#9aa0ad;
   font-size:13px;
-  letter-spacing:5px;
+  letter-spacing:4px;
+  margin:0 0 15px;
+}
+
+.price-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:12px;
+}
+
+.price{
+  font-size:42px;
+  font-weight:800;
+  letter-spacing:-1px;
+}
+
+.status{
+  font-size:13px;
+  color:#9aa0ad;
+  text-align:right;
 }
 
 .decision{
-  margin:28px 0 12px;
-  font-size:44px;
-  line-height:1.02;
-  font-weight:850;
-  letter-spacing:-1.5px;
+  font-size:27px;
+  font-weight:800;
+  margin-top:8px;
 }
+
+.green{color:#27d17f}
+.red{color:#ff5b68}
+.yellow{color:#ffc857}
+.muted{color:#8f96a5}
 
 .score{
-  font-size:21px;
-  margin-bottom:22px;
+  font-size:48px;
+  font-weight:800;
 }
 
-.reason{
-  padding:16px;
-  border:1px solid var(--line);
-  border-radius:18px;
-  background:#15171d;
-  color:var(--yellow);
-  font-weight:700;
-}
-
-.metrics{
-  margin-top:30px;
-}
-
-.metric-row{
-  display:flex;
-  justify-content:space-between;
+.badge{
+  display:inline-flex;
   align-items:center;
-  padding:18px 0;
-  border-bottom:1px solid var(--line);
+  min-height:32px;
+  padding:7px 12px;
+  border-radius:999px;
+  border:1px solid #303541;
+  background:#151820;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.5px;
 }
 
-.metric-row:last-child{
-  border-bottom:0;
+.grid2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
 }
 
-.metric-name{
-  font-size:16px;
+.grid3{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+
+.metric{
+  background:#0c0e12;
+  border:1px solid #252a34;
+  border-radius:17px;
+  padding:15px;
+}
+
+.metric-label{
+  color:#858c9b;
+  font-size:11px;
+  letter-spacing:1px;
+  text-transform:uppercase;
 }
 
 .metric-value{
-  color:#a0a6b4;
-  font-weight:700;
-}
-
-/* DIAGNOSTICS */
-
-.grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
-}
-
-.tile{
-  min-height:112px;
-  padding:20px;
-  border:1px solid var(--line);
-  border-radius:20px;
-  background:#0d0f14;
-}
-
-.tile-title{
-  color:#8f95a4;
-  font-size:12px;
-  letter-spacing:2px;
-}
-
-.tile-value{
-  margin-top:18px;
-  font-size:18px;
-  font-weight:800;
-}
-
-/* EXECUTION */
-
-.execution-card{
-  margin-top:16px;
-  padding:24px;
-}
-
-.execution-title{
-  color:#8f95a4;
-  letter-spacing:3px;
-  font-size:12px;
-}
-
-.execution-state{
-  margin-top:14px;
-  font-size:25px;
-  font-weight:850;
-}
-
-.reasons{
-  margin-top:18px;
-  color:#9da3b0;
-  line-height:1.6;
-  font-size:14px;
-}
-
-/* PLAN */
-
-.plan{
-  padding:18px;
-}
-
-.plan-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
-}
-
-.plan-item{
-  padding:20px;
-  min-height:105px;
-  border:1px solid var(--line);
-  border-radius:20px;
-}
-
-.plan-label{
-  color:#9298a7;
-  font-size:12px;
-  letter-spacing:2px;
-}
-
-.plan-value{
-  margin-top:16px;
-  font-size:23px;
-  font-weight:800;
-}
-
-/* BUTTON */
-
-.primary{
-  width:100%;
-  margin-top:20px;
-  padding:19px;
-  border:0;
-  border-radius:20px;
-  background:#f5f5f6;
-  color:#08090b;
-  font-weight:850;
+  margin-top:7px;
   font-size:17px;
+  font-weight:750;
 }
 
-.primary:disabled{
-  opacity:.55;
-}
-
-.updated{
-  text-align:center;
-  margin-top:16px;
-  color:#9298a7;
-}
-
-/* CHART */
-
-.chart-card{
-  padding:18px;
-}
-
-.chart-toolbar{
+.button-row{
   display:flex;
-  gap:8px;
+  gap:10px;
   overflow-x:auto;
-  padding-bottom:12px;
+  padding-bottom:3px;
 }
 
 .tf-btn{
   flex:0 0 auto;
-  padding:10px 15px;
-  border-radius:13px;
-  border:1px solid var(--line);
-  background:#0d0f14;
-  color:#969cab;
+  min-width:92px;
+  height:58px;
+  border-radius:19px;
+  border:1px solid #292e38;
+  background:#101217;
+  color:#9ba1af;
   font-weight:800;
+  font-size:18px;
 }
 
 .tf-btn.active{
-  background:#f2f3f4;
-  color:#08090b;
+  background:#f4f5f7;
+  color:#08090c;
+  border-color:#f4f5f7;
 }
 
-.chart-meta{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin:8px 0 16px;
-}
-
-.chart-price{
-  font-size:27px;
+.primary-btn{
+  width:100%;
+  border:0;
+  border-radius:22px;
+  min-height:62px;
+  background:#f4f5f7;
+  color:#08090c;
+  font-size:16px;
   font-weight:850;
+  letter-spacing:.5px;
+  margin-top:15px;
 }
 
-.chart-status{
-  color:var(--muted);
-  font-size:12px;
+.secondary-btn{
+  width:100%;
+  border:1px solid #303541;
+  border-radius:20px;
+  min-height:54px;
+  background:#151820;
+  color:#f4f5f7;
+  font-weight:800;
+}
+
+.chart-wrap{
+  position:relative;
+  width:100%;
+  height:430px;
+  border-radius:24px;
+  background:#080a0e;
+  border:1px solid #292e38;
+  overflow:hidden;
 }
 
 canvas{
-  width:100%;
-  height:390px;
   display:block;
-  background:#0b0d12;
-  border:1px solid var(--line);
-  border-radius:18px;
+  width:100%;
+  height:100%;
+}
+
+.chart-toolbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+}
+
+.chart-toolbar-left{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
 }
 
 .legend{
   display:flex;
-  gap:15px;
+  gap:10px;
   flex-wrap:wrap;
-  margin-top:14px;
-  color:#9da3b0;
-  font-size:12px;
+  color:#9ca2af;
+  font-size:11px;
+  margin-top:12px;
 }
 
-.legend span{
+.legend-item{
   display:flex;
   align-items:center;
   gap:5px;
 }
 
-/* TIMEFRAMES */
+.dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  display:inline-block;
+}
 
-.tf-grid{
+.chart-info{
   display:grid;
-  grid-template-columns:repeat(5,1fr);
+  grid-template-columns:repeat(2,1fr);
   gap:10px;
+  margin-top:15px;
 }
 
-.tf-box{
-  padding:15px 8px;
-  text-align:center;
-  border:1px solid var(--line);
+.level-card{
+  background:#0c0e12;
+  border:1px solid #252a34;
   border-radius:16px;
-  background:#0d0f14;
+  padding:13px;
 }
 
-.tf-name{
-  color:#9298a7;
-  font-size:11px;
+.level-title{
+  color:#858c9b;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:1px;
 }
 
-.tf-bias{
-  margin-top:9px;
+.level-price{
+  font-size:19px;
   font-weight:800;
+  margin-top:5px;
+}
+
+.execution{
+  border:1px solid #292e38;
+  background:#0c0e12;
+  border-radius:22px;
+  padding:17px;
+}
+
+.execution-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:13px;
+}
+
+.execution-title strong{
+  font-size:17px;
+}
+
+.execution-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+
+.execution-item{
+  background:#11141a;
+  border-radius:14px;
+  padding:12px;
+}
+
+.execution-item span{
+  display:block;
+  color:#7e8594;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.execution-item strong{
+  display:block;
+  margin-top:5px;
+  font-size:14px;
+}
+
+.diagnostic{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+
+.diag{
+  border:1px solid #252a34;
+  background:#0c0e12;
+  border-radius:15px;
+  padding:12px;
+}
+
+.diag span{
+  display:block;
+  color:#858c9b;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.diag strong{
+  display:block;
+  margin-top:5px;
   font-size:13px;
 }
 
-/* BOTTOM NAV */
+.notice{
+  background:#141108;
+  border:1px solid #4a3b16;
+  color:#d9c27b;
+  border-radius:17px;
+  padding:13px;
+  font-size:12px;
+  line-height:1.5;
+}
 
-.bottom-nav{
+.nav{
   position:fixed;
-  z-index:50;
   left:0;
   right:0;
   bottom:0;
-  padding:
-    10px
-    10px
-    calc(env(safe-area-inset-bottom) + 10px);
-  background:rgba(7,8,11,.94);
-  backdrop-filter:blur(20px);
-  border-top:1px solid #20242c;
+  height:86px;
+  background:rgba(8,9,12,.96);
+  backdrop-filter:blur(18px);
+  border-top:1px solid #242832;
+  display:flex;
+  justify-content:center;
+  z-index:50;
 }
 
 .nav-inner{
+  width:100%;
   max-width:900px;
-  margin:auto;
   display:grid;
   grid-template-columns:repeat(4,1fr);
 }
 
 .nav-btn{
   border:0;
-  background:none;
-  color:#818796;
-  padding:10px 4px;
+  background:transparent;
+  color:#7d8493;
+  font-weight:700;
+  font-size:12px;
+}
+
+.nav-btn.active{
+  color:#f4f5f7;
 }
 
 .nav-icon{
   display:block;
-  font-size:20px;
-  margin-bottom:6px;
+  font-size:22px;
+  margin-bottom:5px;
 }
 
-.nav-label{
-  font-size:12px;
-  font-weight:700;
+.empty{
+  padding:30px 5px;
+  color:#858c9b;
+  text-align:center;
 }
 
-.nav-btn.active{
-  color:#f2f3f5;
+.small{
+  font-size:11px;
+  color:#737a88;
 }
 
-/* STATUS */
-
-.status-dot{
-  display:inline-block;
-  width:9px;
-  height:9px;
-  border-radius:50%;
-  background:#8c93a1;
-  margin-right:7px;
-}
-
-.status-dot.green{
-  background:var(--green);
-}
-
-.status-dot.red{
-  background:var(--red);
-}
-
-.status-dot.yellow{
-  background:var(--yellow);
-}
-
-/* HIDDEN SECTIONS */
-
-.view{
-  display:none;
-}
-
-.view.active{
-  display:block;
-}
-
-@media(max-width:600px){
-  .logo{
-    font-size:43px;
+@media(max-width:520px){
+  .app{
+    padding-left:16px;
+    padding-right:16px;
   }
 
-  .decision{
-    font-size:39px;
+  .header h1{
+    font-size:48px;
   }
 
-  .grid{
-    gap:10px;
+  .card{
+    padding:18px;
+    border-radius:24px;
   }
 
-  .tile{
-    padding:16px;
+  .chart-wrap{
+    height:390px;
   }
 
-  .tf-grid{
-    grid-template-columns:repeat(5,1fr);
-  }
-
-  canvas{
-    height:340px;
+  .price{
+    font-size:36px;
   }
 }
 </style>
@@ -505,407 +450,499 @@ canvas{
 
 <div class="app">
 
-  <!-- ================= DASHBOARD ================= -->
+<!-- ========================================================= -->
+<!-- DASHBOARD -->
+<!-- ========================================================= -->
 
-  <section id="dashboardView" class="view active">
+<section id="dashboardPage" class="page active">
 
-    <div class="header">
+  <div class="header">
+    <h1>XAU AI</h1>
+    <p>STRICT EXECUTION SYSTEM</p>
+  </div>
+
+  <div class="card">
+
+    <div class="section-label">MARKET DECISION</div>
+
+    <div class="price-row">
       <div>
-        <div class="logo">XAU AI</div>
-        <div class="subtitle">STRICT EXECUTION SYSTEM</div>
-        <div class="symbol">XAUUSD · Gold / US Dollar</div>
+        <div id="dashPrice" class="price">—</div>
+        <div id="dashDecision" class="decision muted">LOADING</div>
       </div>
 
-      <button class="settings" onclick="showSettings()">⚙️</button>
-    </div>
-
-    <div id="livePrice" class="chart-price muted">—</div>
-
-    <div class="section-title">Live analysis</div>
-
-    <div class="card decision-card">
-
-      <div class="decision-label">MARKET DECISION</div>
-
-      <div id="decision" class="decision muted">LOADING</div>
-
-      <div class="score">
-        SETUP SCORE <strong id="score">—</strong>/100
-      </div>
-
-      <div id="reason" class="reason">
-        Loading market analysis…
-      </div>
-
-      <div class="metrics">
-
-        <div class="metric-row">
-          <div class="metric-name">TREND</div>
-          <div id="trend" class="metric-value">—</div>
-        </div>
-
-        <div class="metric-row">
-          <div class="metric-name">STRUCTURE</div>
-          <div id="structure" class="metric-value">—</div>
-        </div>
-
-        <div class="metric-row">
-          <div class="metric-name">MOMENTUM</div>
-          <div id="momentum" class="metric-value">—</div>
-        </div>
-
-        <div class="metric-row">
-          <div class="metric-name">LIQUIDITY</div>
-          <div id="liquidity" class="metric-value">—</div>
-        </div>
-
-        <div class="metric-row">
-          <div class="metric-name">NEWS RISK</div>
-          <div id="newsRisk" class="metric-value">NOT CHECKED</div>
-        </div>
-
+      <div class="status">
+        <div id="dashFresh">—</div>
+        <div id="dashTime">—</div>
       </div>
     </div>
 
-    <div class="section-title">Strict diagnostics</div>
+    <div style="margin-top:20px">
 
-    <div class="card" style="padding:18px">
+      <div class="section-label">SETUP SCORE</div>
 
-      <div class="grid">
+      <div id="dashScore" class="score">—</div>
 
-        <div class="tile">
-          <div class="tile-title">H4 DIRECTION</div>
-          <div id="dH4" class="tile-value">—</div>
-        </div>
+    </div>
 
-        <div class="tile">
-          <div class="tile-title">H1 DIRECTION</div>
-          <div id="dH1" class="tile-value">—</div>
-        </div>
+  </div>
 
-        <div class="tile">
-          <div class="tile-title">M15 DIRECTION</div>
-          <div id="dM15" class="tile-value">—</div>
-        </div>
+  <div class="card">
 
-        <div class="tile">
-          <div class="tile-title">M5 DIRECTION</div>
-          <div id="dM5" class="tile-value">—</div>
-        </div>
+    <div class="section-label">MARKET STATE</div>
 
-        <div class="tile">
-          <div class="tile-title">M15 STRUCTURE</div>
-          <div id="dStructure" class="tile-value">—</div>
-        </div>
+    <div class="grid2">
 
-        <div class="tile">
-          <div class="tile-title">M15 BOS / CHOCH</div>
-          <div id="dBos" class="tile-value">—</div>
-        </div>
-
-        <div class="tile">
-          <div class="tile-title">M15 LIQUIDITY</div>
-          <div id="dLiquidity" class="tile-value">—</div>
-        </div>
-
-        <div class="tile">
-          <div class="tile-title">M5 PULLBACK</div>
-          <div id="dPullback" class="tile-value">NOT EXPOSED</div>
-        </div>
-
-        <div class="tile">
-          <div class="tile-title">M1 CONFIRMATION</div>
-          <div id="dConfirmation" class="tile-value">—</div>
-        </div>
-
-        <div class="tile">
-          <div class="tile-title">DATA FRESHNESS</div>
-          <div id="dFresh" class="tile-value">—</div>
-        </div>
-
+      <div class="metric">
+        <div class="metric-label">Trend</div>
+        <div id="dashTrend" class="metric-value">—</div>
       </div>
 
-      <div class="execution-card">
+      <div class="metric">
+        <div class="metric-label">Structure</div>
+        <div id="dashStructure" class="metric-value">—</div>
+      </div>
 
-        <div class="execution-title">EXECUTION GATE</div>
+      <div class="metric">
+        <div class="metric-label">Momentum</div>
+        <div id="dashMomentum" class="metric-value">—</div>
+      </div>
 
-        <div id="gateState" class="execution-state yellow">
-          🔒 GATE LOCKED
-        </div>
-
-        <div class="reasons">
-          <strong>WHY WAIT</strong>
-          <div id="gateReasons">Loading…</div>
-        </div>
-
+      <div class="metric">
+        <div class="metric-label">Liquidity</div>
+        <div id="dashLiquidity" class="metric-value">—</div>
       </div>
 
     </div>
 
-    <div class="section-title">Execution plan</div>
+  </div>
 
-    <div class="card plan">
+  <div class="card">
 
-      <div class="plan-grid">
+    <div class="section-label">STRICT DIAGNOSTICS</div>
 
-        <div class="plan-item">
-          <div class="plan-label">ENTRY</div>
-          <div id="entry" class="plan-value">—</div>
-        </div>
+    <div class="diagnostic">
 
-        <div class="plan-item">
-          <div class="plan-label">STOP LOSS</div>
-          <div id="sl" class="plan-value">—</div>
-        </div>
-
-        <div class="plan-item">
-          <div class="plan-label">TP 1</div>
-          <div id="tp1" class="plan-value">—</div>
-        </div>
-
-        <div class="plan-item">
-          <div class="plan-label">TP 2</div>
-          <div id="tp2" class="plan-value">—</div>
-        </div>
-
-        <div class="plan-item">
-          <div class="plan-label">RISK / REWARD</div>
-          <div id="rr" class="plan-value">—</div>
-        </div>
-
-        <div class="plan-item">
-          <div class="plan-label">STATUS</div>
-          <div id="planStatus" class="plan-value yellow">
-            WAIT
-          </div>
-        </div>
-
+      <div class="diag">
+        <span>H4 Direction</span>
+        <strong id="dH4">—</strong>
       </div>
 
-      <button id="analyzeBtn"
-              class="primary"
-              onclick="analyzeXAU()">
-        ANALYZE XAUUSD
-      </button>
+      <div class="diag">
+        <span>H1 Direction</span>
+        <strong id="dH1">—</strong>
+      </div>
 
-      <div id="updated"
-           class="updated">
-        Waiting for analysis…
+      <div class="diag">
+        <span>M15 Direction</span>
+        <strong id="dM15">—</strong>
+      </div>
+
+      <div class="diag">
+        <span>M5 Direction</span>
+        <strong id="dM5">—</strong>
+      </div>
+
+      <div class="diag">
+        <span>M15 Structure</span>
+        <strong id="dStructure">—</strong>
+      </div>
+
+      <div class="diag">
+        <span>M15 BOS / CHoCH</span>
+        <strong id="dBos">—</strong>
+      </div>
+
+      <div class="diag">
+        <span>M15 Liquidity</span>
+        <strong id="dLiquidity">—</strong>
+      </div>
+
+      <div class="diag">
+        <span>M5 Pullback</span>
+        <strong id="dPullback">—</strong>
+      </div>
+
+      <div class="diag">
+        <span>M1 Confirmation</span>
+        <strong id="dConfirm">—</strong>
+      </div>
+
+      <div class="diag">
+        <span>Execution Gate</span>
+        <strong id="dGate">—</strong>
       </div>
 
     </div>
 
-  </section>
+  </div>
 
+  <div class="card">
 
-  <!-- ================= CHART ================= -->
+    <div class="section-label">EXECUTION PLAN</div>
 
-  <section id="chartView" class="view">
+    <div class="execution">
 
-    <div class="header">
-      <div>
-        <div class="logo">CHART</div>
-        <div class="subtitle">LIVE XAUUSD MARKET DATA</div>
-      </div>
-    </div>
+      <div class="execution-title">
 
-    <div class="section-title">Timeframe</div>
+        <strong>STRICT EXECUTION</strong>
 
-    <div class="card chart-card">
-
-      <div class="chart-toolbar">
-
-        <button class="tf-btn active"
-                data-tf="1min"
-                onclick="changeChartTF('1min',this)">
-          M1
-        </button>
-
-        <button class="tf-btn"
-                data-tf="5min"
-                onclick="changeChartTF('5min',this)">
-          M5
-        </button>
-
-        <button class="tf-btn"
-                data-tf="15min"
-                onclick="changeChartTF('15min',this)">
-          M15
-        </button>
-
-        <button class="tf-btn"
-                data-tf="1h"
-                onclick="changeChartTF('1h',this)">
-          H1
-        </button>
-
-        <button class="tf-btn"
-                data-tf="4h"
-                onclick="changeChartTF('4h',this)">
-          H4
-        </button>
+        <span id="planBadge" class="badge">WAIT</span>
 
       </div>
 
-      <div class="chart-meta">
-        <div id="chartPrice" class="chart-price">—</div>
-        <div id="chartStatus" class="chart-status">
-          Loading…
-        </div>
-      </div>
+      <div class="execution-grid">
 
-      <canvas id="priceCanvas"></canvas>
-
-      <div class="legend">
-        <span>● Price</span>
-        <span>━ EMA20</span>
-        <span>━ EMA50</span>
-        <span>━ EMA200</span>
-      </div>
-
-      <button class="primary"
-              onclick="loadChart(currentChartTF)">
-        REFRESH CHART
-      </button>
-
-    </div>
-
-    <div class="section-title">Multi-timeframe snapshot</div>
-
-    <div class="card" style="padding:16px">
-
-      <div class="tf-grid">
-
-        <div class="tf-box">
-          <div class="tf-name">M1</div>
-          <div id="chartM1" class="tf-bias">—</div>
+        <div class="execution-item">
+          <span>Entry</span>
+          <strong id="planEntry">—</strong>
         </div>
 
-        <div class="tf-box">
-          <div class="tf-name">M5</div>
-          <div id="chartM5" class="tf-bias">—</div>
+        <div class="execution-item">
+          <span>Stop Loss</span>
+          <strong id="planSL">—</strong>
         </div>
 
-        <div class="tf-box">
-          <div class="tf-name">M15</div>
-          <div id="chartM15" class="tf-bias">—</div>
+        <div class="execution-item">
+          <span>Take Profit</span>
+          <strong id="planTP">—</strong>
         </div>
 
-        <div class="tf-box">
-          <div class="tf-name">H1</div>
-          <div id="chartH1" class="tf-bias">—</div>
-        </div>
-
-        <div class="tf-box">
-          <div class="tf-name">H4</div>
-          <div id="chartH4" class="tf-bias">—</div>
+        <div class="execution-item">
+          <span>R:R</span>
+          <strong id="planRR">—</strong>
         </div>
 
       </div>
 
     </div>
 
-  </section>
+  </div>
+
+</section>
 
 
-  <!-- ================= AI ================= -->
+<!-- ========================================================= -->
+<!-- CHART V2 -->
+<!-- ========================================================= -->
 
-  <section id="aiView" class="view">
+<section id="chartPage" class="page">
 
-    <div class="header">
-      <div>
-        <div class="logo">AI</div>
-        <div class="subtitle">STRICT MARKET ANALYSIS</div>
-      </div>
-    </div>
+  <div class="header">
+    <h1>CHART</h1>
+    <p>TRADING GRADE XAUUSD</p>
+  </div>
 
-    <div class="card" style="padding:24px">
+  <div class="card">
 
-      <div class="section-title" style="margin-top:0">
-        AI Analysis
-      </div>
+    <div class="section-label">TIMEFRAME</div>
 
-      <p class="muted" style="line-height:1.7">
-        AI explanation module will use the verified Strict Execution
-        Engine output. It will not override the execution gate.
-      </p>
+    <div class="button-row">
 
-      <div class="reason">
-        Current architecture:
-        Rules Engine → Risk Filter → Execution Gate → AI Explanation
-      </div>
-
-      <button class="primary"
-              onclick="showComingSoon('AI explanation')">
-        ANALYZE MARKET WITH AI
-      </button>
+      <button class="tf-btn active" data-tf="1min">M1</button>
+      <button class="tf-btn" data-tf="5min">M5</button>
+      <button class="tf-btn" data-tf="15min">M15</button>
+      <button class="tf-btn" data-tf="1h">H1</button>
+      <button class="tf-btn" data-tf="4h">H4</button>
 
     </div>
 
-  </section>
+    <div style="margin-top:20px">
 
+      <div class="price-row">
 
-  <!-- ================= JOURNAL ================= -->
+        <div id="chartPrice" class="price">—</div>
 
-  <section id="journalView" class="view">
+        <div class="status">
+          <div id="chartFresh">—</div>
+          <div id="chartCandles">—</div>
+        </div>
 
-    <div class="header">
-      <div>
-        <div class="logo">JOURNAL</div>
-        <div class="subtitle">TRADE HISTORY</div>
       </div>
-    </div>
-
-    <div class="card" style="padding:24px">
-
-      <div class="section-title" style="margin-top:0">
-        Trade Journal
-      </div>
-
-      <p class="muted" style="line-height:1.7">
-        Trade logging module is ready for the next development phase.
-      </p>
-
-      <button class="primary"
-              onclick="showComingSoon('Trade Journal')">
-        NEW TRADE ENTRY
-      </button>
 
     </div>
 
-  </section>
+    <div class="chart-toolbar" style="margin-top:18px">
+
+      <div class="chart-toolbar-left">
+
+        <span id="chartTrendBadge" class="badge">TREND —</span>
+        <span id="chartGateBadge" class="badge">GATE —</span>
+
+      </div>
+
+    </div>
+
+    <div class="chart-wrap">
+      <canvas id="chartCanvas"></canvas>
+    </div>
+
+    <div class="legend">
+
+      <div class="legend-item">
+        <span class="dot" style="background:#ffc857"></span>
+        EMA20
+      </div>
+
+      <div class="legend-item">
+        <span class="dot" style="background:#4da3ff"></span>
+        EMA50
+      </div>
+
+      <div class="legend-item">
+        <span class="dot" style="background:#d7dbe2"></span>
+        EMA200
+      </div>
+
+      <div class="legend-item">
+        <span class="dot" style="background:#27d17f"></span>
+        BOS
+      </div>
+
+      <div class="legend-item">
+        <span class="dot" style="background:#ff9f43"></span>
+        CHoCH
+      </div>
+
+      <div class="legend-item">
+        <span class="dot" style="background:#c77dff"></span>
+        Liquidity
+      </div>
+
+    </div>
+
+    <button id="refreshChart" class="primary-btn">
+      REFRESH CHART
+    </button>
+
+  </div>
+
+
+  <!-- EXECUTION LEVELS -->
+
+  <div class="card">
+
+    <div class="section-label">EXECUTION LEVELS</div>
+
+    <div class="chart-info">
+
+      <div class="level-card">
+        <div class="level-title">Entry</div>
+        <div id="chartEntry" class="level-price">—</div>
+      </div>
+
+      <div class="level-card">
+        <div class="level-title">Stop Loss</div>
+        <div id="chartSL" class="level-price red">—</div>
+      </div>
+
+      <div class="level-card">
+        <div class="level-title">Take Profit</div>
+        <div id="chartTP" class="level-price green">—</div>
+      </div>
+
+      <div class="level-card">
+        <div class="level-title">R:R</div>
+        <div id="chartRR" class="level-price">—</div>
+      </div>
+
+    </div>
+
+    <button id="refreshAnalysis" class="secondary-btn" style="margin-top:12px">
+      REFRESH STRICT ANALYSIS
+    </button>
+
+    <div class="small" style="margin-top:10px">
+      Analysis refresh uses the protected multi-timeframe engine.
+    </div>
+
+  </div>
+
+
+  <!-- MTF -->
+
+  <div class="card">
+
+    <div class="section-label">MULTI-TIMEFRAME SNAPSHOT</div>
+
+    <div class="grid3">
+
+      <div class="metric">
+        <div class="metric-label">H4</div>
+        <div id="chartH4" class="metric-value">—</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">H1</div>
+        <div id="chartH1" class="metric-value">—</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">M15</div>
+        <div id="chartM15" class="metric-value">—</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">M5</div>
+        <div id="chartM5" class="metric-value">—</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">M1</div>
+        <div id="chartM1" class="metric-value">—</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">Score</div>
+        <div id="chartScore" class="metric-value">—</div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- STRICT STATUS -->
+
+  <div class="card">
+
+    <div class="section-label">STRICT EXECUTION STATUS</div>
+
+    <div class="execution">
+
+      <div class="execution-title">
+
+        <strong id="chartDecision">WAIT</strong>
+
+        <span id="chartScoreBadge" class="badge">
+          SCORE —
+        </span>
+
+      </div>
+
+      <div class="diagnostic">
+
+        <div class="diag">
+          <span>M15 Structure</span>
+          <strong id="chartStructure">—</strong>
+        </div>
+
+        <div class="diag">
+          <span>M15 BOS / CHoCH</span>
+          <strong id="chartBos">—</strong>
+        </div>
+
+        <div class="diag">
+          <span>Liquidity</span>
+          <strong id="chartLiquidity">—</strong>
+        </div>
+
+        <div class="diag">
+          <span>M5 Pullback</span>
+          <strong id="chartPullback">—</strong>
+        </div>
+
+        <div class="diag">
+          <span>M1 Confirmation</span>
+          <strong id="chartConfirm">—</strong>
+        </div>
+
+        <div class="diag">
+          <span>Execution Gate</span>
+          <strong id="chartGate">—</strong>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="notice">
+    Chart signals are visual diagnostics only. BUY/SELL execution remains controlled by the STRICT EXECUTION ENGINE.
+    No signal is created merely because a technical pattern appears on the chart.
+  </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- AI -->
+<!-- ========================================================= -->
+
+<section id="aiPage" class="page">
+
+  <div class="header">
+    <h1>AI</h1>
+    <p>MARKET REASONING</p>
+  </div>
+
+  <div class="card">
+
+    <div class="section-label">AI ANALYSIS</div>
+
+    <div class="empty">
+      AI reasoning module will be connected to the protected analysis engine.
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- JOURNAL -->
+<!-- ========================================================= -->
+
+<section id="journalPage" class="page">
+
+  <div class="header">
+    <h1>JOURNAL</h1>
+    <p>TRADE HISTORY</p>
+  </div>
+
+  <div class="card">
+
+    <div class="section-label">TRADE JOURNAL</div>
+
+    <div class="empty">
+      Trade journal module will be connected in the next version.
+    </div>
+
+  </div>
+
+</section>
 
 </div>
 
 
-<!-- ================= BOTTOM NAV ================= -->
+<!-- ========================================================= -->
+<!-- NAV -->
+<!-- ========================================================= -->
 
-<nav class="bottom-nav">
+<nav class="nav">
 
   <div class="nav-inner">
 
-    <button class="nav-btn active"
-            onclick="switchView('dashboardView',this)">
+    <button class="nav-btn active" data-page="dashboardPage">
       <span class="nav-icon">⌂</span>
-      <span class="nav-label">Dashboard</span>
+      Dashboard
     </button>
 
-    <button class="nav-btn"
-            onclick="switchView('chartView',this)">
+    <button class="nav-btn" data-page="chartPage">
       <span class="nav-icon">⌁</span>
-      <span class="nav-label">Chart</span>
+      Chart
     </button>
 
-    <button class="nav-btn"
-            onclick="switchView('aiView',this)">
+    <button class="nav-btn" data-page="aiPage">
       <span class="nav-icon">✦</span>
-      <span class="nav-label">AI</span>
+      AI
     </button>
 
-    <button class="nav-btn"
-            onclick="switchView('journalView',this)">
+    <button class="nav-btn" data-page="journalPage">
       <span class="nav-icon">▣</span>
-      <span class="nav-label">Journal</span>
+      Journal
     </button>
 
   </div>
@@ -918,1016 +955,1100 @@ canvas{
 const API =
   "https://xau-ai-api.khoochorshioong.workers.dev";
 
-const TIMEFRAMES = [
-  "1min",
-  "5min",
-  "15min",
-  "1h",
-  "4h"
-];
+const $ = id => document.getElementById(id);
 
-let latestAnalysis = null;
-let currentChartTF = "1min";
-let chartData = [];
+let selectedTF = "1min";
+
+let marketData = {};
+let analysisData = null;
+
+let chartCandles = [];
+
+let dpr = window.devicePixelRatio || 1;
 
 
-/* =========================================================
-   HELPERS
-========================================================= */
+/* ========================================================= */
+/* HELPERS */
+/* ========================================================= */
 
-function el(id){
-  return document.getElementById(id);
-}
+function safeNumber(v){
 
-function text(id,value){
-  const node=el(id);
-  if(node) node.textContent =
-    value === null ||
-    value === undefined ||
-    value === ""
-      ? "—"
-      : value;
-}
+  const n = Number(v);
 
-function safeObject(value){
-  return value && typeof value === "object"
-    ? value
-    : null;
-}
+  return Number.isFinite(n) ? n : null;
 
-function upper(value){
-  return value == null
-    ? "—"
-    : String(value).toUpperCase();
-}
-
-function biasClass(value){
-  const v=String(value||"").toUpperCase();
-
-  if(v.includes("BULL")||v==="BUY")
-    return "green";
-
-  if(v.includes("BEAR")||v==="SELL")
-    return "red";
-
-  if(v.includes("WAIT")||
-     v.includes("LOCK")||
-     v.includes("MIXED"))
-    return "yellow";
-
-  return "";
-}
-
-function setColored(id,value){
-  const node=el(id);
-  if(!node)return;
-
-  node.className =
-    node.className
-      .replace(/\bgreen\b|\bred\b|\byellow\b/g,"")
-      .trim();
-
-  node.textContent =
-    value == null || value === ""
-      ? "—"
-      : value;
-
-  const c=biasClass(value);
-  if(c)node.classList.add(c);
 }
 
 
-/* =========================================================
-   VIEW NAVIGATION
-========================================================= */
+function fmt(v){
 
-function switchView(viewId,button){
+  const n = safeNumber(v);
 
-  document
-    .querySelectorAll(".view")
-    .forEach(v=>v.classList.remove("active"));
+  if(n === null) return "—";
 
-  const target=el(viewId);
+  return n.toFixed(2);
 
-  if(target)
-    target.classList.add("active");
-
-  document
-    .querySelectorAll(".nav-btn")
-    .forEach(b=>b.classList.remove("active"));
-
-  if(button)
-    button.classList.add("active");
-
-  if(viewId==="chartView"){
-    loadChart(currentChartTF);
-  }
 }
 
 
-/* =========================================================
-   ANALYSIS
-========================================================= */
+function direction(tf){
 
-async function analyzeXAU(){
+  const x =
+    analysisData?.analysis?.[tf] ||
+    analysisData?.timeframes?.[tf] ||
+    {};
 
-  const button=el("analyzeBtn");
+  return (
+    x?.score?.bias ||
+    x?.bias ||
+    x?.direction ||
+    "NEUTRAL"
+  ).toUpperCase();
 
-  if(button){
-    button.disabled=true;
-    button.textContent="ANALYZING XAUUSD…";
-  }
-
-  try{
-
-    const response=await fetch(
-      API+"/api/analyze?ts="+Date.now(),
-      {
-        method:"GET",
-        cache:"no-store"
-      }
-    );
-
-    const data=await response.json();
-
-    latestAnalysis=data;
-
-    renderAnalysis(data);
-
-  }catch(error){
-
-    console.error(error);
-
-    text(
-      "reason",
-      "Unable to load market analysis."
-    );
-
-    text(
-      "gateReasons",
-      "API connection failed."
-    );
-
-  }finally{
-
-    if(button){
-      button.disabled=false;
-      button.textContent="ANALYZE XAUUSD";
-    }
-
-  }
 }
 
 
-/* =========================================================
-   ANALYSIS RENDERER
-========================================================= */
+function getTF(tf){
 
-function renderAnalysis(data){
-
-  if(!data){
-    return;
-  }
-
-  /*
-    IMPORTANT:
-    Final Engine 1.1 uses:
-      analysis["1min"]
-      analysis["5min"]
-      analysis["15min"]
-      analysis["1h"]
-      analysis["4h"]
-
-    We do NOT assume a "timeframes" object.
-  */
-
-  const analysis =
-    safeObject(data.analysis) || {};
-
-  const m1 =
-    safeObject(analysis["1min"]);
-
-  const m5 =
-    safeObject(analysis["5min"]);
-
-  const m15 =
-    safeObject(analysis["15min"]);
-
-  const h1 =
-    safeObject(analysis["1h"]);
-
-  const h4 =
-    safeObject(analysis["4h"]);
-
-
-  /* DECISION */
-
-  let decision =
-    data.decision;
-
-  /*
-    Some engine versions return a string.
-    Others return:
-      decision.direction
-  */
-
-  if(
-    decision &&
-    typeof decision === "object"
-  ){
-    decision =
-      decision.direction ||
-      decision.label ||
-      "NO TRADE";
-  }
-
-  decision =
-    decision ||
-    data.execution?.label ||
-    "NO TRADE";
-
-  setColored(
-    "decision",
-    upper(decision)
+  return (
+    analysisData?.analysis?.[tf] ||
+    analysisData?.timeframes?.[tf] ||
+    {}
   );
 
-  text(
-    "score",
-    Number.isFinite(Number(data.setupScore))
-      ? Number(data.setupScore)
-      : "—"
-  );
-
-
-  /* REASON */
-
-  let reason="Strict execution gate active.";
-
-  if(
-    typeof data.decision==="object" &&
-    data.decision.rule
-  ){
-    reason=data.decision.rule;
-  }
-
-  if(
-    data.executionGate?.reasons?.length
-  ){
-    reason =
-      data.executionGate.reasons
-        .join(" · ");
-  }
-
-  text("reason",reason);
-
-
-  /* CURRENT PRICE */
-
-  const price =
-    data.price ??
-    m1?.price ??
-    m5?.price ??
-    null;
-
-  text(
-    "livePrice",
-    price != null
-      ? Number(price).toFixed(2)
-      : "—"
-  );
-
-
-  /* SUMMARY */
-
-  const primary =
-    m15 ||
-    h1 ||
-    h4 ||
-    m5 ||
-    m1;
-
-  setColored(
-    "trend",
-    upper(primary?.trend || primary?.bias)
-  );
-
-  setColored(
-    "structure",
-    upper(
-      primary?.structure?.structure ||
-      primary?.structure ||
-      "RANGE"
-    )
-  );
-
-  setColored(
-    "momentum",
-    upper(
-      primary?.momentum ||
-      primary?.momentumState ||
-      "NEUTRAL"
-    )
-  );
-
-  const liquidity =
-    m15?.liquiditySweep ??
-    m15?.liquidity ??
-    "NONE";
-
-  setColored(
-    "liquidity",
-    upper(liquidity)
-  );
-
-  text(
-    "newsRisk",
-    data.safety?.newsRisk ||
-    "NOT CHECKED"
-  );
-
-
-  /* DIAGNOSTICS */
-
-  setColored(
-    "dH4",
-    upper(h4?.bias || h4?.direction)
-  );
-
-  setColored(
-    "dH1",
-    upper(h1?.bias || h1?.direction)
-  );
-
-  setColored(
-    "dM15",
-    upper(m15?.bias || m15?.direction)
-  );
-
-  setColored(
-    "dM5",
-    upper(m5?.bias || m5?.direction)
-  );
-
-
-  const structureObj =
-    safeObject(m15?.structure);
-
-  text(
-    "dStructure",
-    upper(
-      structureObj?.structure ||
-      m15?.structure ||
-      "RANGE"
-    )
-  );
-
-  text(
-    "dBos",
-    upper(
-      structureObj?.bos ||
-      structureObj?.choch ||
-      m15?.bos ||
-      m15?.choch ||
-      "NONE"
-    )
-  );
-
-  text(
-    "dLiquidity",
-    upper(
-      m15?.liquiditySweep ||
-      m15?.liquidity ||
-      "NONE"
-    )
-  );
-
-
-  /* M5 PULLBACK */
-
-  const pullback =
-    m5?.pullback ??
-    m5?.pullbackState ??
-    m5?.pullbackDetected ??
-    null;
-
-  text(
-    "dPullback",
-    pullback === null
-      ? "NOT EXPOSED"
-      : (
-          typeof pullback==="object"
-            ? pullback.state ||
-              pullback.status ||
-              "DETECTED"
-            : String(pullback)
-        )
-  );
-
-
-  /* M1 CONFIRMATION */
-
-  /*
-    CRITICAL FIX:
-    null means NO CONFIRMATION.
-    It must NEVER become "CONFIRMED".
-  */
-
-  const confirmation =
-    data.entryConfirmation ??
-    m1?.entryConfirmation ??
-    null;
-
-  if(confirmation===null){
-
-    text(
-      "dConfirmation",
-      "NOT CONFIRMED"
-    );
-
-    el("dConfirmation")
-      ?.classList.remove(
-        "green","red","yellow"
-      );
-
-  }else{
-
-    let confirmationText;
-
-    if(typeof confirmation==="object"){
-
-      confirmationText =
-        confirmation.status ||
-        confirmation.state ||
-        confirmation.type ||
-        "CONFIRMED";
-
-    }else{
-
-      confirmationText =
-        String(confirmation);
-
-    }
-
-    setColored(
-      "dConfirmation",
-      upper(confirmationText)
-    );
-
-  }
-
-
-  /* FRESHNESS */
-
-  const freshness =
-    data.freshness || {};
-
-  const freshList =
-    Object.values(freshness);
-
-  const allFresh =
-    data.dataStatus==="FRESH" ||
-    (
-      freshList.length===5 &&
-      freshList.every(
-        x=>x?.fresh!==false
-      )
-    );
-
-  setColored(
-    "dFresh",
-    allFresh
-      ? "FRESH"
-      : "STALE / DEGRADED"
-  );
-
-
-  /* EXECUTION GATE */
-
-  const gate =
-    safeObject(data.executionGate) || {};
-
-  const executable =
-    gate.executable === true ||
-    data.execution?.executable === true;
-
-  if(executable){
-
-    el("gateState").textContent =
-      "🔓 GATE OPEN";
-
-    el("gateState").className =
-      "execution-state green";
-
-  }else{
-
-    el("gateState").textContent =
-      "🔒 GATE LOCKED";
-
-    el("gateState").className =
-      "execution-state yellow";
-
-  }
-
-  let reasons =
-    gate.reasons || [];
-
-  if(!Array.isArray(reasons))
-    reasons=[String(reasons)];
-
-  if(!reasons.length){
-
-    reasons=[
-      executable
-        ? "ALL STRICT ENTRY CONDITIONS PASSED"
-        : "NO EXECUTABLE SIGNAL"
-    ];
-
-  }
-
-  el("gateReasons").innerHTML =
-    reasons
-      .map(x=>`• ${escapeHtml(x)}`)
-      .join("<br>");
-
-
-  /* RISK PLAN */
-
-  const risk =
-    safeObject(data.riskPlan);
-
-  if(
-    risk &&
-    (
-      risk.entry != null ||
-      risk.stopLoss != null ||
-      risk.sl != null
-    )
-  ){
-
-    text(
-      "entry",
-      formatPrice(
-        risk.entry
-      )
-    );
-
-    text(
-      "sl",
-      formatPrice(
-        risk.stopLoss ??
-        risk.sl
-      )
-    );
-
-    text(
-      "tp1",
-      formatPrice(
-        risk.takeProfit1 ??
-        risk.tp1 ??
-        risk.tp
-      )
-    );
-
-    text(
-      "tp2",
-      formatPrice(
-        risk.takeProfit2 ??
-        risk.tp2
-      )
-    );
-
-    text(
-      "rr",
-      risk.rrToTP1 != null
-        ? "1:"+risk.rrToTP1
-        : risk.rr != null
-          ? (
-            typeof risk.rr==="number"
-              ? "1:"+risk.rr
-              : risk.rr
-          )
-          : "—"
-    );
-
-  }else{
-
-    [
-      "entry",
-      "sl",
-      "tp1",
-      "tp2",
-      "rr"
-    ].forEach(id=>text(id,"—"));
-
-  }
-
-
-  setColored(
-    "planStatus",
-    upper(decision)
-  );
-
-
-  /* TIME */
-
-  text(
-    "updated",
-    "Analysis updated · "+
-    new Date(
-      data.generatedAt || Date.now()
-    ).toLocaleTimeString()
-  );
-
-
-  /* CHART SNAPSHOT */
-
-  setColored(
-    "chartM1",
-    upper(m1?.bias || "NEUTRAL")
-  );
-
-  setColored(
-    "chartM5",
-    upper(m5?.bias || "NEUTRAL")
-  );
-
-  setColored(
-    "chartM15",
-    upper(m15?.bias || "NEUTRAL")
-  );
-
-  setColored(
-    "chartH1",
-    upper(h1?.bias || "NEUTRAL")
-  );
-
-  setColored(
-    "chartH4",
-    upper(h4?.bias || "NEUTRAL")
-  );
 }
 
 
-/* =========================================================
-   CHART DATA
-========================================================= */
+function colorDirection(el,value){
 
-async function loadChart(interval){
+  if(!el) return;
 
-  currentChartTF=interval;
+  el.classList.remove("green","red","yellow","muted");
 
-  text(
-    "chartStatus",
-    "Loading "+interval+"…"
+  const v = String(value || "").toUpperCase();
+
+  if(v.includes("BULL") || v.includes("BUY")){
+    el.classList.add("green");
+  }
+  else if(v.includes("BEAR") || v.includes("SELL")){
+    el.classList.add("red");
+  }
+  else if(v.includes("WAIT") || v.includes("WATCH")){
+    el.classList.add("yellow");
+  }
+  else{
+    el.classList.add("muted");
+  }
+
+}
+
+
+function extractPrice(data){
+
+  return safeNumber(
+    data?.price ??
+    data?.close ??
+    data?.latestPrice ??
+    data?.values?.[0]?.close ??
+    data?.candles?.[0]?.close
   );
 
-  try{
+}
 
-    const response=await fetch(
-      API+
-      "/api/market?interval="+
-      encodeURIComponent(interval)+
-      "&ts="+Date.now(),
-      {
-        method:"GET",
-        cache:"no-store"
-      }
-    );
 
-    const data=await response.json();
+function extractRiskPlan(data){
 
-    if(!response.ok || data.ok===false){
+  const candidates = [
 
-      throw new Error(
-        data.error ||
-        data.details ||
-        "Market data unavailable"
-      );
+    data?.riskPlan,
 
-    }
+    data?.executionPlan,
 
-    chartData =
-      data.candles ||
-      data.values ||
-      [];
+    data?.plan,
 
-    if(!Array.isArray(chartData) ||
-       chartData.length<2){
+    data?.analysis?.riskPlan,
 
-      throw new Error(
-        "Not enough candles"
-      );
+    data?.analysis?.executionPlan
 
-    }
+  ];
 
-    const latest =
-      chartData[chartData.length-1];
+  for(const p of candidates){
 
-    text(
-      "chartPrice",
-      latest?.close != null
-        ? Number(latest.close).toFixed(2)
-        : "—"
-    );
+    if(!p) continue;
 
-    text(
-      "chartStatus",
-      (
-        data.freshness?.fresh === false
-          ? "STALE DATA"
-          : "FRESH · "+
-            chartData.length+
-            " candles"
-      )
-    );
+    const entry =
+      safeNumber(p.entry ?? p.entryPrice);
 
-    drawChart(chartData);
+    const sl =
+      safeNumber(p.sl ?? p.stopLoss ?? p.stop);
 
-  }catch(error){
+    const tp =
+      safeNumber(p.tp ?? p.takeProfit ?? p.target);
 
-    console.error(error);
+    const rr =
+      safeNumber(p.rr ?? p.riskReward);
 
-    text(
-      "chartStatus",
-      "DATA ERROR"
-    );
+    if(entry !== null || sl !== null || tp !== null){
 
-    const canvas=
-      el("priceCanvas");
-
-    if(canvas){
-
-      const ctx=
-        canvas.getContext("2d");
-
-      resizeCanvas(canvas,ctx);
-
-      ctx.fillStyle="#0b0d12";
-
-      ctx.fillRect(
-        0,0,
-        canvas.width,
-        canvas.height
-      );
-
-      ctx.fillStyle="#9298a7";
-
-      ctx.font="14px -apple-system";
-
-      ctx.fillText(
-        "Market data unavailable",
-        24,
-        45
-      );
+      return {
+        entry,
+        sl,
+        tp,
+        rr
+      };
 
     }
 
   }
-
-}
-
-
-/* =========================================================
-   CHART TIMEFRAME
-========================================================= */
-
-function changeChartTF(interval,button){
-
-  document
-    .querySelectorAll(".tf-btn")
-    .forEach(b=>
-      b.classList.remove("active")
-    );
-
-  if(button)
-    button.classList.add("active");
-
-  loadChart(interval);
-}
-
-
-/* =========================================================
-   CHART DRAWING
-========================================================= */
-
-function resizeCanvas(canvas,ctx){
-
-  const ratio=
-    window.devicePixelRatio || 1;
-
-  const rect=
-    canvas.getBoundingClientRect();
-
-  canvas.width=
-    Math.round(rect.width*ratio);
-
-  canvas.height=
-    Math.round(rect.height*ratio);
-
-  ctx.setTransform(
-    ratio,0,0,ratio,0,0
-  );
 
   return {
-    width:rect.width,
-    height:rect.height
+    entry:null,
+    sl:null,
+    tp:null,
+    rr:null
   };
 
 }
 
 
-function drawChart(candles){
+function extractDecision(data){
 
-  const canvas=
-    el("priceCanvas");
+  return String(
+    data?.decision ??
+    data?.signal ??
+    data?.analysis?.decision ??
+    "NO TRADE"
+  ).toUpperCase();
 
-  if(!canvas)return;
-
-  const ctx=
-    canvas.getContext("2d");
-
-  const size=
-    resizeCanvas(canvas,ctx);
-
-  const W=size.width;
-  const H=size.height;
-
-  ctx.clearRect(0,0,W,H);
-
-  if(!candles.length)return;
+}
 
 
-  /*
-    Use the last 120 candles so the chart remains
-    readable on iPhone.
-  */
+function extractScore(data){
 
-  const visible=
-    candles.slice(-120);
+  return safeNumber(
+    data?.setupScore ??
+    data?.score ??
+    data?.analysis?.setupScore
+  );
 
-
-  const closes=
-    visible.map(c=>Number(c.close));
-
-  const highs=
-    visible.map(c=>Number(c.high));
-
-  const lows=
-    visible.map(c=>Number(c.low));
+}
 
 
-  const ema20=
-    calculateEMA(closes,20);
+function extractStructure(tf){
 
-  const ema50=
-    calculateEMA(closes,50);
+  const x = getTF(tf);
 
-  const ema200=
-    calculateEMA(closes,200);
-
-
-  let min=
-    Math.min(...lows);
-
-  let max=
-    Math.max(...highs);
-
-  const padding=25;
-
-  const range=
-    Math.max(
-      max-min,
-      0.01
-    );
-
-  min-=range*.06;
-  max+=range*.06;
+  return (
+    x?.structure?.structure ??
+    x?.structure ??
+    "RANGE"
+  );
+}
 
 
-  function x(i){
+function extractBOS(tf){
 
-    return padding+
-      (
-        i/(visible.length-1)
-      )*
-      (W-padding*2);
+  const x = getTF(tf);
+
+  return (
+    x?.structure?.bos ??
+    x?.bos ??
+    x?.structure?.event ??
+    "NONE"
+  );
+}
+
+
+function extractLiquidity(tf){
+
+  const x = getTF(tf);
+
+  return (
+    x?.liquidity?.type ??
+    x?.liquidity ??
+    "NONE"
+  );
+}
+
+
+function extractPullback(){
+
+  const m5 = getTF("5min");
+
+  return (
+    m5?.pullback ??
+    m5?.pullbackStatus ??
+    analysisData?.pullback ??
+    "NOT EXPOSED"
+  );
+
+}
+
+
+function extractConfirmation(){
+
+  const m1 = getTF("1min");
+
+  return (
+    m1?.confirmation ??
+    m1?.entryConfirmation ??
+    analysisData?.entryConfirmation ??
+    "NOT EXPOSED"
+  );
+
+}
+
+
+function formatBooleanState(v){
+
+  if(v === true) return "CONFIRMED";
+
+  if(v === false) return "WAIT";
+
+  if(v === null || v === undefined) return "NOT EXPOSED";
+
+  if(typeof v === "object"){
+
+    if(v.confirmed === true) return "CONFIRMED";
+
+    if(v.confirmed === false) return "WAIT";
+
+    return "CONFIRMED";
 
   }
 
+  return String(v).toUpperCase();
+
+}
+
+
+/* ========================================================= */
+/* API */
+/* ========================================================= */
+
+async function fetchJSON(url){
+
+  const response =
+    await fetch(
+      url + (url.includes("?") ? "&" : "?") + "ts=" + Date.now(),
+      {
+        cache:"no-store"
+      }
+    );
+
+  if(!response.ok){
+
+    throw new Error(
+      "HTTP " + response.status
+    );
+
+  }
+
+  return await response.json();
+
+}
+
+
+async function fetchMarket(tf){
+
+  const data =
+    await fetchJSON(
+      `${API}/api/market?interval=${tf}`
+    );
+
+  marketData[tf] = data;
+
+  return data;
+
+}
+
+
+async function fetchAnalysis(){
+
+  analysisData =
+    await fetchJSON(
+      `${API}/api/analyze`
+    );
+
+  return analysisData;
+
+}
+
+
+/* ========================================================= */
+/* DASHBOARD */
+/* ========================================================= */
+
+function renderDashboard(){
+
+  if(!analysisData) return;
+
+  const m1 =
+    getTF("1min");
+
+  const price =
+    safeNumber(
+      analysisData.price ??
+      m1?.price ??
+      m1?.close
+    );
+
+  const decision =
+    extractDecision(analysisData);
+
+  const score =
+    extractScore(analysisData);
+
+  const plan =
+    extractRiskPlan(analysisData);
+
+  const trend =
+    analysisData?.trend ??
+    m1?.trend ??
+    direction("1min");
+
+  const structure =
+    analysisData?.structure ??
+    extractStructure("15min");
+
+  const momentum =
+    analysisData?.momentum ??
+    m1?.momentum ??
+    "NEUTRAL";
+
+  const liquidity =
+    analysisData?.liquidity ??
+    extractLiquidity("15min");
+
+  $("dashPrice").textContent =
+    price === null ? "—" : fmt(price);
+
+  $("dashDecision").textContent =
+    decision;
+
+  colorDirection(
+    $("dashDecision"),
+    decision
+  );
+
+  $("dashScore").textContent =
+    score === null ? "—" : Math.round(score);
+
+  $("dashTrend").textContent =
+    String(trend).toUpperCase();
+
+  $("dashStructure").textContent =
+    String(structure).toUpperCase();
+
+  $("dashMomentum").textContent =
+    String(momentum).toUpperCase();
+
+  $("dashLiquidity").textContent =
+    String(liquidity).toUpperCase();
+
+  $("dH4").textContent =
+    direction("4h");
+
+  $("dH1").textContent =
+    direction("1h");
+
+  $("dM15").textContent =
+    direction("15min");
+
+  $("dM5").textContent =
+    direction("5min");
+
+  $("dStructure").textContent =
+    String(extractStructure("15min")).toUpperCase();
+
+  $("dBos").textContent =
+    String(extractBOS("15min")).toUpperCase();
+
+  $("dLiquidity").textContent =
+    String(extractLiquidity("15min")).toUpperCase();
+
+  $("dPullback").textContent =
+    formatBooleanState(
+      extractPullback()
+    );
+
+  $("dConfirm").textContent =
+    formatBooleanState(
+      extractConfirmation()
+    );
+
+  const gate =
+    analysisData?.executionGate ??
+    analysisData?.gate ??
+    analysisData?.execution?.gate ??
+    "LOCKED";
+
+  $("dGate").textContent =
+    String(gate).toUpperCase();
+
+  $("planEntry").textContent =
+    fmt(plan.entry);
+
+  $("planSL").textContent =
+    fmt(plan.sl);
+
+  $("planTP").textContent =
+    fmt(plan.tp);
+
+  $("planRR").textContent =
+    plan.rr === null
+      ? "—"
+      : plan.rr.toFixed(2) + "R";
+
+  $("planBadge").textContent =
+    decision;
+
+  colorDirection(
+    $("planBadge"),
+    decision
+  );
+
+  $("dashFresh").textContent =
+    "LIVE";
+
+  $("dashTime").textContent =
+    new Date().toLocaleTimeString(
+      [],
+      {
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit"
+      }
+    );
+
+}
+
+
+/* ========================================================= */
+/* CHART DATA */
+/* ========================================================= */
+
+function normalizeCandles(data){
+
+  const raw =
+    data?.values ??
+    data?.candles ??
+    [];
+
+  return raw
+    .map(c => {
+
+      return {
+        time:
+          c.datetime ??
+          c.time ??
+          c.date ??
+          "",
+
+        open:
+          safeNumber(c.open),
+
+        high:
+          safeNumber(c.high),
+
+        low:
+          safeNumber(c.low),
+
+        close:
+          safeNumber(c.close)
+
+      };
+
+    })
+    .filter(
+      c =>
+        c.open !== null &&
+        c.high !== null &&
+        c.low !== null &&
+        c.close !== null
+    )
+    .reverse();
+
+}
+
+
+function ema(values,period){
+
+  if(values.length < period){
+
+    return values.map(() => null);
+
+  }
+
+  const result =
+    new Array(values.length).fill(null);
+
+  const multiplier =
+    2 / (period + 1);
+
+  let sum = 0;
+
+  for(let i=0;i<period;i++){
+
+    sum += values[i];
+
+  }
+
+  let previous =
+    sum / period;
+
+  result[period - 1] =
+    previous;
+
+  for(
+    let i=period;
+    i<values.length;
+    i++
+  ){
+
+    previous =
+      (
+        values[i] - previous
+      ) * multiplier +
+      previous;
+
+    result[i] =
+      previous;
+
+  }
+
+  return result;
+
+}
+
+
+/* ========================================================= */
+/* STRUCTURE DETECTION */
+/* ========================================================= */
+
+function detectSwings(candles){
+
+  const highs = [];
+  const lows = [];
+
+  const len = candles.length;
+
+  for(let i=2;i<len-2;i++){
+
+    const c = candles[i];
+
+    if(
+      c.high > candles[i-1].high &&
+      c.high > candles[i-2].high &&
+      c.high > candles[i+1].high &&
+      c.high > candles[i+2].high
+    ){
+
+      highs.push({
+        index:i,
+        price:c.high
+      });
+
+    }
+
+    if(
+      c.low < candles[i-1].low &&
+      c.low < candles[i-2].low &&
+      c.low < candles[i+1].low &&
+      c.low < candles[i+2].low
+    ){
+
+      lows.push({
+        index:i,
+        price:c.low
+      });
+
+    }
+
+  }
+
+  return {
+    highs,
+    lows
+  };
+
+}
+
+
+function detectEvents(candles){
+
+  const swings =
+    detectSwings(candles);
+
+  const events = [];
+
+  let previousHigh = null;
+  let previousLow = null;
+
+  for(let i=0;i<candles.length;i++){
+
+    const c = candles[i];
+
+    const swingHigh =
+      swings.highs.find(
+        x => x.index === i
+      );
+
+    const swingLow =
+      swings.lows.find(
+        x => x.index === i
+      );
+
+    if(swingHigh){
+
+      previousHigh =
+        swingHigh.price;
+
+    }
+
+    if(swingLow){
+
+      previousLow =
+        swingLow.price;
+
+    }
+
+    if(
+      previousHigh !== null &&
+      c.close > previousHigh &&
+      i > 5
+    ){
+
+      events.push({
+        index:i,
+        type:"BOS",
+        direction:"BUY",
+        price:c.close
+      });
+
+      previousHigh = null;
+
+    }
+
+    if(
+      previousLow !== null &&
+      c.close < previousLow &&
+      i > 5
+    ){
+
+      events.push({
+        index:i,
+        type:"BOS",
+        direction:"SELL",
+        price:c.close
+      });
+
+      previousLow = null;
+
+    }
+
+  }
+
+  /* CHoCH approximation */
+
+  for(let i=3;i<candles.length;i++){
+
+    const a = candles[i-1];
+    const b = candles[i];
+
+    if(
+      b.close > a.high &&
+      b.close < candles[
+        Math.max(0,i-3)
+      ].close
+    ){
+
+      events.push({
+        index:i,
+        type:"CHoCH",
+        direction:"BUY",
+        price:b.close
+      });
+
+    }
+
+    if(
+      b.close < a.low &&
+      b.close > candles[
+        Math.max(0,i-3)
+      ].close
+    ){
+
+      events.push({
+        index:i,
+        type:"CHoCH",
+        direction:"SELL",
+        price:b.close
+      });
+
+    }
+
+  }
+
+  /* Liquidity sweep */
+
+  for(let i=5;i<candles.length;i++){
+
+    const c = candles[i];
+
+    let priorHigh =
+      -Infinity;
+
+    let priorLow =
+      Infinity;
+
+    for(
+      let j=Math.max(0,i-5);
+      j<i;
+      j++
+    ){
+
+      priorHigh =
+        Math.max(
+          priorHigh,
+          candles[j].high
+        );
+
+      priorLow =
+        Math.min(
+          priorLow,
+          candles[j].low
+        );
+
+    }
+
+    if(
+      c.high > priorHigh &&
+      c.close < priorHigh
+    ){
+
+      events.push({
+        index:i,
+        type:"LIQUIDITY",
+        direction:"SELL",
+        price:c.high
+      });
+
+    }
+
+    if(
+      c.low < priorLow &&
+      c.close > priorLow
+    ){
+
+      events.push({
+        index:i,
+        type:"LIQUIDITY",
+        direction:"BUY",
+        price:c.low
+      });
+
+    }
+
+  }
+
+  return {
+    swings,
+    events
+  };
+
+}
+
+
+/* ========================================================= */
+/* CANVAS */
+/* ========================================================= */
+
+function resizeCanvas(){
+
+  const canvas =
+    $("chartCanvas");
+
+  const rect =
+    canvas.getBoundingClientRect();
+
+  canvas.width =
+    Math.floor(
+      rect.width * dpr
+    );
+
+  canvas.height =
+    Math.floor(
+      rect.height * dpr
+    );
+
+  drawChart();
+
+}
+
+
+function drawText(
+  ctx,
+  text,
+  x,
+  y,
+  size=11,
+  color="#9aa0ad",
+  align="left"
+){
+
+  ctx.fillStyle =
+    color;
+
+  ctx.font =
+    `${size}px -apple-system,BlinkMacSystemFont,Arial`;
+
+  ctx.textAlign =
+    align;
+
+  ctx.textBaseline =
+    "middle";
+
+  ctx.fillText(
+    text,
+    x,
+    y
+  );
+
+}
+
+
+function drawChart(){
+
+  const canvas =
+    $("chartCanvas");
+
+  const ctx =
+    canvas.getContext("2d");
+
+  if(!chartCandles.length){
+
+    ctx.clearRect(
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+    return;
+
+  }
+
+  const W =
+    canvas.width;
+
+  const H =
+    canvas.height;
+
+  ctx.clearRect(
+    0,
+    0,
+    W,
+    H
+  );
+
+  const padding = {
+    left:45*dpr,
+    right:55*dpr,
+    top:22*dpr,
+    bottom:28*dpr
+  };
+
+  const visible =
+    chartCandles.slice(-120);
+
+  const highs =
+    visible.map(c => c.high);
+
+  const lows =
+    visible.map(c => c.low);
+
+  let maxPrice =
+    Math.max(...highs);
+
+  let minPrice =
+    Math.min(...lows);
+
+  const priceRange =
+    maxPrice - minPrice || 1;
+
+  const extra =
+    priceRange * .08;
+
+  maxPrice += extra;
+  minPrice -= extra;
+
+  const plotW =
+    W -
+    padding.left -
+    padding.right;
+
+  const plotH =
+    H -
+    padding.top -
+    padding.bottom;
+
+  const xStep =
+    plotW /
+    visible.length;
+
+  function x(index){
+
+    return (
+      padding.left +
+      index * xStep +
+      xStep/2
+    );
+
+  }
 
   function y(price){
 
-    return H-padding-
+    return (
+      padding.top +
       (
-        (price-min)/(max-min)
-      )*
-      (H-padding*2);
+        maxPrice - price
+      ) /
+      (
+        maxPrice - minPrice
+      ) *
+      plotH
+    );
 
   }
 
+  /* Grid */
 
-  /* GRID */
+  ctx.strokeStyle =
+    "#1b2029";
 
-  ctx.lineWidth=1;
-  ctx.strokeStyle="#1c2028";
+  ctx.lineWidth =
+    1*dpr;
 
-  for(let i=0;i<=5;i++){
+  for(let i=0;i<6;i++){
 
-    const yy=
-      padding+
-      (i/5)*
-      (H-padding*2);
+    const gy =
+      padding.top +
+      (
+        plotH/5
+      ) * i;
 
     ctx.beginPath();
 
     ctx.moveTo(
-      padding,
-      yy
+      padding.left,
+      gy
     );
 
     ctx.lineTo(
-      W-padding,
-      yy
+      W-padding.right,
+      gy
     );
 
     ctx.stroke();
 
+    const price =
+      maxPrice -
+      (
+        maxPrice-minPrice
+      ) * i/5;
+
+    drawText(
+      ctx,
+      price.toFixed(2),
+      W-padding.right+6*dpr,
+      gy,
+      10*dpr,
+      "#727987",
+      "left"
+    );
+
   }
 
+  /* Candles */
 
-  /* CANDLES */
-
-  const candleWidth=
+  const candleWidth =
     Math.max(
-      2,
-      (
-        W-padding*2
-      )/visible.length*0.62
+      2*dpr,
+      xStep*.58
     );
 
   visible.forEach(
-    (candle,i)=>{
+    (c,i) => {
 
-      const open=
-        Number(candle.open);
+      const cx =
+        x(i);
 
-      const close=
-        Number(candle.close);
+      const openY =
+        y(c.open);
 
-      const high=
-        Number(candle.high);
+      const closeY =
+        y(c.close);
 
-      const low=
-        Number(candle.low);
+      const highY =
+        y(c.high);
 
-      const xx=x(i);
+      const lowY =
+        y(c.low);
 
-      const bullish=
-        close>=open;
+      const bullish =
+        c.close >= c.open;
 
-      const bodyTop=
-        y(Math.max(open,close));
+      ctx.strokeStyle =
+        bullish
+          ? "#22d889"
+          : "#ff5261";
 
-      const bodyBottom=
-        y(Math.min(open,close));
+      ctx.fillStyle =
+        bullish
+          ? "#22d889"
+          : "#ff5261";
 
-      const bodyHeight=
+      ctx.lineWidth =
         Math.max(
           1,
-          bodyBottom-bodyTop
+          dpr
         );
 
-      ctx.strokeStyle=
-        bullish
-          ? "#22d889"
-          : "#ff5d68";
-
-      ctx.fillStyle=
-        bullish
-          ? "#22d889"
-          : "#ff5d68";
-
-      /* wick */
+      /* Wick */
 
       ctx.beginPath();
 
       ctx.moveTo(
-        xx,
-        y(high)
+        cx,
+        highY
       );
 
       ctx.lineTo(
-        xx,
-        y(low)
+        cx,
+        lowY
       );
 
       ctx.stroke();
 
+      /* Body */
 
-      /* body */
+      const bodyTop =
+        Math.min(
+          openY,
+          closeY
+        );
+
+      const bodyHeight =
+        Math.max(
+          1*dpr,
+          Math.abs(
+            closeY-openY
+          )
+        );
 
       ctx.fillRect(
-        xx-candleWidth/2,
+        cx-candleWidth/2,
         bodyTop,
         candleWidth,
         bodyHeight
@@ -1937,247 +2058,779 @@ function drawChart(candles){
   );
 
 
-  /* EMA20 */
+  /* EMA */
+
+  const closes =
+    visible.map(
+      c => c.close
+    );
+
+  const e20 =
+    ema(closes,20);
+
+  const e50 =
+    ema(closes,50);
+
+  const e200 =
+    ema(closes,200);
+
+
+  function drawLine(
+    values,
+    color
+  ){
+
+    ctx.strokeStyle =
+      color;
+
+    ctx.lineWidth =
+      2*dpr;
+
+    ctx.beginPath();
+
+    let started = false;
+
+    values.forEach(
+      (v,i) => {
+
+        if(v === null)
+          return;
+
+        const px =
+          x(i);
+
+        const py =
+          y(v);
+
+        if(!started){
+
+          ctx.moveTo(
+            px,
+            py
+          );
+
+          started = true;
+
+        }
+        else{
+
+          ctx.lineTo(
+            px,
+            py
+          );
+
+        }
+
+      }
+    );
+
+    ctx.stroke();
+
+  }
+
 
   drawLine(
-    ctx,
-    ema20,
-    x,
-    y,
-    "#f5ca4f",
-    1.5
+    e20,
+    "#ffc857"
   );
-
-  /* EMA50 */
 
   drawLine(
-    ctx,
-    ema50,
-    x,
-    y,
-    "#5da9ff",
-    1.5
+    e50,
+    "#4da3ff"
   );
-
-  /* EMA200 */
 
   drawLine(
-    ctx,
-    ema200,
-    x,
-    y,
-    "#c6cbd5",
-    1.5
+    e200,
+    "#d7dbe2"
   );
 
 
-  /* PRICE LABEL */
+  /* Current price */
 
-  const last=
-    closes[closes.length-1];
+  const current =
+    visible[
+      visible.length-1
+    ].close;
 
-  const lastY=
-    y(last);
+  const currentY =
+    y(current);
 
-  ctx.strokeStyle="#555b68";
-  ctx.setLineDash([4,4]);
+  ctx.strokeStyle =
+    "#717886";
+
+  ctx.setLineDash(
+    [7*dpr,5*dpr]
+  );
 
   ctx.beginPath();
 
   ctx.moveTo(
-    padding,
-    lastY
+    padding.left,
+    currentY
   );
 
   ctx.lineTo(
-    W-padding,
-    lastY
+    W-padding.right,
+    currentY
   );
 
   ctx.stroke();
 
   ctx.setLineDash([]);
 
-  ctx.fillStyle="#f4f5f7";
-  ctx.font="12px -apple-system";
 
-  ctx.fillText(
-    Number(last).toFixed(2),
-    W-padding-65,
-    lastY-6
+  drawText(
+    ctx,
+    current.toFixed(2),
+    W-padding.right+5*dpr,
+    currentY,
+    11*dpr,
+    "#f4f5f7",
+    "left"
   );
 
-}
+
+  /* Structure events */
+
+  const structure =
+    detectEvents(
+      chartCandles
+    );
+
+  const firstIndex =
+    chartCandles.length -
+    visible.length;
 
 
-function drawLine(
-  ctx,
-  values,
-  x,
-  y,
-  stroke,
-  width
-){
+  structure.events
+    .forEach(event => {
 
-  ctx.strokeStyle=stroke;
-  ctx.lineWidth=width;
-  ctx.beginPath();
+      if(
+        event.index <
+        firstIndex
+      ) return;
 
-  let started=false;
+      const vi =
+        event.index -
+        firstIndex;
 
-  values.forEach(
-    (value,i)=>{
+      if(
+        vi < 0 ||
+        vi >= visible.length
+      ) return;
 
-      if(!Number.isFinite(value))
-        return;
+      const px =
+        x(vi);
 
-      const xx=x(i);
-      const yy=y(value);
+      const py =
+        y(event.price);
 
-      if(!started){
+      let color =
+        "#27d17f";
 
-        ctx.moveTo(xx,yy);
-        started=true;
+      if(
+        event.type === "CHoCH"
+      ){
 
-      }else{
-
-        ctx.lineTo(xx,yy);
+        color =
+          "#ff9f43";
 
       }
 
-    }
-  );
+      if(
+        event.type === "LIQUIDITY"
+      ){
 
-  ctx.stroke();
+        color =
+          "#c77dff";
 
-}
+      }
+
+      ctx.fillStyle =
+        color;
+
+      ctx.beginPath();
+
+      ctx.arc(
+        px,
+        py,
+        4*dpr,
+        0,
+        Math.PI*2
+      );
+
+      ctx.fill();
+
+      let label =
+        event.type;
+
+      if(
+        event.type === "LIQUIDITY"
+      ){
+
+        label =
+          "LIQ";
+
+      }
+
+      const above =
+        event.direction === "SELL";
+
+      drawText(
+        ctx,
+        label,
+        px,
+        py + (
+          above
+            ? -14*dpr
+            : 14*dpr
+        ),
+        9*dpr,
+        color,
+        "center"
+      );
+
+    });
 
 
-/* =========================================================
-   EMA
-========================================================= */
+  /* Swing markers */
 
-function calculateEMA(values,period){
+  structure.swings.highs
+    .slice(-12)
+    .forEach(s => {
 
-  const output=
-    new Array(values.length)
-      .fill(null);
+      if(
+        s.index < firstIndex
+      ) return;
 
-  if(values.length===0)
-    return output;
+      const vi =
+        s.index -
+        firstIndex;
 
-  const k=
-    2/(period+1);
+      drawText(
+        ctx,
+        "H",
+        x(vi),
+        y(s.price)-10*dpr,
+        8*dpr,
+        "#6e7481",
+        "center"
+      );
 
-  let ema=null;
+    });
 
-  for(let i=0;i<values.length;i++){
+  structure.swings.lows
+    .slice(-12)
+    .forEach(s => {
 
-    const value=
-      Number(values[i]);
+      if(
+        s.index < firstIndex
+      ) return;
 
-    if(!Number.isFinite(value))
-      continue;
+      const vi =
+        s.index -
+        firstIndex;
 
-    if(ema===null){
+      drawText(
+        ctx,
+        "L",
+        x(vi),
+        y(s.price)+10*dpr,
+        8*dpr,
+        "#6e7481",
+        "center"
+      );
 
-      ema=value;
-
-    }else{
-
-      ema=
-        value*k+
-        ema*(1-k);
-
-    }
-
-    output[i]=ema;
-
-  }
-
-  return output;
-}
+    });
 
 
-/* =========================================================
-   UTILS
-========================================================= */
+  /* Execution levels */
 
-function formatPrice(value){
+  const plan =
+    extractRiskPlan(
+      analysisData || {}
+    );
 
-  if(
-    value===null ||
-    value===undefined ||
-    value===""
+  function drawLevel(
+    price,
+    color,
+    label
   ){
-    return "—";
+
+    if(price === null)
+      return;
+
+    if(
+      price < minPrice ||
+      price > maxPrice
+    ) return;
+
+    const py =
+      y(price);
+
+    ctx.strokeStyle =
+      color;
+
+    ctx.lineWidth =
+      1.5*dpr;
+
+    ctx.setLineDash(
+      [10*dpr,6*dpr]
+    );
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+      padding.left,
+      py
+    );
+
+    ctx.lineTo(
+      W-padding.right,
+      py
+    );
+
+    ctx.stroke();
+
+    ctx.setLineDash([]);
+
+    drawText(
+      ctx,
+      `${label} ${price.toFixed(2)}`,
+      padding.left+6*dpr,
+      py-9*dpr,
+      10*dpr,
+      color,
+      "left"
+    );
+
   }
 
-  const n=Number(value);
 
-  return Number.isFinite(n)
-    ? n.toFixed(2)
-    : String(value);
-}
+  drawLevel(
+    plan.sl,
+    "#ff5261",
+    "SL"
+  );
 
+  drawLevel(
+    plan.entry,
+    "#f4f5f7",
+    "ENTRY"
+  );
 
-function escapeHtml(value){
-
-  return String(value)
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
-}
-
-
-function showSettings(){
-
-  alert(
-    "XAU AI\n\n"+
-    "FINAL STRICT EXECUTION SYSTEM\n"+
-    "Engine data is provided by Cloudflare Worker.\n\n"+
-    "News / spread / slippage are currently NOT CHECKED."
+  drawLevel(
+    plan.tp,
+    "#27d17f",
+    "TP"
   );
 
 }
 
 
-function showComingSoon(name){
+/* ========================================================= */
+/* CHART RENDER */
+/* ========================================================= */
 
-  alert(
-    name+
-    " will be connected in the next development phase."
+function renderChart(){
+
+  if(!chartCandles.length)
+    return;
+
+  const latest =
+    chartCandles[
+      chartCandles.length-1
+    ];
+
+  const price =
+    latest.close;
+
+  $("chartPrice").textContent =
+    fmt(price);
+
+  $("chartCandles").textContent =
+    `${chartCandles.length} candles`;
+
+  $("chartFresh").textContent =
+    "FRESH";
+
+  const dir =
+    direction(
+      selectedTF
+    );
+
+  $("chartTrendBadge").textContent =
+    dir;
+
+  colorDirection(
+    $("chartTrendBadge"),
+    dir
   );
+
+  if(analysisData){
+
+    const decision =
+      extractDecision(
+        analysisData
+      );
+
+    const score =
+      extractScore(
+        analysisData
+      );
+
+    $("chartDecision").textContent =
+      decision;
+
+    colorDirection(
+      $("chartDecision"),
+      decision
+    );
+
+    $("chartScoreBadge").textContent =
+      score === null
+        ? "SCORE —"
+        : `SCORE ${Math.round(score)}`;
+
+    const plan =
+      extractRiskPlan(
+        analysisData
+      );
+
+    $("chartEntry").textContent =
+      fmt(plan.entry);
+
+    $("chartSL").textContent =
+      fmt(plan.sl);
+
+    $("chartTP").textContent =
+      fmt(plan.tp);
+
+    $("chartRR").textContent =
+      plan.rr === null
+        ? "—"
+        : plan.rr.toFixed(2)+"R";
+
+    $("chartH4").textContent =
+      direction("4h");
+
+    $("chartH1").textContent =
+      direction("1h");
+
+    $("chartM15").textContent =
+      direction("15min");
+
+    $("chartM5").textContent =
+      direction("5min");
+
+    $("chartM1").textContent =
+      direction("1min");
+
+    $("chartScore").textContent =
+      score === null
+        ? "—"
+        : Math.round(score);
+
+    $("chartStructure").textContent =
+      String(
+        extractStructure("15min")
+      ).toUpperCase();
+
+    $("chartBos").textContent =
+      String(
+        extractBOS("15min")
+      ).toUpperCase();
+
+    $("chartLiquidity").textContent =
+      String(
+        extractLiquidity("15min")
+      ).toUpperCase();
+
+    $("chartPullback").textContent =
+      formatBooleanState(
+        extractPullback()
+      );
+
+    $("chartConfirm").textContent =
+      formatBooleanState(
+        extractConfirmation()
+      );
+
+    const gate =
+      analysisData?.executionGate ??
+      analysisData?.gate ??
+      analysisData?.execution?.gate ??
+      "LOCKED";
+
+    $("chartGate").textContent =
+      String(gate).toUpperCase();
+
+    $("chartGateBadge").textContent =
+      String(gate).toUpperCase();
+
+  }
+
+  drawChart();
 
 }
 
 
-/* =========================================================
-   STARTUP
-========================================================= */
+/* ========================================================= */
+/* LOAD CHART */
+/* ========================================================= */
+
+async function loadChart(
+  tf = selectedTF
+){
+
+  selectedTF = tf;
+
+  document
+    .querySelectorAll(".tf-btn")
+    .forEach(btn => {
+
+      btn.classList.toggle(
+        "active",
+        btn.dataset.tf === tf
+      );
+
+    });
+
+  try{
+
+    const data =
+      await fetchMarket(tf);
+
+    chartCandles =
+      normalizeCandles(
+        data
+      );
+
+    renderChart();
+
+  }
+  catch(error){
+
+    console.error(
+      "Chart error:",
+      error
+    );
+
+    $("chartFresh").textContent =
+      "DATA ERROR";
+
+  }
+
+}
+
+
+/* ========================================================= */
+/* LOAD ANALYSIS */
+/* ========================================================= */
+
+async function loadAnalysis(){
+
+  try{
+
+    $("refreshAnalysis").textContent =
+      "ANALYZING...";
+
+    const data =
+      await fetchAnalysis();
+
+    analysisData =
+      data;
+
+    renderDashboard();
+
+    renderChart();
+
+  }
+  catch(error){
+
+    console.error(
+      "Analysis error:",
+      error
+    );
+
+    alert(
+      "Strict analysis unavailable: " +
+      error.message
+    );
+
+  }
+  finally{
+
+    $("refreshAnalysis").textContent =
+      "REFRESH STRICT ANALYSIS";
+
+  }
+
+}
+
+
+/* ========================================================= */
+/* NAVIGATION */
+/* ========================================================= */
+
+document
+  .querySelectorAll(".nav-btn")
+  .forEach(btn => {
+
+    btn.addEventListener(
+      "click",
+      async () => {
+
+        const page =
+          btn.dataset.page;
+
+        document
+          .querySelectorAll(".page")
+          .forEach(p => {
+
+            p.classList.toggle(
+              "active",
+              p.id === page
+            );
+
+          });
+
+        document
+          .querySelectorAll(".nav-btn")
+          .forEach(b => {
+
+            b.classList.toggle(
+              "active",
+              b === btn
+            );
+
+          });
+
+        if(page === "chartPage"){
+
+          if(!chartCandles.length){
+
+            await loadChart(
+              selectedTF
+            );
+
+          }
+
+          if(!analysisData){
+
+            await loadAnalysis();
+
+          }
+
+        }
+
+        if(page === "dashboardPage"){
+
+          if(!analysisData){
+
+            await loadAnalysis();
+
+          }
+
+        }
+
+      }
+    );
+
+  });
+
+
+/* ========================================================= */
+/* TIMEFRAME BUTTONS */
+/* ========================================================= */
+
+document
+  .querySelectorAll(".tf-btn")
+  .forEach(btn => {
+
+    btn.addEventListener(
+      "click",
+      async () => {
+
+        await loadChart(
+          btn.dataset.tf
+        );
+
+      }
+    );
+
+  });
+
+
+/* ========================================================= */
+/* REFRESH */
+/* ========================================================= */
+
+$("refreshChart")
+  .addEventListener(
+    "click",
+    async () => {
+
+      await loadChart(
+        selectedTF
+      );
+
+    }
+  );
+
+
+$("refreshAnalysis")
+  .addEventListener(
+    "click",
+    async () => {
+
+      await loadAnalysis();
+
+    }
+  );
+
+
+/* ========================================================= */
+/* RESIZE */
+/* ========================================================= */
 
 window.addEventListener(
   "resize",
-  ()=>{
-    if(
-      chartData &&
-      chartData.length
-    ){
-      drawChart(chartData);
-    }
+  () => {
+
+    resizeCanvas();
+
   }
 );
 
 
-window.addEventListener(
-  "load",
-  ()=>{
-    analyzeXAU();
+/* ========================================================= */
+/* START */
+/* ========================================================= */
+
+(async function(){
+
+  try{
+
+    await loadAnalysis();
+
   }
-);
+  catch(e){
+
+    console.error(e);
+
+  }
+
+  await loadChart(
+    selectedTF
+  );
+
+  setTimeout(
+    resizeCanvas,
+    100
+  );
+
+})();
 
 </script>
 
