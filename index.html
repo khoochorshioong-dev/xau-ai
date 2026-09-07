@@ -2,29 +2,28 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0,
-               maximum-scale=1.0, user-scalable=no">
-
-<meta name="theme-color" content="#080a0e">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#07090d">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-<title>XAU AI — STRICT EXECUTION SYSTEM</title>
+<title>XAU AI — Strict Execution System</title>
 
 <style>
-
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
-html,
-body{
-  margin:0;
-  padding:0;
-  background:#080a0e;
-  color:#f4f6f8;
+html {
+  background: #07090d;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at top, #11161d 0%, #07090d 45%, #05070a 100%);
+  color: #f4f7fb;
   font-family:
     -apple-system,
     BlinkMacSystemFont,
@@ -32,683 +31,660 @@ body{
     "SF Pro Text",
     Arial,
     sans-serif;
+  min-height: 100vh;
 }
 
-body{
-  min-height:100vh;
-  overflow-x:hidden;
+button {
+  font: inherit;
 }
 
-button{
-  font:inherit;
+.app {
+  max-width: 900px;
+  margin: 0 auto;
+  padding-bottom: 80px;
 }
 
-.app{
-  width:100%;
-  max-width:1100px;
-  margin:0 auto;
-  padding-bottom:40px;
-}
-
-/* =========================
+/* =========================================================
    HEADER
-========================= */
+========================================================= */
 
-.header{
-  position:sticky;
-  top:0;
-  z-index:20;
-
-  background:
-    linear-gradient(
-      180deg,
-      rgba(8,10,14,.98),
-      rgba(8,10,14,.94)
-    );
-
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-
-  border-bottom:1px solid #1c222b;
-
+.header {
   padding:
-    calc(12px + env(safe-area-inset-top))
-    16px
-    12px;
+    calc(22px + env(safe-area-inset-top))
+    20px
+    22px;
+
+  border-bottom: 1px solid #1c232c;
+  background: rgba(5, 7, 10, 0.92);
+  backdrop-filter: blur(20px);
+  position: sticky;
+  top: 0;
+  z-index: 20;
 }
 
-.header-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.brand{
-  display:flex;
-  flex-direction:column;
-  gap:2px;
+.brand {
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -1px;
 }
 
-.brand-title{
-  font-size:20px;
-  font-weight:800;
-  letter-spacing:-.4px;
+.subtitle {
+  margin-top: 5px;
+  color: #8793a3;
+  font-size: 12px;
+  letter-spacing: 3px;
+  font-weight: 600;
 }
 
-.brand-subtitle{
-  font-size:10px;
-  color:#7e8997;
-  letter-spacing:1.2px;
+.api-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 10px 14px;
+
+  border: 1px solid #26303c;
+  border-radius: 22px;
+
+  color: #9da8b7;
+  font-size: 13px;
 }
 
-.live-pill{
-  display:flex;
-  align-items:center;
-  gap:6px;
-
-  padding:6px 9px;
-
-  border:1px solid #202832;
-  border-radius:999px;
-
-  background:#0d1117;
-
-  font-size:10px;
-  color:#9ba5b1;
+.api-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #20d88a;
+  box-shadow: 0 0 12px rgba(32, 216, 138, .65);
 }
 
-.live-dot{
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:#27d17f;
-  box-shadow:0 0 8px rgba(39,209,127,.55);
+.api-dot.offline {
+  background: #ff5367;
+  box-shadow: 0 0 12px rgba(255, 83, 103, .5);
 }
 
-/* =========================
+/* =========================================================
    NAV
-========================= */
+========================================================= */
 
-.nav{
-  display:flex;
-  gap:8px;
-  overflow-x:auto;
-
-  padding:12px 16px 4px;
-
-  scrollbar-width:none;
+.nav {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 16px 20px;
 }
 
-.nav::-webkit-scrollbar{
-  display:none;
+.nav button {
+  background: #0b0f14;
+  border: 1px solid #202a35;
+  color: #8793a3;
+
+  border-radius: 17px;
+  padding: 13px 7px;
+
+  font-weight: 700;
+  font-size: 15px;
 }
 
-.nav-btn{
-  flex:0 0 auto;
-
-  border:1px solid #1e252e;
-  background:#0d1117;
-  color:#8e99a7;
-
-  border-radius:10px;
-
-  padding:9px 14px;
-
-  font-size:12px;
-  font-weight:700;
+.nav button.active {
+  color: #f6f8fb;
+  background: #151b22;
+  border-color: #3a4654;
 }
 
-.nav-btn.active{
-  color:#fff;
-  border-color:#35404d;
-  background:#171c23;
+/* =========================================================
+   PAGE
+========================================================= */
+
+.page {
+  display: none;
+  padding: 0 20px;
 }
 
-/* =========================
-   MAIN
-========================= */
-
-.main{
-  padding:12px 14px;
+.page.active {
+  display: block;
 }
 
-.section{
-  margin-bottom:14px;
-}
+/* =========================================================
+   CARD
+========================================================= */
 
-.card{
+.card {
   background:
     linear-gradient(
-      180deg,
-      #10151b,
-      #0d1117
+      145deg,
+      rgba(18, 23, 30, .98),
+      rgba(10, 14, 19, .98)
     );
 
-  border:1px solid #1d252e;
-  border-radius:16px;
+  border: 1px solid #202a35;
+  border-radius: 24px;
+
+  padding: 24px;
+  margin-bottom: 18px;
 
   box-shadow:
-    0 10px 30px rgba(0,0,0,.18);
+    0 15px 50px rgba(0, 0, 0, .18);
 }
 
-/* =========================
-   TOP STATUS
-========================= */
-
-.status-card{
-  padding:18px;
+.card-title {
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 6px;
 }
 
-.status-top{
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap:12px;
+.card-subtitle {
+  color: #748092;
+  font-size: 14px;
+  margin-bottom: 24px;
 }
 
-.symbol{
-  font-size:13px;
-  color:#9ba5b1;
-  font-weight:700;
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 270px;
+  gap: 20px;
+  align-items: stretch;
 }
 
-.price{
-  margin-top:4px;
-
-  font-size:32px;
-  line-height:1;
-
-  font-weight:850;
-  letter-spacing:-1px;
+.symbol {
+  color: #98a4b3;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .5px;
 }
 
-.price-label{
-  margin-top:6px;
-  color:#697482;
-  font-size:10px;
+.price {
+  margin-top: 10px;
+  font-size: clamp(48px, 13vw, 72px);
+  line-height: .95;
+  font-weight: 800;
+  letter-spacing: -3px;
 }
 
-.decision-box{
-  min-width:112px;
-
-  padding:12px 10px;
-
-  border-radius:12px;
-
-  text-align:center;
-
-  background:#0a0d12;
-  border:1px solid #222a34;
+.price-label {
+  margin-top: 12px;
+  color: #6f7b8b;
+  font-size: 13px;
+  letter-spacing: .5px;
 }
 
-.decision{
-  font-size:17px;
-  font-weight:900;
-  letter-spacing:.3px;
+.decision-box {
+  min-height: 180px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+
+  background: #080c11;
+  border: 1px solid #28323e;
+  border-radius: 22px;
+
+  padding: 20px;
 }
 
-.decision-sub{
-  margin-top:4px;
-  font-size:9px;
-  color:#687482;
-  letter-spacing:.8px;
-  line-height:1.35;
+.decision {
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: .5px;
 }
 
-.decision-buy{
-  color:#27d17f;
+.decision.buy,
+.decision.sell {
+  color: #35df9b;
 }
 
-.decision-sell{
-  color:#ff5c67;
+.decision.sell {
+  color: #ff5c70;
 }
 
-.decision-watch{
-  color:#ffc857;
+.decision.wait {
+  color: #f1c75b;
 }
 
-.decision-neutral{
-  color:#9ba5b1;
+.decision.no-trade {
+  color: #d8dee7;
 }
 
-/* =========================
+.decision-reasons {
+  margin-top: 12px;
+  color: #7d8999;
+  font-size: 12px;
+  line-height: 1.65;
+  letter-spacing: 1.2px;
+}
+
+/* =========================================================
    SCORE
-========================= */
+========================================================= */
 
-.score-row{
-  margin-top:18px;
+.score-wrap {
+  margin-top: 32px;
 }
 
-.score-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-
-  margin-bottom:7px;
+.score-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.score-title{
-  font-size:11px;
-  color:#8994a1;
-  font-weight:700;
+.score-label {
+  color: #96a2b2;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .5px;
 }
 
-.score-value{
-  font-size:14px;
-  font-weight:800;
+.score-value {
+  font-size: 26px;
+  font-weight: 800;
 }
 
-.score-bar{
-  height:7px;
-  border-radius:999px;
-
-  background:#1b2129;
-  overflow:hidden;
+.score-bar {
+  height: 13px;
+  background: #1c232c;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 12px;
 }
 
-.score-fill{
-  height:100%;
-  width:0%;
-
-  border-radius:999px;
-
-  transition:
-    width .35s ease,
-    background .35s ease;
+.score-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: inherit;
+  transition: width .5s ease;
+  background: #ff5367;
 }
 
-/* =========================
-   MTF
-========================= */
-
-.mtf-grid{
-  display:grid;
-  grid-template-columns:
-    repeat(5,1fr);
-
-  gap:7px;
-
-  margin-top:14px;
+.score-fill.good {
+  background: #25d88c;
 }
 
-.tf-card{
-  min-width:0;
-
-  padding:10px 6px;
-
-  background:#0b0f14;
-
-  border:1px solid #1c232c;
-  border-radius:11px;
-
-  text-align:center;
+.score-fill.warning {
+  background: #f1c75b;
 }
 
-.tf-name{
-  font-size:9px;
-  color:#687482;
-  margin-bottom:6px;
+/* =========================================================
+   TIMEFRAME GRID
+========================================================= */
+
+.tf-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-top: 26px;
 }
 
-.tf-direction{
-  font-size:10px;
-  font-weight:900;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+.tf {
+  background: #090d12;
+  border: 1px solid #202a35;
+  border-radius: 18px;
+  padding: 16px 8px;
+  text-align: center;
 }
 
-/* =========================
+.tf-name {
+  color: #718092;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.tf-value {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.bullish {
+  color: #35df9b;
+}
+
+.bearish {
+  color: #ff5c70;
+}
+
+.neutral {
+  color: #9ba6b5;
+}
+
+/* =========================================================
    DIAGNOSTICS
-========================= */
+========================================================= */
 
-.card-title{
-  padding:15px 16px 0;
-
-  font-size:13px;
-  font-weight:800;
+.diagnostic-list {
+  display: flex;
+  flex-direction: column;
 }
 
-.card-subtitle{
-  padding:4px 16px 0;
+.diagnostic-row {
+  min-height: 65px;
 
-  color:#687482;
-  font-size:10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+
+  border-bottom: 1px solid #19212a;
 }
 
-.diagnostics{
-  padding:12px 16px 16px;
+.diagnostic-row:last-child {
+  border-bottom: none;
 }
 
-.diag-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-
-  min-height:35px;
-
-  border-bottom:1px solid #171d24;
+.diagnostic-label {
+  color: #94a0b0;
+  font-size: 15px;
 }
 
-.diag-row:last-child{
-  border-bottom:0;
+.diagnostic-value {
+  text-align: right;
+  font-size: 15px;
+  font-weight: 800;
 }
 
-.diag-label{
-  font-size:11px;
-  color:#8c97a4;
+.status-good {
+  color: #35df9b;
 }
 
-.diag-value{
-  max-width:58%;
-
-  text-align:right;
-
-  font-size:11px;
-  font-weight:800;
+.status-bad {
+  color: #ff5c70;
 }
 
-/* =========================
-   EXECUTION
-========================= */
-
-.execution-card{
-  padding-bottom:4px;
+.status-neutral {
+  color: #a1abb9;
 }
 
-.execution-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-
-  padding:15px 16px 12px;
+.status-warning {
+  color: #f1c75b;
 }
 
-.execution-title{
-  font-size:13px;
-  font-weight:800;
+/* =========================================================
+   EXECUTION PLAN
+========================================================= */
+
+.plan-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
 }
 
-.gate{
-  padding:5px 8px;
+.lock-badge {
+  border: 1px solid rgba(255, 83, 103, .4);
+  background: rgba(255, 83, 103, .07);
+  color: #ff5c70;
 
-  border-radius:7px;
+  padding: 8px 13px;
+  border-radius: 12px;
 
-  font-size:9px;
-  font-weight:900;
-  letter-spacing:.5px;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 1px;
 }
 
-.gate-open{
-  color:#27d17f;
-  background:rgba(39,209,127,.08);
-  border:1px solid rgba(39,209,127,.25);
+.lock-badge.unlocked {
+  color: #35df9b;
+  border-color: rgba(53, 223, 155, .4);
+  background: rgba(53, 223, 155, .07);
 }
 
-.gate-locked{
-  color:#ff5c67;
-  background:rgba(255,92,103,.08);
-  border:1px solid rgba(255,92,103,.22);
+.plan-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 22px;
 }
 
-.risk-grid{
-  display:grid;
-  grid-template-columns:
-    repeat(4,1fr);
-
-  gap:7px;
-
-  padding:0 16px 15px;
+.plan-item {
+  background: #080c11;
+  border: 1px solid #202a35;
+  border-radius: 17px;
+  padding: 20px;
+  text-align: center;
 }
 
-.risk-box{
-  padding:11px 7px;
-
-  background:#0a0e13;
-  border:1px solid #1b222b;
-
-  border-radius:10px;
-
-  text-align:center;
+.plan-label {
+  color: #748092;
+  font-size: 12px;
+  margin-bottom: 10px;
+  letter-spacing: .5px;
 }
 
-.risk-label{
-  color:#65717f;
-  font-size:9px;
+.plan-value {
+  font-size: 23px;
+  font-weight: 800;
 }
 
-.risk-value{
-  margin-top:5px;
+/* =========================================================
+   MARKET STATUS
+========================================================= */
 
-  font-size:12px;
-  font-weight:850;
-
-  overflow:hidden;
-  text-overflow:ellipsis;
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
 }
 
-/* =========================
+.status-box {
+  background: #080c11;
+  border: 1px solid #202a35;
+  border-radius: 18px;
+  padding: 18px;
+}
+
+.status-box-label {
+  color: #748092;
+  font-size: 12px;
+  margin-bottom: 9px;
+}
+
+.status-box-value {
+  font-size: 15px;
+  font-weight: 800;
+}
+
+/* =========================================================
+   REASONS
+========================================================= */
+
+.reason-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.reason {
+  background: #080c11;
+  border: 1px solid #252e38;
+  border-radius: 15px;
+  padding: 13px 15px;
+  color: #a7b1bf;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.reason.fail {
+  border-color: rgba(255, 83, 103, .25);
+  color: #ff7a88;
+}
+
+.reason.pass {
+  border-color: rgba(53, 223, 155, .25);
+  color: #5ce4aa;
+}
+
+/* =========================================================
    CHART
-========================= */
+========================================================= */
 
-.chart-card{
-  overflow:hidden;
+.chart-wrap {
+  height: 380px;
+  position: relative;
+  overflow: hidden;
+
+  background: #080c11;
+  border: 1px solid #202a35;
+  border-radius: 20px;
 }
 
-.chart-toolbar{
-  padding:14px 14px 10px;
-
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-
-  gap:8px;
+#chartCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
-.chart-title{
-  font-size:13px;
-  font-weight:800;
+.chart-loading {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #778394;
+  font-size: 14px;
+
+  pointer-events: none;
 }
 
-.chart-status{
-  font-size:9px;
-  color:#66717e;
+/* =========================================================
+   AI
+========================================================= */
+
+.ai-box {
+  background: #080c11;
+  border: 1px solid #202a35;
+  border-radius: 20px;
+  padding: 20px;
 }
 
-.tf-buttons{
-  display:flex;
-  gap:5px;
-
-  padding:
-    0 14px
-    10px;
-
-  overflow-x:auto;
-
-  scrollbar-width:none;
+.ai-title {
+  font-size: 17px;
+  font-weight: 800;
+  margin-bottom: 15px;
 }
 
-.tf-buttons::-webkit-scrollbar{
-  display:none;
+.ai-text {
+  color: #9ca8b7;
+  line-height: 1.7;
+  font-size: 14px;
 }
 
-.tf-button{
-  flex:0 0 auto;
+/* =========================================================
+   JOURNAL
+========================================================= */
 
-  padding:7px 11px;
-
-  border-radius:8px;
-
-  border:1px solid #1d252e;
-
-  background:#0b0f14;
-  color:#788491;
-
-  font-size:10px;
-  font-weight:800;
+.journal-empty {
+  text-align: center;
+  padding: 50px 20px;
+  color: #758193;
 }
 
-.tf-button.active{
-  color:#fff;
-  background:#171d24;
-  border-color:#35404d;
+.journal-empty strong {
+  display: block;
+  color: #dce2e9;
+  font-size: 18px;
+  margin-bottom: 8px;
 }
 
-.chart-wrap{
-  position:relative;
-
-  width:100%;
-  height:430px;
-
-  background:
-    linear-gradient(
-      180deg,
-      #090d12,
-      #080b10
-    );
-}
-
-canvas{
-  display:block;
-
-  width:100%;
-  height:100%;
-}
-
-/* =========================
-   CHART LEGEND
-========================= */
-
-.chart-legend{
-  display:flex;
-  flex-wrap:wrap;
-
-  gap:10px;
-
-  padding:9px 14px 13px;
-
-  border-top:1px solid #151b22;
-
-  color:#697582;
-
-  font-size:9px;
-}
-
-.legend-item{
-  display:flex;
-  align-items:center;
-  gap:5px;
-}
-
-.legend-dot{
-  width:7px;
-  height:7px;
-  border-radius:50%;
-}
-
-/* =========================
-   DATA STATUS
-========================= */
-
-.data-card{
-  padding:14px 16px;
-}
-
-.data-grid{
-  display:grid;
-  grid-template-columns:
-    repeat(2,1fr);
-
-  gap:8px;
-}
-
-.data-box{
-  background:#0a0e13;
-  border:1px solid #1b222b;
-  border-radius:10px;
-
-  padding:10px;
-}
-
-.data-label{
-  color:#65717f;
-  font-size:9px;
-}
-
-.data-value{
-  margin-top:4px;
-
-  font-size:11px;
-  font-weight:800;
-  line-height:1.35;
-}
-
-/* =========================
+/* =========================================================
    FOOTER
-========================= */
+========================================================= */
 
-.footer{
-  padding:12px 16px 30px;
-
-  color:#46515e;
-
-  text-align:center;
-
-  font-size:9px;
-  line-height:1.6;
+.footer {
+  text-align: center;
+  color: #3f4a57;
+  font-size: 11px;
+  line-height: 1.6;
+  padding: 30px 20px 60px;
 }
 
-/* =========================
-   MOBILE
-========================= */
+/* =========================================================
+   RESPONSIVE
+========================================================= */
 
-@media(max-width:600px){
+@media (max-width: 700px) {
 
-  .main{
-    padding:10px;
+  .hero {
+    grid-template-columns: 1fr;
   }
 
-  .status-card{
-    padding:15px;
+  .decision-box {
+    min-height: 140px;
   }
 
-  .price{
-    font-size:29px;
+  .tf-grid {
+    gap: 8px;
   }
 
-  .decision-box{
-    min-width:102px;
-    max-width:145px;
+  .tf {
+    padding: 14px 5px;
   }
 
-  .chart-wrap{
-    height:390px;
+  .tf-value {
+    font-size: 12px;
   }
-
-  .risk-grid{
-    grid-template-columns:
-      repeat(2,1fr);
-  }
-
 }
 
-/* =========================
-   DESKTOP
-========================= */
+@media (max-width: 430px) {
 
-@media(min-width:900px){
-
-  .main{
-    padding:18px;
+  .header {
+    padding-left: 16px;
+    padding-right: 16px;
   }
 
-  .chart-wrap{
-    height:520px;
+  .page {
+    padding-left: 14px;
+    padding-right: 14px;
   }
 
+  .nav {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .brand {
+    font-size: 27px;
+  }
+
+  .api-status {
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+
+  .card {
+    padding: 19px;
+    border-radius: 21px;
+  }
+
+  .tf-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .status-grid,
+  .plan-grid {
+    gap: 9px;
+  }
+
+  .status-box {
+    padding: 14px;
+  }
+
+  .status-box-value {
+    font-size: 12px;
+  }
 }
-
 </style>
 </head>
 
@@ -716,757 +692,762 @@ canvas{
 
 <div class="app">
 
-  <!-- HEADER -->
+<!-- =======================================================
+     HEADER
+======================================================= -->
 
-  <header class="header">
+<header class="header">
 
-    <div class="header-row">
+  <div class="header-row">
 
+    <div>
       <div class="brand">
+        XAU AI
+      </div>
 
-        <div class="brand-title">
-          XAU AI
+      <div class="subtitle">
+        STRICT EXECUTION SYSTEM
+      </div>
+    </div>
+
+    <div class="api-status">
+      <span
+        id="apiDot"
+        class="api-dot"
+      ></span>
+
+      <span id="apiStatus">
+        API ONLINE
+      </span>
+    </div>
+
+  </div>
+
+</header>
+
+
+<!-- =======================================================
+     NAV
+======================================================= -->
+
+<nav class="nav">
+
+  <button
+    class="active"
+    data-page="dashboard"
+  >
+    Dashboard
+  </button>
+
+  <button
+    data-page="chart"
+  >
+    Chart
+  </button>
+
+  <button
+    data-page="ai"
+  >
+    AI Analysis
+  </button>
+
+  <button
+    data-page="journal"
+  >
+    Journal
+  </button>
+
+</nav>
+
+
+<!-- =======================================================
+     DASHBOARD
+======================================================= -->
+
+<main
+  id="dashboard"
+  class="page active"
+>
+
+  <!-- HERO -->
+
+  <section class="card">
+
+    <div class="hero">
+
+      <div>
+
+        <div class="symbol">
+          XAU / USD
         </div>
 
-        <div class="brand-subtitle">
-          STRICT EXECUTION SYSTEM
+        <div
+          id="price"
+          class="price"
+        >
+          —
+        </div>
+
+        <div class="price-label">
+          MARKET PRICE
         </div>
 
       </div>
 
-      <div
-        id="livePill"
-        class="live-pill">
 
-        <span class="live-dot"></span>
-        API ONLINE
+      <div class="decision-box">
+
+        <div
+          id="decision"
+          class="decision no-trade"
+        >
+          NO TRADE
+        </div>
+
+        <div
+          id="decisionReasons"
+          class="decision-reasons"
+        >
+          Waiting for analysis...
+        </div>
 
       </div>
 
     </div>
 
-  </header>
+
+    <!-- SCORE -->
+
+    <div class="score-wrap">
+
+      <div class="score-row">
+
+        <div class="score-label">
+          SETUP SCORE
+        </div>
+
+        <div
+          id="score"
+          class="score-value"
+        >
+          —
+        </div>
+
+      </div>
+
+      <div class="score-bar">
+
+        <div
+          id="scoreFill"
+          class="score-fill"
+        ></div>
+
+      </div>
+
+    </div>
 
 
-  <!-- NAV -->
+    <!-- TIMEFRAMES -->
 
-  <nav class="nav">
+    <div
+      id="tfGrid"
+      class="tf-grid"
+    >
 
-    <button
-      class="nav-btn active"
-      data-page="dashboard">
-      Dashboard
-    </button>
+      <div class="tf">
+        <div class="tf-name">M1</div>
+        <div id="tf1m" class="tf-value neutral">—</div>
+      </div>
 
-    <button
-      class="nav-btn"
-      data-page="chart">
-      Chart
-    </button>
+      <div class="tf">
+        <div class="tf-name">M5</div>
+        <div id="tf5m" class="tf-value neutral">—</div>
+      </div>
 
-    <button
-      class="nav-btn"
-      data-page="ai">
-      AI Analysis
-    </button>
+      <div class="tf">
+        <div class="tf-name">M15</div>
+        <div id="tf15m" class="tf-value neutral">—</div>
+      </div>
 
-    <button
-      class="nav-btn"
-      data-page="journal">
-      Journal
-    </button>
+      <div class="tf">
+        <div class="tf-name">H1</div>
+        <div id="tf1h" class="tf-value neutral">—</div>
+      </div>
 
-  </nav>
+      <div class="tf">
+        <div class="tf-name">H4</div>
+        <div id="tf4h" class="tf-value neutral">—</div>
+      </div>
 
+    </div>
 
-  <main class="main">
-
-    <!-- ======================
-         DASHBOARD
-    ======================= -->
-
-    <section id="dashboardPage">
-
-      <div class="section">
-
-        <div class="card status-card">
-
-          <div class="status-top">
-
-            <div>
-
-              <div class="symbol">
-                XAU / USD
-              </div>
-
-              <div
-                id="price"
-                class="price">
-                —
-              </div>
-
-              <div
-                id="priceLabel"
-                class="price-label">
-                MARKET PRICE
-              </div>
-
-            </div>
+  </section>
 
 
-            <div class="decision-box">
+  <!-- STRICT DIAGNOSTICS -->
 
-              <div
-                id="decision"
-                class="decision decision-neutral">
-                NO TRADE
-              </div>
+  <section class="card">
 
-              <div
-                id="decisionSub"
-                class="decision-sub">
-                STRICT FILTER
-              </div>
+    <div class="card-title">
+      STRICT DIAGNOSTICS
+    </div>
 
-            </div>
-
-          </div>
+    <div class="card-subtitle">
+      Multi-timeframe execution filters
+    </div>
 
 
-          <div class="score-row">
+    <div class="diagnostic-list">
 
-            <div class="score-header">
+      <div class="diagnostic-row">
+        <div class="diagnostic-label">
+          H4 Direction
+        </div>
 
-              <div class="score-title">
-                SETUP SCORE
-              </div>
-
-              <div
-                id="scoreValue"
-                class="score-value">
-                —
-              </div>
-
-            </div>
-
-            <div class="score-bar">
-
-              <div
-                id="scoreFill"
-                class="score-fill">
-              </div>
-
-            </div>
-
-          </div>
+        <div
+          id="diagH4"
+          class="diagnostic-value status-neutral"
+        >
+          —
+        </div>
+      </div>
 
 
-          <div
-            id="mtfGrid"
-            class="mtf-grid">
+      <div class="diagnostic-row">
+        <div class="diagnostic-label">
+          H1 Direction
+        </div>
 
-          </div>
+        <div
+          id="diagH1"
+          class="diagnostic-value status-neutral"
+        >
+          —
+        </div>
+      </div>
 
+
+      <div class="diagnostic-row">
+        <div class="diagnostic-label">
+          M15 Direction
+        </div>
+
+        <div
+          id="diagM15"
+          class="diagnostic-value status-neutral"
+        >
+          —
+        </div>
+      </div>
+
+
+      <div class="diagnostic-row">
+        <div class="diagnostic-label">
+          M5 Direction
+        </div>
+
+        <div
+          id="diagM5"
+          class="diagnostic-value status-neutral"
+        >
+          —
+        </div>
+      </div>
+
+
+      <div class="diagnostic-row">
+        <div class="diagnostic-label">
+          M1 Direction
+        </div>
+
+        <div
+          id="diagM1"
+          class="diagnostic-value status-neutral"
+        >
+          —
+        </div>
+      </div>
+
+
+      <div class="diagnostic-row">
+        <div class="diagnostic-label">
+          M15 Structure
+        </div>
+
+        <div
+          id="diagStructure"
+          class="diagnostic-value status-neutral"
+        >
+          —
+        </div>
+      </div>
+
+
+      <div class="diagnostic-row">
+        <div class="diagnostic-label">
+          M15 BOS
+        </div>
+
+        <div
+          id="diagBOS"
+          class="diagnostic-value status-neutral"
+        >
+          —
+        </div>
+      </div>
+
+
+      <div class="diagnostic-row">
+        <div class="diagnostic-label">
+          M15 CHoCH
+        </div>
+
+        <div
+          id="diagCHoCH"
+          class="diagnostic-value status-neutral"
+        >
+          —
+        </div>
+      </div>
+
+
+      <div class="diagnostic-row">
+        <div class="diagnostic-label">
+          M15 Liquidity
+        </div>
+
+        <div
+          id="diagLiquidity"
+          class="diagnostic-value status-neutral"
+        >
+          —
+        </div>
+      </div>
+
+
+      <div class="diagnostic-row">
+        <div class="diagnostic-label">
+          M5 Pullback
+        </div>
+
+        <div
+          id="diagPullback"
+          class="diagnostic-value status-neutral"
+        >
+          —
+        </div>
+      </div>
+
+
+      <div class="diagnostic-row">
+        <div class="diagnostic-label">
+          M1 Confirmation
+        </div>
+
+        <div
+          id="diagConfirmation"
+          class="diagnostic-value status-neutral"
+        >
+          —
+        </div>
+      </div>
+
+
+      <div class="diagnostic-row">
+        <div class="diagnostic-label">
+          Execution Gate
+        </div>
+
+        <div
+          id="diagExecution"
+          class="diagnostic-value status-neutral"
+        >
+          —
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- EXECUTION REASONS -->
+
+  <section class="card">
+
+    <div class="card-title">
+      EXECUTION GATE
+    </div>
+
+    <div class="card-subtitle">
+      Backend execution decision — directly synchronized
+    </div>
+
+    <div
+      id="reasonList"
+      class="reason-list"
+    >
+      <div class="reason">
+        Waiting for backend analysis...
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- EXECUTION PLAN -->
+
+  <section class="card">
+
+    <div class="plan-header">
+
+      <div class="card-title">
+        EXECUTION PLAN
+      </div>
+
+      <div
+        id="lockBadge"
+        class="lock-badge"
+      >
+        LOCKED
+      </div>
+
+    </div>
+
+
+    <div class="plan-grid">
+
+      <div class="plan-item">
+
+        <div class="plan-label">
+          ENTRY
+        </div>
+
+        <div
+          id="entry"
+          class="plan-value"
+        >
+          —
         </div>
 
       </div>
 
 
-      <!-- DIAGNOSTICS -->
+      <div class="plan-item">
 
-      <div class="section">
+        <div class="plan-label">
+          STOP LOSS
+        </div>
 
-        <div class="card">
-
-          <div class="card-title">
-            STRICT DIAGNOSTICS
-          </div>
-
-          <div class="card-subtitle">
-            Multi-timeframe execution filters
-          </div>
-
-
-          <div class="diagnostics">
-
-            <div class="diag-row">
-              <span class="diag-label">
-                H4 Direction
-              </span>
-
-              <span
-                id="h4Direction"
-                class="diag-value">
-                —
-              </span>
-            </div>
-
-
-            <div class="diag-row">
-              <span class="diag-label">
-                H1 Direction
-              </span>
-
-              <span
-                id="h1Direction"
-                class="diag-value">
-                —
-              </span>
-            </div>
-
-
-            <div class="diag-row">
-              <span class="diag-label">
-                M15 Direction
-              </span>
-
-              <span
-                id="m15Direction"
-                class="diag-value">
-                —
-              </span>
-            </div>
-
-
-            <div class="diag-row">
-              <span class="diag-label">
-                M5 Direction
-              </span>
-
-              <span
-                id="m5Direction"
-                class="diag-value">
-                —
-              </span>
-            </div>
-
-
-            <div class="diag-row">
-              <span class="diag-label">
-                M1 Direction
-              </span>
-
-              <span
-                id="m1Direction"
-                class="diag-value">
-                —
-              </span>
-            </div>
-
-
-            <div class="diag-row">
-              <span class="diag-label">
-                M15 Structure
-              </span>
-
-              <span
-                id="structure"
-                class="diag-value">
-                —
-              </span>
-            </div>
-
-
-            <div class="diag-row">
-              <span class="diag-label">
-                M15 BOS
-              </span>
-
-              <span
-                id="bos"
-                class="diag-value">
-                —
-              </span>
-            </div>
-
-
-            <div class="diag-row">
-              <span class="diag-label">
-                M15 CHoCH
-              </span>
-
-              <span
-                id="choch"
-                class="diag-value">
-                —
-              </span>
-            </div>
-
-
-            <div class="diag-row">
-              <span class="diag-label">
-                M15 Liquidity
-              </span>
-
-              <span
-                id="liquidity"
-                class="diag-value">
-                —
-              </span>
-            </div>
-
-
-            <div class="diag-row">
-              <span class="diag-label">
-                M5 Pullback
-              </span>
-
-              <span
-                id="pullback"
-                class="diag-value">
-                —
-              </span>
-            </div>
-
-
-            <div class="diag-row">
-              <span class="diag-label">
-                M1 Confirmation
-              </span>
-
-              <span
-                id="confirmation"
-                class="diag-value">
-                —
-              </span>
-            </div>
-
-
-            <div class="diag-row">
-              <span class="diag-label">
-                Execution Gate
-              </span>
-
-              <span
-                id="executionGate"
-                class="diag-value">
-                —
-              </span>
-            </div>
-
-          </div>
-
+        <div
+          id="sl"
+          class="plan-value"
+        >
+          —
         </div>
 
       </div>
 
 
-      <!-- EXECUTION PLAN -->
+      <div class="plan-item">
 
-      <div class="section">
+        <div class="plan-label">
+          TAKE PROFIT
+        </div>
 
-        <div class="card execution-card">
-
-          <div class="execution-header">
-
-            <div class="execution-title">
-              EXECUTION PLAN
-            </div>
-
-            <div
-              id="gateBadge"
-              class="gate gate-locked">
-              LOCKED
-            </div>
-
-          </div>
-
-
-          <div class="risk-grid">
-
-            <div class="risk-box">
-
-              <div class="risk-label">
-                ENTRY
-              </div>
-
-              <div
-                id="entry"
-                class="risk-value">
-                —
-              </div>
-
-            </div>
-
-
-            <div class="risk-box">
-
-              <div class="risk-label">
-                STOP LOSS
-              </div>
-
-              <div
-                id="sl"
-                class="risk-value">
-                —
-              </div>
-
-            </div>
-
-
-            <div class="risk-box">
-
-              <div class="risk-label">
-                TAKE PROFIT
-              </div>
-
-              <div
-                id="tp"
-                class="risk-value">
-                —
-              </div>
-
-            </div>
-
-
-            <div class="risk-box">
-
-              <div class="risk-label">
-                R:R
-              </div>
-
-              <div
-                id="rr"
-                class="risk-value">
-                —
-              </div>
-
-            </div>
-
-          </div>
-
+        <div
+          id="tp"
+          class="plan-value"
+        >
+          —
         </div>
 
       </div>
 
 
-      <!-- DATA STATUS -->
+      <div class="plan-item">
 
-      <div class="section">
+        <div class="plan-label">
+          R:R
+        </div>
 
-        <div class="card data-card">
-
-          <div class="card-title"
-               style="padding:0 0 10px;">
-            DATA & MARKET STATUS
-          </div>
-
-          <div class="data-grid">
-
-            <div class="data-box">
-
-              <div class="data-label">
-                SESSION
-              </div>
-
-              <div
-                id="session"
-                class="data-value">
-                —
-              </div>
-
-            </div>
-
-
-            <div class="data-box">
-
-              <div class="data-label">
-                VOLATILITY
-              </div>
-
-              <div
-                id="volatility"
-                class="data-value">
-                —
-              </div>
-
-            </div>
-
-
-            <div class="data-box">
-
-              <div class="data-label">
-                MARKET CONDITION
-              </div>
-
-              <div
-                id="marketCondition"
-                class="data-value">
-                —
-              </div>
-
-            </div>
-
-
-            <div class="data-box">
-
-              <div class="data-label">
-                NEWS RISK
-              </div>
-
-              <div
-                id="newsRisk"
-                class="data-value">
-                NOT CHECKED
-              </div>
-
-            </div>
-
-
-            <div class="data-box">
-
-              <div class="data-label">
-                SPREAD
-              </div>
-
-              <div
-                id="spread"
-                class="data-value">
-                NOT CHECKED
-              </div>
-
-            </div>
-
-
-            <div class="data-box">
-
-              <div class="data-label">
-                SLIPPAGE
-              </div>
-
-              <div
-                id="slippage"
-                class="data-value">
-                NOT CHECKED
-              </div>
-
-            </div>
-
-          </div>
-
+        <div
+          id="rr"
+          class="plan-value"
+        >
+          —
         </div>
 
       </div>
 
-    </section>
+    </div>
+
+  </section>
 
 
-    <!-- ======================
-         CHART
-    ======================= -->
+  <!-- MARKET STATUS -->
 
-    <section
-      id="chartPage"
-      style="display:none;">
+  <section class="card">
 
-      <div class="section">
+    <div class="card-title">
+      DATA & MARKET STATUS
+    </div>
 
-        <div class="card chart-card">
+    <div class="status-grid">
 
-          <div class="chart-toolbar">
+      <div class="status-box">
 
-            <div class="chart-title">
-              XAU/USD MARKET CHART
-            </div>
+        <div class="status-box-label">
+          SESSION
+        </div>
 
-            <div
-              id="chartStatus"
-              class="chart-status">
-              —
-            </div>
-
-          </div>
-
-
-          <div class="tf-buttons">
-
-            <button
-              class="tf-button active"
-              data-tf="1min">
-              M1
-            </button>
-
-            <button
-              class="tf-button"
-              data-tf="5min">
-              M5
-            </button>
-
-            <button
-              class="tf-button"
-              data-tf="15min">
-              M15
-            </button>
-
-            <button
-              class="tf-button"
-              data-tf="1h">
-              H1
-            </button>
-
-            <button
-              class="tf-button"
-              data-tf="4h">
-              H4
-            </button>
-
-          </div>
-
-
-          <div class="chart-wrap">
-
-            <canvas id="chartCanvas">
-            </canvas>
-
-          </div>
-
-
-          <div class="chart-legend">
-
-            <div class="legend-item">
-              <span
-                class="legend-dot"
-                style="background:#4ca3ff;">
-              </span>
-              EMA20
-            </div>
-
-            <div class="legend-item">
-              <span
-                class="legend-dot"
-                style="background:#ffc857;">
-              </span>
-              EMA50
-            </div>
-
-            <div class="legend-item">
-              <span
-                class="legend-dot"
-                style="background:#c77dff;">
-              </span>
-              EMA200
-            </div>
-
-            <div class="legend-item">
-              <span
-                class="legend-dot"
-                style="background:#27d17f;">
-              </span>
-              BOS
-            </div>
-
-            <div class="legend-item">
-              <span
-                class="legend-dot"
-                style="background:#ff9f43;">
-              </span>
-              CHoCH
-            </div>
-
-            <div class="legend-item">
-              <span
-                class="legend-dot"
-                style="background:#c77dff;">
-              </span>
-              LIQ
-            </div>
-
-          </div>
-
+        <div
+          id="session"
+          class="status-box-value"
+        >
+          —
         </div>
 
       </div>
 
-    </section>
 
+      <div class="status-box">
 
-    <!-- ======================
-         AI
-    ======================= -->
+        <div class="status-box-label">
+          VOLATILITY
+        </div>
 
-    <section
-      id="aiPage"
-      style="display:none;">
-
-      <div class="section">
-
-        <div class="card"
-             style="padding:20px;">
-
-          <div class="card-title"
-               style="padding:0;">
-            AI ANALYSIS
-          </div>
-
-          <div
-            id="aiContent"
-            style="
-              margin-top:12px;
-              color:#7d8996;
-              font-size:12px;
-              line-height:1.7;
-            ">
-
-            AI analysis module is prepared for
-            the next integration stage.
-
-          </div>
-
+        <div
+          id="volatility"
+          class="status-box-value"
+        >
+          —
         </div>
 
       </div>
 
-    </section>
 
+      <div class="status-box">
 
-    <!-- ======================
-         JOURNAL
-    ======================= -->
+        <div class="status-box-label">
+          MARKET CONDITION
+        </div>
 
-    <section
-      id="journalPage"
-      style="display:none;">
-
-      <div class="section">
-
-        <div class="card"
-             style="padding:20px;">
-
-          <div class="card-title"
-               style="padding:0;">
-            TRADE JOURNAL
-          </div>
-
-          <div
-            style="
-              margin-top:12px;
-              color:#7d8996;
-              font-size:12px;
-              line-height:1.7;
-            ">
-
-            Trade Journal module is prepared for
-            the next development stage.
-
-          </div>
-
+        <div
+          id="marketCondition"
+          class="status-box-value"
+        >
+          —
         </div>
 
       </div>
 
-    </section>
 
-  </main>
+      <div class="status-box">
+
+        <div class="status-box-label">
+          NEWS RISK
+        </div>
+
+        <div
+          id="newsRisk"
+          class="status-box-value"
+        >
+          —
+        </div>
+
+      </div>
 
 
-  <footer class="footer">
+      <div class="status-box">
 
-    XAU AI — STRICT EXECUTION SYSTEM<br>
+        <div class="status-box-label">
+          SPREAD
+        </div>
 
-    Market data is informational.
-    No trade signal guarantees profit.
+        <div
+          id="spread"
+          class="status-box-value"
+        >
+          —
+        </div>
 
-  </footer>
+      </div>
+
+
+      <div class="status-box">
+
+        <div class="status-box-label">
+          SLIPPAGE
+        </div>
+
+        <div
+          id="slippage"
+          class="status-box-value"
+        >
+          —
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- DATA FRESHNESS -->
+
+  <section class="card">
+
+    <div class="card-title">
+      DATA FRESHNESS
+    </div>
+
+    <div class="card-subtitle">
+      Market-data protection layer
+    </div>
+
+    <div
+      id="freshnessList"
+      class="diagnostic-list"
+    >
+      <div class="diagnostic-row">
+        <div class="diagnostic-label">Status</div>
+        <div class="diagnostic-value">—</div>
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+
+<!-- =======================================================
+     CHART
+======================================================= -->
+
+<main
+  id="chart"
+  class="page"
+>
+
+  <section class="card">
+
+    <div class="card-title">
+      XAU / USD CHART
+    </div>
+
+    <div class="card-subtitle">
+      1-minute market structure
+    </div>
+
+    <div class="chart-wrap">
+
+      <canvas
+        id="chartCanvas"
+      ></canvas>
+
+      <div
+        id="chartLoading"
+        class="chart-loading"
+      >
+        Loading market data...
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<!-- =======================================================
+     AI ANALYSIS
+======================================================= -->
+
+<main
+  id="ai"
+  class="page"
+>
+
+  <section class="card">
+
+    <div class="card-title">
+      AI ANALYSIS
+    </div>
+
+    <div class="card-subtitle">
+      Strict execution interpretation
+    </div>
+
+    <div class="ai-box">
+
+      <div class="ai-title">
+        Current System Assessment
+      </div>
+
+      <div
+        id="aiText"
+        class="ai-text"
+      >
+        Waiting for live market analysis...
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<!-- =======================================================
+     JOURNAL
+======================================================= -->
+
+<main
+  id="journal"
+  class="page"
+>
+
+  <section class="card">
+
+    <div class="card-title">
+      TRADE JOURNAL
+    </div>
+
+    <div class="card-subtitle">
+      Execution history
+    </div>
+
+    <div class="journal-empty">
+
+      <strong>
+        Journal module
+      </strong>
+
+      Trade journaling will be connected
+      to the execution system in a later version.
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<!-- =======================================================
+     FOOTER
+======================================================= -->
+
+<footer class="footer">
+
+  XAU AI — STRICT EXECUTION SYSTEM<br>
+
+  Market data is informational only.<br>
+
+  No system can guarantee profit or trading success.
+
+</footer>
 
 </div>
 
@@ -1480,212 +1461,318 @@ canvas{
 const API_BASE =
   "https://xau-ai-api.khoochorshioong.workers.dev";
 
+const ANALYZE_URL =
+  `${API_BASE}/api/analyze`;
 
-const TIMEFRAMES = [
-  "1min",
-  "5min",
-  "15min",
-  "1h",
-  "4h"
-];
+const MARKET_URL =
+  `${API_BASE}/api/market?interval=1min`;
 
-
-let analysisData = null;
-
-let currentTF = "1min";
-
-let marketCache = {};
+const REFRESH_MS =
+  35000;
 
 
 /* =========================================================
-   SAFE HELPERS
+   GLOBAL
 ========================================================= */
 
-function safeNumber(value){
+let latestData =
+  null;
+
+let refreshTimer =
+  null;
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function byId(id) {
+  return document.getElementById(id);
+}
+
+
+function safeText(value, fallback = "—") {
+
+  if (
+    value === null ||
+    value === undefined ||
+    value === ""
+  ) {
+    return fallback;
+  }
+
+  return String(value);
+}
+
+
+function formatPrice(value) {
 
   const n =
     Number(value);
 
-  if(!Number.isFinite(n)){
-    return null;
+  if (
+    !Number.isFinite(n)
+  ) {
+    return "—";
   }
 
-  return n;
-
+  return n.toFixed(2);
 }
 
 
-function fmt(
-  value,
-  decimals = 2
-){
-
-  const n =
-    safeNumber(value);
-
-  if(
-    n === null ||
-    n === 0
-  ){
-
-    return "—";
-
-  }
-
-  return n.toFixed(decimals);
-
-}
-
-
-function textValue(value){
-
-  if(
-    value === null ||
-    value === undefined
-  ){
-
-    return "—";
-
-  }
-
-  if(
-    typeof value === "object"
-  ){
-
-    return "—";
-
-  }
-
-  return String(value);
-
-}
-
-
-/* =========================================================
-   FIXED API TIMEFRAME READER
-========================================================= */
-
-function getTF(
-  data,
-  tf
-){
-
-  /*
-    FINAL-TRADING-ENGINE-1.1 returns:
-
-    data.analysis["1min"]
-    data.analysis["5min"]
-    data.analysis["15min"]
-    data.analysis["1h"]
-    data.analysis["4h"]
-  */
+function getTF(data, tf) {
 
   return (
-    data?.analysis?.[tf] ??
-    data?.timeframes?.[tf] ??
-    data?.[tf] ??
+    data?.analysis?.[tf] ||
     null
   );
+}
 
+
+function getDirection(data, tf) {
+
+  return (
+    getTF(data, tf)?.bias ||
+    getTF(data, tf)?.trend ||
+    "NEUTRAL"
+  );
+}
+
+
+function structureState(data) {
+
+  return (
+    getTF(data, "15min")
+      ?.structure
+      ?.state ||
+    "UNKNOWN"
+  );
+}
+
+
+function structureBOS(data) {
+
+  return (
+    getTF(data, "15min")
+      ?.structure
+      ?.bos ||
+    "NONE"
+  );
+}
+
+
+function structureCHoCH(data) {
+
+  return (
+    getTF(data, "15min")
+      ?.structure
+      ?.choch ||
+    "NONE"
+  );
+}
+
+
+function liquidityState(data) {
+
+  return (
+    getTF(data, "15min")
+      ?.liquidity ||
+    "NONE"
+  );
 }
 
 
 /* =========================================================
-   DIRECTION
+   IMPORTANT:
+   READ BACKEND ENTRY DIAGNOSTICS DIRECTLY
 ========================================================= */
 
-function direction(x){
+function getPullback(data) {
 
-  const candidates = [
+  const pullback =
+    data
+      ?.entryConfirmation
+      ?.m5
+      ?.pullback;
 
-    x?.score?.bias,
-    x?.bias,
-    x?.direction,
-    x?.trend,
-    x?.analysis?.bias,
-    x?.analysis?.direction
-
-  ];
-
-  for(
-    const value of candidates
-  ){
-
-    if(
-      typeof value === "string" &&
-      value.trim()
-    ){
-
-      return value
-        .trim()
-        .toUpperCase();
-
-    }
-
+  if (!pullback) {
+    return {
+      state: "NOT CHECKED",
+      valid: false
+    };
   }
 
-  return "NEUTRAL";
+  if (
+    pullback.valid === true
+  ) {
+    return {
+      state: "VALID",
+      valid: true,
+      raw: pullback
+    };
+  }
 
+  return {
+    state:
+      pullback.state ||
+      "FAILED",
+
+    valid: false,
+
+    raw: pullback
+  };
 }
 
 
-function colorDirection(
-  element,
-  value
-){
+function getConfirmation(data) {
 
-  if(!element){
+  const confirmation =
+    data
+      ?.entryConfirmation
+      ?.m1
+      ?.confirmation;
+
+  if (!confirmation) {
+    return {
+      state: "NOT CHECKED",
+      confirmed: false
+    };
+  }
+
+  if (
+    confirmation.confirmed === true
+  ) {
+    return {
+      state: "CONFIRMED",
+      confirmed: true,
+      raw: confirmation
+    };
+  }
+
+  return {
+    state: "FAILED",
+    confirmed: false,
+    raw: confirmation
+  };
+}
+
+
+/* =========================================================
+   EXECUTION GATE
+   DIRECT BACKEND SOURCE
+========================================================= */
+
+function getExecutionGate(data) {
+
+  return (
+    data?.executionGate ||
+    {
+      passed: false,
+      reasons: [
+        "NO_EXECUTION_GATE_DATA"
+      ]
+    }
+  );
+}
+
+
+function getExecutionReasons(data) {
+
+  const gate =
+    getExecutionGate(data);
+
+  if (
+    !Array.isArray(
+      gate.reasons
+    )
+  ) {
+    return [];
+  }
+
+  return gate.reasons;
+}
+
+
+/* =========================================================
+   STATUS CLASS
+========================================================= */
+
+function directionClass(value) {
+
+  if (
+    value === "BULLISH"
+  ) {
+    return "bullish";
+  }
+
+  if (
+    value === "BEARISH"
+  ) {
+    return "bearish";
+  }
+
+  return "neutral";
+}
+
+
+function setDiagnostic(
+  id,
+  value
+) {
+
+  const el =
+    byId(id);
+
+  if (!el) {
     return;
   }
 
-  element.classList.remove(
-    "decision-buy",
-    "decision-sell",
-    "decision-watch",
-    "decision-neutral"
-  );
+  el.textContent =
+    safeText(value);
 
-  const v =
-    String(value)
-      .toUpperCase();
+  el.className =
+    `diagnostic-value ${directionClass(
+      value
+    )}`;
+}
 
-  if(
-    v.includes("BULL") ||
-    v.includes("BUY")
-  ){
 
-    element.classList.add(
-      "decision-buy"
-    );
+/* =========================================================
+   API STATUS
+========================================================= */
 
-  }
-  else if(
-    v.includes("BEAR") ||
-    v.includes("SELL")
-  ){
+function setApiStatus(
+  online
+) {
 
-    element.classList.add(
-      "decision-sell"
-    );
+  const dot =
+    byId("apiDot");
 
-  }
-  else if(
-    v.includes("WATCH")
-  ){
+  const text =
+    byId("apiStatus");
 
-    element.classList.add(
-      "decision-watch"
-    );
-
-  }
-  else{
-
-    element.classList.add(
-      "decision-neutral"
-    );
-
+  if (!dot || !text) {
+    return;
   }
 
+  if (online) {
+
+    dot.classList.remove(
+      "offline"
+    );
+
+    text.textContent =
+      "API ONLINE";
+
+  } else {
+
+    dot.classList.add(
+      "offline"
+    );
+
+    text.textContent =
+      "API OFFLINE";
+  }
 }
 
 
@@ -1693,39 +1780,174 @@ function colorDirection(
    DECISION
 ========================================================= */
 
-function extractDecision(
-  data
-){
+function renderDecision(data) {
 
-  const candidates = [
+  const el =
+    byId("decision");
 
-    data?.decision,
-    data?.signal,
-    data?.action,
-    data?.analysis?.decision,
-    data?.analysis?.signal
+  const reasonsEl =
+    byId("decisionReasons");
 
-  ];
-
-  for(
-    const value of candidates
-  ){
-
-    if(
-      typeof value === "string" &&
-      value.trim()
-    ){
-
-      return value
-        .trim()
-        .toUpperCase();
-
-    }
-
+  if (!el) {
+    return;
   }
 
-  return "NO TRADE";
+  const decision =
+    data?.decision ||
+    "NO TRADE";
 
+  el.textContent =
+    decision;
+
+  el.className =
+    "decision";
+
+  if (
+    decision === "BUY"
+  ) {
+
+    el.classList.add(
+      "buy"
+    );
+
+  } else if (
+    decision === "SELL"
+  ) {
+
+    el.classList.add(
+      "sell"
+    );
+
+  } else if (
+    decision.startsWith(
+      "WAIT"
+    )
+  ) {
+
+    el.classList.add(
+      "wait"
+    );
+
+  } else {
+
+    el.classList.add(
+      "no-trade"
+    );
+  }
+
+
+  const reasons =
+    getExecutionReasons(
+      data
+    );
+
+  if (!reasonsEl) {
+    return;
+  }
+
+  if (
+    reasons.length
+  ) {
+
+    reasonsEl.textContent =
+      reasons
+        .map(formatReason)
+        .join(" · ");
+
+  } else {
+
+    reasonsEl.textContent =
+      "NO EXECUTION RESTRICTIONS";
+  }
+}
+
+
+/* =========================================================
+   REASON FORMATTER
+========================================================= */
+
+function formatReason(reason) {
+
+  const map = {
+
+    H4_H1_M15_NOT_ALIGNED:
+      "H4 / H1 / M15 NOT ALIGNED",
+
+    H4_H1_M15_ALIGNED:
+      "H4 / H1 / M15 ALIGNED",
+
+    M15_STRUCTURE_FAILED:
+      "M15 STRUCTURE FAILED",
+
+    M15_STRUCTURE_CONFIRMED:
+      "M15 STRUCTURE CONFIRMED",
+
+    M15_LIQUIDITY_OR_BOS_FAILED:
+      "M15 LIQUIDITY / BOS FAILED",
+
+    M15_LIQUIDITY_OR_BOS_CONFIRMED:
+      "M15 LIQUIDITY / BOS CONFIRMED",
+
+    M1_CONFIRMATION_FAILED:
+      "M1 CONFIRMATION FAILED",
+
+    M1_CONFIRMATION_CONFIRMED:
+      "M1 CONFIRMATION CONFIRMED",
+
+    M5_NOT_ALIGNED:
+      "M5 NOT ALIGNED",
+
+    M1_NOT_ALIGNED:
+      "M1 NOT ALIGNED",
+
+    SCORE_BELOW_70:
+      "SCORE BELOW 70",
+
+    SCORE_GE_70:
+      "SCORE ≥ 70",
+
+    VOLATILITY_WARNING:
+      "VOLATILITY WARNING",
+
+    VOLATILITY_ACCEPTABLE:
+      "VOLATILITY ACCEPTABLE",
+
+    RR_BELOW_1_TO_2:
+      "R:R BELOW 1:2",
+
+    RR_GE_1_TO_2:
+      "R:R ≥ 1:2",
+
+    DATA_NOT_FRESH_OR_UNAVAILABLE:
+      "DATA NOT FRESH / UNAVAILABLE",
+
+    WEEKEND:
+      "WEEKEND",
+
+    NO_M1_CONFIRMATION:
+      "NO M1 CONFIRMATION",
+
+    NO_M5_IMPULSE:
+      "NO M5 IMPULSE",
+
+    CHASING:
+      "M5 CHASING",
+
+    DEEP_PULLBACK:
+      "M5 PULLBACK TOO DEEP",
+
+    INSUFFICIENT_DATA:
+      "INSUFFICIENT DATA"
+  };
+
+  return (
+    map[reason] ||
+    String(reason)
+      .replaceAll(
+        "_",
+        " "
+      )
+  );
 }
 
 
@@ -1733,1954 +1955,995 @@ function extractDecision(
    SCORE
 ========================================================= */
 
-function extractScore(
-  data
-){
-
-  const candidates = [
-
-    data?.setupScore,
-    data?.score?.total,
-    data?.score?.value,
-    data?.score,
-    data?.analysis?.setupScore,
-    data?.analysis?.score
-
-  ];
-
-  for(
-    const value of candidates
-  ){
-
-    const n =
-      safeNumber(value);
-
-    if(
-      n !== null
-    ){
-
-      return Math.max(
-        0,
-        Math.min(
-          100,
-          n
-        )
-      );
-
-    }
-
-  }
-
-  return null;
-
-}
-
-
-/* =========================================================
-   STRUCTURE
-========================================================= */
-
-function extractStructure(
-  data
-){
-
-  const candidates = [
-
-    data?.structure?.state,
-    data?.structure?.structure,
-    data?.marketStructure?.state,
-    data?.marketStructure,
-    data?.analysis?.structure?.state,
-    data?.analysis?.structure?.structure
-
-  ];
-
-  for(
-    const value of candidates
-  ){
-
-    if(
-      typeof value === "string" &&
-      value.trim()
-    ){
-
-      return value
-        .trim()
-        .toUpperCase();
-
-    }
-
-  }
-
-  return "—";
-
-}
-
-
-/* =========================================================
-   BOS
-========================================================= */
-
-function extractBOS(
-  data
-){
-
-  const candidates = [
-
-    data?.structure?.bos,
-    data?.structure?.BOS,
-    data?.bos,
-    data?.BOS,
-    data?.analysis?.structure?.bos
-
-  ];
-
-  for(
-    const value of candidates
-  ){
-
-    if(
-      typeof value === "string"
-    ){
-
-      return value
-        .trim()
-        .toUpperCase();
-
-    }
-
-    if(
-      typeof value === "boolean"
-    ){
-
-      return value
-        ? "YES"
-        : "NONE";
-
-    }
-
-  }
-
-  return "NONE";
-
-}
-
-
-/* =========================================================
-   CHOCH
-========================================================= */
-
-function extractCHoCH(
-  data
-){
-
-  const candidates = [
-
-    data?.structure?.choch,
-    data?.structure?.CHoCH,
-    data?.choch,
-    data?.CHoCH,
-    data?.analysis?.structure?.choch,
-    data?.analysis?.structure?.CHoCH
-
-  ];
-
-  for(
-    const value of candidates
-  ){
-
-    if(
-      typeof value === "string"
-    ){
-
-      return value
-        .trim()
-        .toUpperCase();
-
-    }
-
-    if(
-      typeof value === "boolean"
-    ){
-
-      return value
-        ? "YES"
-        : "NONE";
-
-    }
-
-  }
-
-  return "NONE";
-
-}
-
-
-/* =========================================================
-   LIQUIDITY
-========================================================= */
-
-function extractLiquidity(
-  data
-){
-
-  const candidates = [
-
-    data?.liquidity?.type,
-    data?.liquidity,
-    data?.analysis?.liquidity?.type,
-    data?.analysis?.liquidity
-
-  ];
-
-  for(
-    const value of candidates
-  ){
-
-    if(
-      typeof value === "string" &&
-      value.trim()
-    ){
-
-      return value
-        .trim()
-        .toUpperCase();
-
-    }
-
-  }
-
-  return "NONE";
-
-}
-
-
-/* =========================================================
-   PULLBACK
-========================================================= */
-
-function extractPullback(
-  data
-){
-
-  const candidates = [
-
-    data?.pullback,
-    data?.pullback?.status,
-    data?.pullback?.state,
-    data?.analysis?.pullback,
-    data?.analysis?.pullback?.status
-
-  ];
-
-  for(
-    const value of candidates
-  ){
-
-    if(
-      typeof value === "string" &&
-      value.trim()
-    ){
-
-      return value
-        .trim()
-        .toUpperCase();
-
-    }
-
-    if(
-      typeof value === "boolean"
-    ){
-
-      return value
-        ? "CONFIRMED"
-        : "NOT CONFIRMED";
-
-    }
-
-  }
-
-  /*
-    FINAL ENGINE 1.1 does not expose
-    internal M5 pullback diagnostics
-    in the public JSON.
-
-    Never fabricate a result.
-  */
-
-  return "NOT EXPOSED";
-
-}
-
-
-/* =========================================================
-   M1 CONFIRMATION
-========================================================= */
-
-function extractConfirmation(
-  data
-){
-
-  const candidates = [
-
-    data?.confirmation,
-    data?.confirmation?.status,
-    data?.confirmation?.state,
-    data?.m1Confirmation,
-    data?.analysis?.confirmation
-
-  ];
-
-  for(
-    const value of candidates
-  ){
-
-    if(
-      typeof value === "string" &&
-      value.trim()
-    ){
-
-      return value
-        .trim()
-        .toUpperCase();
-
-    }
-
-    if(
-      typeof value === "boolean"
-    ){
-
-      return value
-        ? "CONFIRMED"
-        : "NOT CONFIRMED";
-
-    }
-
-  }
-
-  /*
-    FINAL ENGINE 1.1 does not expose
-    internal M1 confirmation diagnostics
-    in the public JSON.
-  */
-
-  return "NOT EXPOSED";
-
-}
-
-
-/* =========================================================
-   BOOLEAN / STATUS STATE
-========================================================= */
-
-function formatBooleanState(
-  value
-){
-
-  if(
-    value === null ||
-    value === undefined
-  ){
-
-    return "NOT CHECKED";
-
-  }
-
-  if(
-    typeof value === "object"
-  ){
-
-    if(
-      typeof value.checked === "boolean"
-    ){
-
-      return value.checked
-        ? (
-          value.value ??
-          "YES"
-        )
-        : "NOT CHECKED";
-
-    }
-
-    if(
-      typeof value.status === "string"
-    ){
-
-      return value.status
-        .toUpperCase();
-
-    }
-
-    if(
-      typeof value.state === "string"
-    ){
-
-      return value.state
-        .toUpperCase();
-
-    }
-
-    return "NOT CHECKED";
-
-  }
-
-  if(
-    typeof value === "boolean"
-  ){
-
-    return value
-      ? "YES"
-      : "NO";
-
-  }
-
-  return String(value)
-    .toUpperCase();
-
-}
-
-
-/* =========================================================
-   RISK PLAN
-========================================================= */
-
-function extractRiskPlan(
-  data
-){
-
-  const candidates = [
-
-    data?.riskPlan,
-    data?.executionPlan,
-    data?.plan,
-    data?.analysis?.riskPlan,
-    data?.analysis?.executionPlan
-
-  ];
-
-
-  for(
-    const plan of candidates
-  ){
-
-    if(
-      !plan ||
-      typeof plan !== "object"
-    ){
-
-      continue;
-
-    }
-
-
-    let entry =
-      safeNumber(
-        plan.entry ??
-        plan.entryPrice
-      );
-
-
-    let sl =
-      safeNumber(
-        plan.sl ??
-        plan.stopLoss ??
-        plan.stop
-      );
-
-
-    let tp =
-      safeNumber(
-        plan.tp ??
-        plan.takeProfit ??
-        plan.target
-      );
-
-
-    let rr =
-      safeNumber(
-        plan.rr ??
-        plan.riskReward
-      );
-
-
-    if(entry === 0)
-      entry = null;
-
-    if(sl === 0)
-      sl = null;
-
-    if(tp === 0)
-      tp = null;
-
-    if(rr === 0)
-      rr = null;
-
-
-    if(
-      entry !== null ||
-      sl !== null ||
-      tp !== null ||
-      rr !== null
-    ){
-
-      return {
-        entry,
-        sl,
-        tp,
-        rr
-      };
-
-    }
-
-  }
-
-
-  return {
-    entry:null,
-    sl:null,
-    tp:null,
-    rr:null
-  };
-
-}
-
-
-/* =========================================================
-   FETCH JSON
-========================================================= */
-
-async function fetchJSON(
-  url
-){
-
-  const response =
-    await fetch(
-      url,
-      {
-        method:"GET",
-        cache:"no-store"
-      }
-    );
-
-
-  if(!response.ok){
-
-    throw new Error(
-      `HTTP ${response.status}`
-    );
-
-  }
-
-
-  return await response.json();
-
-}
-
-
-/* =========================================================
-   MARKET DATA
-========================================================= */
-
-async function fetchMarket(
-  tf
-){
-
-  const now =
-    Date.now();
-
-
-  const cached =
-    marketCache[tf];
-
-
-  /*
-    Frontend cache:
-
-    15 seconds.
-
-    Worker has its own longer cache.
-  */
-
-  if(
-    cached &&
-    now - cached.timestamp <
-      15000
-  ){
-
-    return cached.data;
-
-  }
-
-
-  const url =
-    `${API_BASE}/api/market?interval=${encodeURIComponent(tf)}`;
-
-
-  const data =
-    await fetchJSON(url);
-
-
-  marketCache[tf] = {
-
-    timestamp:now,
-
-    data
-
-  };
-
-
-  return data;
-
-}
-
-
-/* =========================================================
-   ANALYSIS
-========================================================= */
-
-async function fetchAnalysis(){
-
-  return await fetchJSON(
-    `${API_BASE}/api/analyze`
-  );
-
-}
-
-
-/* =========================================================
-   DIAGNOSTIC HELPER
-========================================================= */
-
-function setDiag(
-  id,
-  value
-){
-
-  const el =
-    document.getElementById(id);
-
-
-  if(!el){
-    return;
-  }
-
-
-  el.textContent =
-    textValue(value);
-
-
-  colorDirection(
-    el,
-    value
-  );
-
-}
-
-
-/* =========================================================
-   OBJECT TEXT
-========================================================= */
-
-function formatObjectText(
-  value
-){
-
-  if(
-    value === null ||
-    value === undefined
-  ){
-
-    return "—";
-
-  }
-
-
-  if(
-    typeof value === "object"
-  ){
-
-    return (
-      value.status ??
-      value.state ??
-      value.value ??
-      value.name ??
-      "—"
-    );
-
-  }
-
-
-  return String(value)
-    .toUpperCase();
-
-}
-
-
-/* =========================================================
-   GATE REASON FORMATTER
-========================================================= */
-
-function formatGateReason(
-  reason
-){
-
-  if(
-    !reason
-  ){
-
-    return "";
-
-  }
-
-
-  const map = {
-
-    H4_H1_M15_NOT_ALIGNED:
-      "H4 / H1 / M15 NOT ALIGNED",
-
-    M5_PULLBACK_NOT_CONFIRMED:
-      "M5 PULLBACK NOT CONFIRMED",
-
-    M1_CONFIRMATION_NOT_CONFIRMED:
-      "M1 CONFIRMATION NOT CONFIRMED",
-
-    DATA_NOT_FRESH:
-      "MARKET DATA NOT FRESH",
-
-    WEEKEND:
-      "WEEKEND",
-
-    VOLATILITY_TOO_HIGH:
-      "VOLATILITY TOO HIGH"
-
-  };
-
-
-  return (
-    map[reason] ??
-    String(reason)
-      .replaceAll("_"," ")
-      .toUpperCase()
-  );
-
-}
-
-
-/* =========================================================
-   DASHBOARD RENDER
-========================================================= */
-
-function renderDashboard(
-  data
-){
-
-  analysisData =
-    data;
-
-
-  /* =====================================================
-     PRICE
-  ===================================================== */
-
-  const price =
-    safeNumber(
-      data?.price ??
-      data?.currentPrice ??
-      data?.market?.price
-    );
-
-
-  document
-    .getElementById("price")
-    .textContent =
-      price === null
-        ? "—"
-        : price.toFixed(2);
-
-
-  /* =====================================================
-     DECISION
-  ===================================================== */
-
-  const decision =
-    extractDecision(data);
-
-
-  const decisionEl =
-    document.getElementById(
-      "decision"
-    );
-
-
-  decisionEl.textContent =
-    decision;
-
-
-  colorDirection(
-    decisionEl,
-    decision
-  );
-
-
-  /* =====================================================
-     EXECUTION GATE
-  ===================================================== */
-
-  const gate =
-    data?.executionGate ??
-    data?.gate ??
-    data?.execution?.gate ??
-    data?.analysis?.executionGate ??
-    null;
-
-
-  const gatePassed =
-    gate?.passed === true;
-
-
-  const gateReasons =
-    Array.isArray(gate?.reasons)
-      ? gate.reasons
-      : [];
-
-
-  const formattedReasons =
-    gateReasons
-      .map(formatGateReason)
-      .filter(Boolean);
-
-
-  const primaryGateReason =
-    formattedReasons.length
-      ? formattedReasons.join(" · ")
-      : "";
-
-
-  /*
-    A BUY/SELL is executable only when
-    the backend gate explicitly passes.
-
-    Never infer executable status merely
-    from the decision string.
-  */
-
-  const executable =
-    (
-      decision === "BUY" ||
-      decision === "SELL"
-    ) &&
-    gatePassed;
-
-
-  document
-    .getElementById("decisionSub")
-    .textContent =
-      executable
-        ? "EXECUTABLE"
-        : primaryGateReason
-          ? primaryGateReason
-          : "STRICT FILTER";
-
-
-  /* =====================================================
-     SCORE
-  ===================================================== */
+function renderScore(data) {
 
   const score =
-    extractScore(data);
-
-
-  const scoreValue =
-    document.getElementById(
-      "scoreValue"
+    Number(
+      data?.setupScore
     );
 
+  const value =
+    Number.isFinite(score)
+      ? Math.max(
+          0,
+          Math.min(
+            100,
+            Math.round(score)
+          )
+        )
+      : 0;
 
-  const scoreFill =
-    document.getElementById(
-      "scoreFill"
+  byId("score").textContent =
+    `${value}/100`;
+
+  const fill =
+    byId("scoreFill");
+
+  fill.style.width =
+    `${value}%`;
+
+  fill.className =
+    "score-fill";
+
+  if (
+    value >= 70
+  ) {
+
+    fill.classList.add(
+      "good"
     );
 
+  } else if (
+    value >= 50
+  ) {
 
-  if(score === null){
-
-    scoreValue.textContent =
-      "—";
-
-    scoreFill.style.width =
-      "0%";
-
+    fill.classList.add(
+      "warning"
+    );
   }
-  else{
-
-    scoreValue.textContent =
-      `${score}/100`;
-
-    scoreFill.style.width =
-      `${score}%`;
-
-    /*
-      Visual score intensity.
-    */
-
-    if(score >= 70){
-
-      scoreFill.style.background =
-        "#27d17f";
-
-    }
-    else if(score >= 50){
-
-      scoreFill.style.background =
-        "#ffc857";
-
-    }
-    else{
-
-      scoreFill.style.background =
-        "#ff5c67";
-
-    }
-
-  }
+}
 
 
-  /* =====================================================
-     MTF
-  ===================================================== */
+/* =========================================================
+   TIMEFRAMES
+========================================================= */
 
-  const mtfGrid =
-    document.getElementById(
-      "mtfGrid"
-    );
+function renderTimeframes(data) {
 
+  const mapping = {
 
-  mtfGrid.innerHTML = "";
+    "1min":
+      "tf1m",
 
+    "5min":
+      "tf5m",
 
-  TIMEFRAMES.forEach(
-    tf => {
+    "15min":
+      "tf15m",
 
-      const result =
-        getTF(
+    "1h":
+      "tf1h",
+
+    "4h":
+      "tf4h"
+  };
+
+  Object.entries(
+    mapping
+  ).forEach(
+    ([tf, id]) => {
+
+      const value =
+        getDirection(
           data,
           tf
         );
 
+      const el =
+        byId(id);
 
-      const dir =
-        direction(result);
+      if (!el) {
+        return;
+      }
+
+      el.textContent =
+        value;
+
+      el.className =
+        `tf-value ${directionClass(
+          value
+        )}`;
+    }
+  );
+}
 
 
-      const name =
-        tf === "1min"
-          ? "M1"
-          : tf === "5min"
-            ? "M5"
-            : tf === "15min"
-              ? "M15"
-              : tf === "1h"
-                ? "H1"
-                : "H4";
+/* =========================================================
+   DIAGNOSTICS
+========================================================= */
+
+function renderDiagnostics(data) {
+
+  setDiagnostic(
+    "diagH4",
+    getDirection(
+      data,
+      "4h"
+    )
+  );
+
+  setDiagnostic(
+    "diagH1",
+    getDirection(
+      data,
+      "1h"
+    )
+  );
+
+  setDiagnostic(
+    "diagM15",
+    getDirection(
+      data,
+      "15min"
+    )
+  );
+
+  setDiagnostic(
+    "diagM5",
+    getDirection(
+      data,
+      "5min"
+    )
+  );
+
+  setDiagnostic(
+    "diagM1",
+    getDirection(
+      data,
+      "1min"
+    );
 
 
-      const box =
+  const structure =
+    structureState(
+      data
+    );
+
+  setDiagnostic(
+    "diagStructure",
+    structure
+  );
+
+
+  setDiagnostic(
+    "diagBOS",
+    structureBOS(
+      data
+    )
+  );
+
+
+  setDiagnostic(
+    "diagCHoCH",
+    structureCHoCH(
+      data
+    )
+  );
+
+
+  setDiagnostic(
+    "diagLiquidity",
+    liquidityState(
+      data
+    );
+
+
+  const pullback =
+    getPullback(
+      data
+    );
+
+  const pullbackEl =
+    byId(
+      "diagPullback"
+    );
+
+  pullbackEl.textContent =
+    pullback.state;
+
+  pullbackEl.className =
+    `diagnostic-value ${
+      pullback.valid
+        ? "status-good"
+        : "status-bad"
+    }`;
+
+
+  const confirmation =
+    getConfirmation(
+      data
+    );
+
+  const confirmationEl =
+    byId(
+      "diagConfirmation"
+    );
+
+  confirmationEl.textContent =
+    confirmation.state;
+
+  confirmationEl.className =
+    `diagnostic-value ${
+      confirmation.confirmed
+        ? "status-good"
+        : "status-bad"
+    }`;
+
+
+  const gate =
+    getExecutionGate(
+      data
+    );
+
+  const executionEl =
+    byId(
+      "diagExecution"
+    );
+
+  executionEl.textContent =
+    gate.passed
+      ? "PASSED"
+      : "LOCKED";
+
+  executionEl.className =
+    `diagnostic-value ${
+      gate.passed
+        ? "status-good"
+        : "status-bad"
+    }`;
+}
+
+
+/* =========================================================
+   REASONS
+========================================================= */
+
+function renderReasons(data) {
+
+  const container =
+    byId(
+      "reasonList"
+    );
+
+  if (!container) {
+    return;
+  }
+
+  const gate =
+    getExecutionGate(
+      data
+    );
+
+  const reasons =
+    getExecutionReasons(
+      data
+    );
+
+  container.innerHTML =
+    "";
+
+
+  if (
+    gate.passed
+  ) {
+
+    const successReasons =
+      reasons.length
+        ? reasons
+        : [
+            "EXECUTION GATE PASSED"
+          ];
+
+    successReasons.forEach(
+      reason => {
+
+        const div =
+          document.createElement(
+            "div"
+          );
+
+        div.className =
+          "reason pass";
+
+        div.textContent =
+          formatReason(
+            reason
+          );
+
+        container.appendChild(
+          div
+        );
+      }
+    );
+
+    return;
+  }
+
+
+  if (
+    !reasons.length
+  ) {
+
+    const div =
+      document.createElement(
+        "div"
+      );
+
+    div.className =
+      "reason fail";
+
+    div.textContent =
+      "NO EXECUTION DATA";
+
+    container.appendChild(
+      div
+    );
+
+    return;
+  }
+
+
+  reasons.forEach(
+    reason => {
+
+      const div =
         document.createElement(
           "div"
         );
 
+      div.className =
+        "reason fail";
 
-      box.className =
-        "tf-card";
+      div.textContent =
+        formatReason(
+          reason
+        );
 
-
-      box.innerHTML = `
-
-        <div class="tf-name">
-          ${name}
-        </div>
-
-        <div class="tf-direction">
-          ${textValue(dir)}
-        </div>
-
-      `;
-
-
-      colorDirection(
-        box.querySelector(
-          ".tf-direction"
-        ),
-        dir
+      container.appendChild(
+        div
       );
-
-
-      mtfGrid.appendChild(box);
-
     }
   );
+}
 
 
-  /* =====================================================
-     INDIVIDUAL TIMEFRAMES
-  ===================================================== */
+/* =========================================================
+   EXECUTION PLAN
+========================================================= */
 
-  const h4 =
-    getTF(data,"4h");
+function renderPlan(data) {
 
-  const h1 =
-    getTF(data,"1h");
+  const executable =
+    data
+      ?.execution
+      ?.executable === true;
 
-  const m15 =
-    getTF(data,"15min");
+  const plan =
+    data?.riskPlan;
 
-  const m5 =
-    getTF(data,"5min");
-
-  const m1 =
-    getTF(data,"1min");
-
-
-  setDiag(
-    "h4Direction",
-    direction(h4)
-  );
-
-  setDiag(
-    "h1Direction",
-    direction(h1)
-  );
-
-  setDiag(
-    "m15Direction",
-    direction(m15)
-  );
-
-  setDiag(
-    "m5Direction",
-    direction(m5)
-  );
-
-  setDiag(
-    "m1Direction",
-    direction(m1)
-  );
-
-
-  /* =====================================================
-     M15 STRUCTURE
-  ===================================================== */
-
-  setDiag(
-    "structure",
-    extractStructure(m15)
-  );
-
-
-  setDiag(
-    "bos",
-    extractBOS(m15)
-  );
-
-
-  setDiag(
-    "choch",
-    extractCHoCH(m15)
-  );
-
-
-  setDiag(
-    "liquidity",
-    extractLiquidity(m15)
-  );
-
-
-  /* =====================================================
-     M5 PULLBACK
-  ===================================================== */
-
-  setDiag(
-    "pullback",
-    extractPullback(m5)
-  );
-
-
-  /* =====================================================
-     M1 CONFIRMATION
-  ===================================================== */
-
-  setDiag(
-    "confirmation",
-    extractConfirmation(m1)
-  );
-
-
-  /* =====================================================
-     EXECUTION GATE
-  ===================================================== */
-
-  const gateText =
-    gatePassed
-      ? "OPEN"
-      : "LOCKED";
-
-
-  setDiag(
-    "executionGate",
-    gateText
-  );
-
-
-  const gateBadge =
-    document.getElementById(
-      "gateBadge"
+  const lock =
+    byId(
+      "lockBadge"
     );
 
+  if (executable && plan) {
 
-  if(executable){
+    lock.textContent =
+      "EXECUTABLE";
 
-    gateBadge.textContent =
-      "OPEN";
+    lock.classList.add(
+      "unlocked"
+    );
 
-    gateBadge.className =
-      "gate gate-open";
+    byId("entry")
+      .textContent =
+      formatPrice(
+        plan.entry
+      );
 
-  }
-  else{
+    byId("sl")
+      .textContent =
+      formatPrice(
+        plan.sl
+      );
 
-    gateBadge.textContent =
+    byId("tp")
+      .textContent =
+      formatPrice(
+        plan.tp
+      );
+
+    byId("rr")
+      .textContent =
+      `1:${Number(
+        plan.rr || 2
+      ).toFixed(0)}`;
+
+  } else {
+
+    lock.textContent =
       "LOCKED";
 
-    gateBadge.className =
-      "gate gate-locked";
+    lock.classList.remove(
+      "unlocked"
+    );
 
+    byId("entry")
+      .textContent =
+      "—";
+
+    byId("sl")
+      .textContent =
+      "—";
+
+    byId("tp")
+      .textContent =
+      "—";
+
+    byId("rr")
+      .textContent =
+      "—";
   }
+}
 
 
-  /* =====================================================
-     RISK PLAN
-  ===================================================== */
+/* =========================================================
+   MARKET STATUS
+========================================================= */
 
-  const risk =
-    extractRiskPlan(data);
-
-
-  document
-    .getElementById("entry")
-    .textContent =
-      fmt(risk.entry);
-
-
-  document
-    .getElementById("sl")
-    .textContent =
-      fmt(risk.sl);
-
-
-  document
-    .getElementById("tp")
-    .textContent =
-      fmt(risk.tp);
-
-
-  document
-    .getElementById("rr")
-    .textContent =
-      risk.rr === null
-        ? "—"
-        : `${risk.rr.toFixed(2)}R`;
-
-
-  /* =====================================================
-     FINAL ENGINE SAFETY
-  ===================================================== */
+function renderMarketStatus(
+  data
+) {
 
   const safety =
-    data?.safety ?? {};
+    data?.safety ||
+    {};
 
-
-  /* =====================================================
-     SESSION
-  ===================================================== */
 
   const session =
     safety?.session;
 
+  byId(
+    "session"
+  ).textContent =
+    session
+      ? `${safeText(
+          session.name
+        )} · ${safeText(
+          session.quality
+        )}`
+      : "—";
 
-  if(
-    session &&
-    typeof session === "object"
-  ){
-
-    const sessionName =
-      session.name ??
-      session.state ??
-      "—";
-
-
-    const sessionQuality =
-      session.quality
-        ? ` · ${session.quality}`
-        : "";
-
-
-    document
-      .getElementById("session")
-      .textContent =
-        `${String(sessionName).toUpperCase()}${sessionQuality}`;
-
-  }
-  else{
-
-    document
-      .getElementById("session")
-      .textContent =
-      "—";
-
-  }
-
-
-  /* =====================================================
-     VOLATILITY
-  ===================================================== */
 
   const volatility =
     safety?.volatility;
 
-
-  if(
-    volatility &&
-    typeof volatility === "object"
-  ){
-
-    const state =
-      volatility.state ??
-      "—";
-
-
-    const atrPercent =
-      safeNumber(
-        volatility.atrPercent
-      );
-
-
-    document
-      .getElementById("volatility")
-      .textContent =
-        atrPercent === null
-          ? String(state).toUpperCase()
-          : `${String(state).toUpperCase()} · ${atrPercent.toFixed(2)}%`;
-
-  }
-  else{
-
-    document
-      .getElementById("volatility")
-      .textContent =
-        "—";
-
-  }
+  byId(
+    "volatility"
+  ).textContent =
+    volatility
+      ? `${safeText(
+          volatility.state
+        )} · ${
+          volatility.atrPercent !== null &&
+          volatility.atrPercent !== undefined
+            ? Number(
+                volatility.atrPercent
+              ).toFixed(2) + "%"
+            : "—"
+        }`
+      : "—";
 
 
-  /* =====================================================
-     MARKET CONDITION
-  ===================================================== */
-
-  const marketCondition =
-    safety?.marketCondition;
-
-
-  document
-    .getElementById("marketCondition")
-    .textContent =
-      typeof marketCondition === "string"
-        ? marketCondition.toUpperCase()
-        : "—";
-
-
-  /* =====================================================
-     NEWS RISK
-  ===================================================== */
-
-  document
-    .getElementById("newsRisk")
-    .textContent =
-      formatBooleanState(
-        safety?.newsRisk
-      );
-
-
-  /* =====================================================
-     SPREAD
-  ===================================================== */
-
-  document
-    .getElementById("spread")
-    .textContent =
-      formatBooleanState(
-        safety?.spread
-      );
-
-
-  /* =====================================================
-     SLIPPAGE
-  ===================================================== */
-
-  document
-    .getElementById("slippage")
-    .textContent =
-      formatBooleanState(
-        safety?.slippage
-      );
-
-}
-
-
-/* =========================================================
-   CANDLE NORMALIZATION
-========================================================= */
-
-function normalizeCandles(
-  data
-){
-
-  const raw =
-    data?.values ??
-    data?.candles ??
-    [];
-
-
-  /*
-    Twelve Data data coming from
-    the Worker is already chronological:
-
-    oldest → newest
-
-    Therefore DO NOT reverse().
-  */
-
-  return raw
-    .map(
-      c => {
-
-        return {
-
-          time:
-            c.datetime ??
-            c.time ??
-            c.date ??
-            "",
-
-          open:
-            safeNumber(c.open),
-
-          high:
-            safeNumber(c.high),
-
-          low:
-            safeNumber(c.low),
-
-          close:
-            safeNumber(c.close)
-
-        };
-
-      }
-    )
-    .filter(
-      c =>
-        c.open !== null &&
-        c.high !== null &&
-        c.low !== null &&
-        c.close !== null
+  byId(
+    "marketCondition"
+  ).textContent =
+    safeText(
+      safety?.marketCondition
     );
 
+
+  byId(
+    "newsRisk"
+  ).textContent =
+    safeText(
+      safety?.newsRisk
+    );
+
+
+  byId(
+    "spread"
+  ).textContent =
+    safeText(
+      safety?.spread
+    );
+
+
+  byId(
+    "slippage"
+  ).textContent =
+    safeText(
+      safety?.slippage
+    );
 }
 
 
 /* =========================================================
-   EMA
+   FRESHNESS
 ========================================================= */
 
-function ema(
+function renderFreshness(
+  data
+) {
+
+  const container =
+    byId(
+      "freshnessList"
+    );
+
+  if (!container) {
+    return;
+  }
+
+  const freshness =
+    data?.freshness ||
+    {};
+
+  const order = [
+    ["1min", "M1"],
+    ["5min", "M5"],
+    ["15min", "M15"],
+    ["1h", "H1"],
+    ["4h", "H4"]
+  ];
+
+  container.innerHTML =
+    "";
+
+
+  order.forEach(
+    ([tf, label]) => {
+
+      const item =
+        freshness[tf];
+
+      const row =
+        document.createElement(
+          "div"
+        );
+
+      row.className =
+        "diagnostic-row";
+
+
+      const left =
+        document.createElement(
+          "div"
+        );
+
+      left.className =
+        "diagnostic-label";
+
+      left.textContent =
+        label;
+
+
+      const right =
+        document.createElement(
+          "div"
+        );
+
+      right.className =
+        `diagnostic-value ${
+          item?.fresh
+            ? "status-good"
+            : "status-bad"
+        }`;
+
+
+      if (!item) {
+
+        right.textContent =
+          "UNAVAILABLE";
+
+      } else {
+
+        right.textContent =
+          item.fresh
+            ? `FRESH · ${item.ageMinutes}m`
+            : `STALE · ${item.ageMinutes ?? "?"}m`;
+      }
+
+
+      row.appendChild(
+        left
+      );
+
+      row.appendChild(
+        right
+      );
+
+      container.appendChild(
+        row
+      );
+    }
+  );
+}
+
+
+/* =========================================================
+   AI INTERPRETATION
+========================================================= */
+
+function renderAI(
+  data
+) {
+
+  const el =
+    byId(
+      "aiText"
+    );
+
+  if (!el) {
+    return;
+  }
+
+  const decision =
+    data?.decision ||
+    "NO TRADE";
+
+  const score =
+    data?.setupScore;
+
+  const direction =
+    data?.multiTimeframeBias ||
+    "MIXED";
+
+  const gate =
+    getExecutionGate(
+      data
+    );
+
+  const reasons =
+    getExecutionReasons(
+      data
+    );
+
+
+  if (
+    data?.execution?.executable === true
+  ) {
+
+    el.innerHTML = `
+      <strong style="color:#35df9b">
+        EXECUTABLE ${safeText(decision)}
+      </strong>
+      <br><br>
+      Multi-timeframe direction is aligned.
+      All strict execution filters passed.
+      Risk plan is available.
+      <br><br>
+      <strong>Important:</strong>
+      This is a rule-based execution decision,
+      not a guarantee of profit.
+    `;
+
+    return;
+  }
+
+
+  el.innerHTML = `
+    <strong style="color:#f1c75b">
+      ${safeText(decision)}
+    </strong>
+    <br><br>
+    Multi-timeframe bias:
+    <strong>${safeText(direction)}</strong>
+    <br>
+    Setup score:
+    <strong>${safeText(score)}/100</strong>
+    <br><br>
+    Execution gate:
+    <strong style="color:#ff6a7b">
+      ${gate.passed ? "PASSED" : "LOCKED"}
+    </strong>
+    <br><br>
+    ${
+      reasons.length
+        ? reasons
+            .map(
+              r =>
+                `• ${formatReason(r)}`
+            )
+            .join("<br>")
+        : "No execution reason available."
+    }
+  `;
+}
+
+
+/* =========================================================
+   MAIN DATA RENDER
+========================================================= */
+
+function renderDashboard(
+  data
+) {
+
+  latestData =
+    data;
+
+
+  const price =
+    data?.price;
+
+  byId(
+    "price"
+  ).textContent =
+    formatPrice(
+      price
+    );
+
+
+  renderDecision(
+    data
+  );
+
+  renderScore(
+    data
+  );
+
+  renderTimeframes(
+    data
+  );
+
+  renderDiagnostics(
+    data
+  );
+
+  renderReasons(
+    data
+  );
+
+  renderPlan(
+    data
+  );
+
+  renderMarketStatus(
+    data
+  );
+
+  renderFreshness(
+    data
+  );
+
+  renderAI(
+    data
+  );
+}
+
+
+/* =========================================================
+   FETCH ANALYSIS
+========================================================= */
+
+async function fetchAnalysis() {
+
+  try {
+
+    setApiStatus(
+      true
+    );
+
+
+    const response =
+      await fetch(
+        `${ANALYZE_URL}?_=${Date.now()}`,
+        {
+          method:
+            "GET",
+
+          cache:
+            "no-store"
+        }
+      );
+
+
+    if (
+      !response.ok
+    ) {
+      throw new Error(
+        `HTTP ${response.status}`
+      );
+    }
+
+
+    const data =
+      await response.json();
+
+
+    if (
+      !data ||
+      data.ok !== true
+    ) {
+      throw new Error(
+        data?.error ||
+        "Invalid API response"
+      );
+    }
+
+
+    renderDashboard(
+      data
+    );
+
+
+    setApiStatus(
+      true
+    );
+
+
+  } catch (
+    error
+  ) {
+
+    console.error(
+      "Analysis error:",
+      error
+    );
+
+    setApiStatus(
+      false
+    );
+
+    byId(
+      "decision"
+    ).textContent =
+      "NO TRADE";
+
+    byId(
+      "decisionReasons"
+    ).textContent =
+      "API / DATA ERROR";
+
+    byId(
+      "score"
+    ).textContent =
+      "—";
+  }
+}
+
+
+/* =========================================================
+   CHART
+========================================================= */
+
+async function fetchChart() {
+
+  const loading =
+    byId(
+      "chartLoading"
+    );
+
+  if (loading) {
+    loading.style.display =
+      "flex";
+  }
+
+
+  try {
+
+    const response =
+      await fetch(
+        `${MARKET_URL}&_=${Date.now()}`,
+        {
+          cache:
+            "no-store"
+        }
+      );
+
+
+    if (
+      !response.ok
+    ) {
+      throw new Error(
+        `HTTP ${response.status}`
+      );
+    }
+
+
+    const data =
+      await response.json();
+
+
+    if (
+      !data?.candles?.length
+    ) {
+      throw new Error(
+        "No candles"
+      );
+    }
+
+
+    drawChart(
+      data.candles
+    );
+
+
+    if (loading) {
+      loading.style.display =
+        "none";
+    }
+
+
+  } catch (
+    error
+  ) {
+
+    console.error(
+      "Chart error:",
+      error
+    );
+
+    if (loading) {
+
+      loading.textContent =
+        "Chart data unavailable";
+
+      loading.style.display =
+        "flex";
+    }
+  }
+}
+
+
+/* =========================================================
+   EMA FOR CHART
+========================================================= */
+
+function chartEMA(
   values,
   period
-){
+) {
 
-  if(
+  if (
     !values.length
-  ){
-
+  ) {
     return [];
-
   }
 
-
-  const result =
-    new Array(
-      values.length
-    ).fill(null);
-
-
-  if(
-    values.length <
-    period
-  ){
-
-    return result;
-
-  }
-
-
-  let sum = 0;
-
-
-  for(
-    let i=0;
-    i<period;
-    i++
-  ){
-
-    sum +=
-      values[i];
-
-  }
-
-
-  let previous =
-    sum / period;
-
-
-  result[period-1] =
-    previous;
-
-
-  const multiplier =
+  const k =
     2 /
     (period + 1);
 
+  const output = [
+    values[0]
+  ];
 
-  for(
-    let i=period;
-    i<values.length;
+  for (
+    let i = 1;
+    i < values.length;
     i++
-  ){
+  ) {
 
-    previous =
-      (
-        values[i] -
-        previous
-      ) *
-      multiplier +
-      previous;
-
-
-    result[i] =
-      previous;
-
-  }
-
-
-  return result;
-
-}
-
-
-/* =========================================================
-   SWINGS
-========================================================= */
-
-function detectSwings(
-  candles
-){
-
-  const highs = [];
-  const lows = [];
-
-
-  for(
-    let i=2;
-    i<candles.length-2;
-    i++
-  ){
-
-    const c =
-      candles[i];
-
-
-    if(
-      c.high >
-      candles[i-1].high &&
-      c.high >
-      candles[i-2].high &&
-      c.high >
-      candles[i+1].high &&
-      c.high >
-      candles[i+2].high
-    ){
-
-      highs.push({
-        index:i,
-        price:c.high
-      });
-
-    }
-
-
-    if(
-      c.low <
-      candles[i-1].low &&
-      c.low <
-      candles[i-2].low &&
-      c.low <
-      candles[i+1].low &&
-      c.low <
-      candles[i+2].low
-    ){
-
-      lows.push({
-        index:i,
-        price:c.low
-      });
-
-    }
-
-  }
-
-
-  return {
-    highs,
-    lows
-  };
-
-}
-
-
-/* =========================================================
-   EVENTS
-========================================================= */
-
-function detectEvents(
-  candles
-){
-
-  const swings =
-    detectSwings(
-      candles
+    output.push(
+      values[i] * k +
+      output[i - 1] *
+        (1 - k)
     );
-
-
-  const events = [];
-
-
-  /* BOS HIGH */
-
-  for(
-    let i=1;
-    i<swings.highs.length;
-    i++
-  ){
-
-    const previous =
-      swings.highs[i-1];
-
-    const current =
-      swings.highs[i];
-
-
-    if(
-      current.price >
-      previous.price
-    ){
-
-      events.push({
-
-        type:"BOS",
-
-        direction:"BUY",
-
-        index:
-          current.index,
-
-        price:
-          current.price
-
-      });
-
-    }
-
   }
 
-
-  /* BOS LOW */
-
-  for(
-    let i=1;
-    i<swings.lows.length;
-    i++
-  ){
-
-    const previous =
-      swings.lows[i-1];
-
-    const current =
-      swings.lows[i];
-
-
-    if(
-      current.price <
-      previous.price
-    ){
-
-      events.push({
-
-        type:"BOS",
-
-        direction:"SELL",
-
-        index:
-          current.index,
-
-        price:
-          current.price
-
-      });
-
-    }
-
-  }
-
-
-  /* CHoCH HIGH */
-
-  for(
-    let i=1;
-    i<swings.highs.length;
-    i++
-  ){
-
-    const previous =
-      swings.highs[i-1];
-
-    const current =
-      swings.highs[i];
-
-
-    if(
-      current.price <
-      previous.price
-    ){
-
-      events.push({
-
-        type:"CHoCH",
-
-        direction:"SELL",
-
-        index:
-          current.index,
-
-        price:
-          current.price
-
-      });
-
-    }
-
-  }
-
-
-  /* CHoCH LOW */
-
-  for(
-    let i=1;
-    i<swings.lows.length;
-    i++
-  ){
-
-    const previous =
-      swings.lows[i-1];
-
-    const current =
-      swings.lows[i];
-
-
-    if(
-      current.price >
-      previous.price
-    ){
-
-      events.push({
-
-        type:"CHoCH",
-
-        direction:"BUY",
-
-        index:
-          current.index,
-
-        price:
-          current.price
-
-      });
-
-    }
-
-  }
-
-
-  /*
-    Liquidity sweep.
-
-    Diagnostic approximation only.
-  */
-
-  const lookback = 20;
-
-
-  for(
-    let i=lookback;
-    i<candles.length;
-    i++
-  ){
-
-    const current =
-      candles[i];
-
-
-    let previousHigh =
-      -Infinity;
-
-    let previousLow =
-      Infinity;
-
-
-    for(
-      let j=i-lookback;
-      j<i;
-      j++
-    ){
-
-      previousHigh =
-        Math.max(
-          previousHigh,
-          candles[j].high
-        );
-
-      previousLow =
-        Math.min(
-          previousLow,
-          candles[j].low
-        );
-
-    }
-
-
-    if(
-      current.high >
-      previousHigh &&
-      current.close <
-      previousHigh
-    ){
-
-      events.push({
-
-        type:"LIQUIDITY",
-
-        direction:"SELL",
-
-        index:i,
-
-        price:current.high
-
-      });
-
-    }
-
-
-    if(
-      current.low <
-      previousLow &&
-      current.close >
-      previousLow
-    ){
-
-      events.push({
-
-        type:"LIQUIDITY",
-
-        direction:"BUY",
-
-        index:i,
-
-        price:current.low
-
-      });
-
-    }
-
-  }
-
-
-  return events;
-
-}
-
-
-/* =========================================================
-   IMPORTANT EVENTS
-========================================================= */
-
-function getImportantEvents(
-  events,
-  visibleStart,
-  visibleEnd
-){
-
-  const filtered =
-    events.filter(
-      event =>
-        event.index >=
-        visibleStart &&
-        event.index <=
-        visibleEnd
-    );
-
-
-  const bos =
-    filtered
-      .filter(
-        e =>
-          e.type === "BOS"
-      )
-      .slice(-2);
-
-
-  const choch =
-    filtered
-      .filter(
-        e =>
-          e.type === "CHoCH"
-      )
-      .slice(-2);
-
-
-  const liq =
-    filtered
-      .filter(
-        e =>
-          e.type === "LIQUIDITY"
-      )
-      .slice(-3);
-
-
-  return [
-    ...bos,
-    ...choch,
-    ...liq
-  ]
-    .sort(
-      (a,b) =>
-        a.index -
-        b.index
-    );
-
-}
-
-
-/* =========================================================
-   CANVAS RESIZE
-========================================================= */
-
-function resizeCanvas(
-  canvas
-){
-
-  const rect =
-    canvas.getBoundingClientRect();
-
-
-  const dpr =
-    window.devicePixelRatio ||
-    1;
-
-
-  const width =
-    Math.max(
-      1,
-      Math.floor(
-        rect.width *
-        dpr
-      )
-    );
-
-
-  const height =
-    Math.max(
-      1,
-      Math.floor(
-        rect.height *
-        dpr
-      )
-    );
-
-
-  if(
-    canvas.width !== width ||
-    canvas.height !== height
-  ){
-
-    canvas.width =
-      width;
-
-    canvas.height =
-      height;
-
-  }
-
-
-  return {
-    width,
-    height,
-    dpr
-  };
-
-}
-
-
-/* =========================================================
-   TEXT
-========================================================= */
-
-function drawText(
-  ctx,
-  text,
-  x,
-  y,
-  size,
-  color,
-  align="left"
-){
-
-  ctx.font =
-    `${size}px -apple-system,BlinkMacSystemFont,Arial`;
-
-  ctx.fillStyle =
-    color;
-
-  ctx.textAlign =
-    align;
-
-  ctx.textBaseline =
-    "middle";
-
-  ctx.fillText(
-    text,
-    x,
-    y
-  );
-
+  return output;
 }
 
 
@@ -3690,63 +2953,33 @@ function drawText(
 
 function drawChart(
   candles
-){
+) {
 
   const canvas =
-    document.getElementById(
+    byId(
       "chartCanvas"
     );
 
-
-  if(!canvas){
+  if (!canvas) {
     return;
   }
 
 
-  if(
-    !candles ||
-    candles.length < 5
-  ){
+  const rect =
+    canvas.getBoundingClientRect();
 
-    const ctx =
-      canvas.getContext(
-        "2d"
-      );
+  const dpr =
+    window.devicePixelRatio ||
+    1;
 
 
-    resizeCanvas(canvas);
+  canvas.width =
+    rect.width *
+    dpr;
 
-
-    ctx.clearRect(
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    );
-
-
-    drawText(
-      ctx,
-      "NO MARKET DATA",
-      canvas.width/2,
-      canvas.height/2,
-      12,
-      "#66717e",
-      "center"
-    );
-
-
-    return;
-
-  }
-
-
-  const {
-    width,
-    height,
-    dpr
-  } =
-    resizeCanvas(canvas);
+  canvas.height =
+    rect.height *
+    dpr;
 
 
   const ctx =
@@ -3754,6 +2987,159 @@ function drawChart(
       "2d"
     );
 
+  ctx.scale(
+    dpr,
+    dpr
+  );
+
+
+  const width =
+    rect.width;
+
+  const height =
+    rect.height;
+
+
+  const visible =
+    candles.slice(
+      -100
+    );
+
+
+  const closes =
+    visible.map(
+      c =>
+        Number(
+          c.close
+        )
+    );
+
+
+  const highs =
+    visible.map(
+      c =>
+        Number(
+          c.high
+        )
+    );
+
+
+  const lows =
+    visible.map(
+      c =>
+        Number(
+          c.low
+        )
+    );
+
+
+  const ema20 =
+    chartEMA(
+      closes,
+      20
+    );
+
+
+  const ema50 =
+    chartEMA(
+      closes,
+      50
+    );
+
+
+  const ema200 =
+    chartEMA(
+      closes,
+      200
+    );
+
+
+  const allValues = [
+    ...highs,
+    ...lows,
+    ...ema20,
+    ...ema50,
+    ...ema200
+  ].filter(
+    Number.isFinite
+  );
+
+
+  if (
+    !allValues.length
+  ) {
+    return;
+  }
+
+
+  const min =
+    Math.min(
+      ...allValues
+    );
+
+  const max =
+    Math.max(
+      ...allValues
+    );
+
+
+  const range =
+    Math.max(
+      max - min,
+      0.01
+    );
+
+
+  const padTop =
+    20;
+
+  const padBottom =
+    25;
+
+  const padLeft =
+    8;
+
+  const padRight =
+    8;
+
+
+  function x(i) {
+
+    return (
+      padLeft +
+      i *
+        (
+          (width -
+            padLeft -
+            padRight) /
+          Math.max(
+            visible.length - 1,
+            1
+          )
+        )
+    );
+  }
+
+
+  function y(value) {
+
+    return (
+      padTop +
+      (
+        max -
+        value
+      ) /
+      range *
+      (
+        height -
+        padTop -
+        padBottom
+      )
+    );
+  }
+
+
+  /* Background */
 
   ctx.clearRect(
     0,
@@ -3763,1108 +3149,249 @@ function drawChart(
   );
 
 
-  const left =
-    45*dpr;
-
-  const right =
-    12*dpr;
-
-  const top =
-    15*dpr;
-
-  const bottom =
-    25*dpr;
-
-
-  const chartWidth =
-    width -
-    left -
-    right;
-
-
-  const chartHeight =
-    height -
-    top -
-    bottom;
-
-
-  const visibleCount =
-    Math.min(
-      120,
-      candles.length
-    );
-
-
-  const firstIndex =
-    candles.length -
-    visibleCount;
-
-
-  const visible =
-    candles.slice(
-      firstIndex
-    );
-
-
-  const closes =
-    candles.map(
-      c =>
-        c.close
-    );
-
-
-  const ema20 =
-    ema(
-      closes,
-      20
-    );
-
-
-  const ema50 =
-    ema(
-      closes,
-      50
-    );
-
-
-  const ema200 =
-    ema(
-      closes,
-      200
-    );
-
-
-  let minPrice =
-    Infinity;
-
-  let maxPrice =
-    -Infinity;
-
-
-  visible.forEach(
-    candle => {
-
-      minPrice =
-        Math.min(
-          minPrice,
-          candle.low
-        );
-
-      maxPrice =
-        Math.max(
-          maxPrice,
-          candle.high
-        );
-
-    }
-  );
-
-
-  for(
-    let i=firstIndex;
-    i<candles.length;
-    i++
-  ){
-
-    if(
-      ema20[i] !== null
-    ){
-
-      minPrice =
-        Math.min(
-          minPrice,
-          ema20[i]
-        );
-
-      maxPrice =
-        Math.max(
-          maxPrice,
-          ema20[i]
-        );
-
-    }
-
-
-    if(
-      ema50[i] !== null
-    ){
-
-      minPrice =
-        Math.min(
-          minPrice,
-          ema50[i]
-        );
-
-      maxPrice =
-        Math.max(
-          maxPrice,
-          ema50[i]
-        );
-
-    }
-
-
-    if(
-      ema200[i] !== null
-    ){
-
-      minPrice =
-        Math.min(
-          minPrice,
-          ema200[i]
-        );
-
-      maxPrice =
-        Math.max(
-          maxPrice,
-          ema200[i]
-        );
-
-    }
-
-  }
-
-
-  const padding =
-    (
-      maxPrice -
-      minPrice
-    ) * .08;
-
-
-  minPrice -=
-    padding;
-
-  maxPrice +=
-    padding;
-
-
-  if(
-    !Number.isFinite(
-      minPrice
-    ) ||
-    !Number.isFinite(
-      maxPrice
-    )
-  ){
-
-    return;
-
-  }
-
-
-  function x(
-    index
-  ){
-
-    if(
-      visible.length <= 1
-    ){
-
-      return left +
-        chartWidth/2;
-
-    }
-
-
-    return (
-      left +
-      index *
-      chartWidth /
-      (visible.length - 1)
-    );
-
-  }
-
-
-  function y(
-    price
-  ){
-
-    return (
-      top +
-      (
-        maxPrice -
-        price
-      ) /
-      (
-        maxPrice -
-        minPrice
-      ) *
-      chartHeight
-    );
-
-  }
-
-
-  /* GRID */
+  /* Grid */
 
   ctx.lineWidth =
-    1*dpr;
+    1;
+
+  ctx.strokeStyle =
+    "rgba(255,255,255,.05)";
 
 
-  for(
-    let i=0;
-    i<=5;
+  for (
+    let i = 1;
+    i < 6;
     i++
-  ){
+  ) {
 
     const gy =
-      top +
-      i *
-      chartHeight /
-      5;
-
-
-    ctx.strokeStyle =
-      "#141a21";
+      padTop +
+      (
+        height -
+        padTop -
+        padBottom
+      ) *
+      i /
+      6;
 
 
     ctx.beginPath();
 
     ctx.moveTo(
-      left,
+      0,
       gy
     );
 
     ctx.lineTo(
-      width-right,
+      width,
       gy
     );
 
     ctx.stroke();
-
-
-    const priceLevel =
-      maxPrice -
-      i *
-      (
-        maxPrice -
-        minPrice
-      ) /
-      5;
-
-
-    drawText(
-      ctx,
-      priceLevel.toFixed(2),
-      width -
-      4*dpr,
-      gy,
-      8*dpr,
-      "#4e5965",
-      "right"
-    );
-
   }
 
 
-  /* CANDLES */
+  /* Candles */
 
-  const candleGap =
-    chartWidth /
+  const candleWidth =
     Math.max(
-      1,
-      visible.length
-    );
-
-
-  const bodyWidth =
-    Math.max(
-      2*dpr,
-      candleGap *
+      2,
+      (
+        width -
+        padLeft -
+        padRight
+      ) /
+      visible.length *
       .55
     );
 
 
   visible.forEach(
-    (
-      candle,
-      i
-    ) => {
+    (candle, i) => {
 
-      const px =
-        x(i);
+      const open =
+        Number(
+          candle.open
+        );
+
+      const high =
+        Number(
+          candle.high
+        );
+
+      const low =
+        Number(
+          candle.low
+        );
+
+      const close =
+        Number(
+          candle.close
+        );
 
 
-      const openY =
-        y(candle.open);
-
-      const closeY =
-        y(candle.close);
-
-      const highY =
-        y(candle.high);
-
-      const lowY =
-        y(candle.low);
+      if (
+        ![
+          open,
+          high,
+          low,
+          close
+        ].every(
+          Number.isFinite
+        )
+      ) {
+        return;
+      }
 
 
       const bullish =
-        candle.close >=
-        candle.open;
+        close >=
+        open;
 
+
+      const cx =
+        x(i);
+
+
+      /* Wick */
 
       ctx.strokeStyle =
         bullish
-          ? "#27d17f"
-          : "#ff5c67";
-
+          ? "rgba(53,223,155,.8)"
+          : "rgba(255,92,112,.8)";
 
       ctx.lineWidth =
-        Math.max(
-          1,
-          dpr
-        );
-
+        1;
 
       ctx.beginPath();
 
       ctx.moveTo(
-        px,
-        highY
+        cx,
+        y(high)
       );
 
       ctx.lineTo(
-        px,
-        lowY
+        cx,
+        y(low)
       );
 
       ctx.stroke();
 
 
-      const bodyTop =
-        Math.min(
-          openY,
-          closeY
+      /* Body */
+
+      const top =
+        y(
+          Math.max(
+            open,
+            close
+          )
         );
 
-
-      const bodyHeight =
-        Math.max(
-          dpr,
-          Math.abs(
-            closeY -
-            openY
+      const bottom =
+        y(
+          Math.min(
+            open,
+            close
           )
         );
 
 
       ctx.fillStyle =
         bullish
-          ? "#27d17f"
-          : "#ff5c67";
+          ? "rgba(53,223,155,.85)"
+          : "rgba(255,92,112,.85)";
 
 
       ctx.fillRect(
-        px -
-        bodyWidth/2,
-        bodyTop,
-        bodyWidth,
-        bodyHeight
+        cx -
+          candleWidth / 2,
+        top,
+        candleWidth,
+        Math.max(
+          bottom -
+            top,
+          1
+        )
       );
-
     }
   );
 
 
-  /* EMA */
-
-  function drawEMA(
+  function drawLine(
     values,
-    stroke
-  ){
+    stroke,
+    lineWidth
+  ) {
 
     ctx.beginPath();
+
+    ctx.lineWidth =
+      lineWidth;
+
+    ctx.strokeStyle =
+      stroke;
 
     let started =
       false;
 
 
-    for(
-      let i=firstIndex;
-      i<candles.length;
-      i++
-    ){
-
-      const value =
-        values[i];
-
-
-      if(
-        value === null
-      ){
-
-        continue;
-
-      }
-
-
-      const vi =
-        i -
-        firstIndex;
-
-
-      const px =
-        x(vi);
-
-      const py =
-        y(value);
-
-
-      if(!started){
-
-        ctx.moveTo(
-          px,
-          py
-        );
-
-        started = true;
-
-      }
-      else{
-
-        ctx.lineTo(
-          px,
-          py
-        );
-
-      }
-
-    }
-
-
-    ctx.strokeStyle =
-      stroke;
-
-    ctx.lineWidth =
-      1.15*dpr;
-
-    ctx.stroke();
-
-  }
-
-
-  drawEMA(
-    ema20,
-    "#4ca3ff"
-  );
-
-
-  drawEMA(
-    ema50,
-    "#ffc857"
-  );
-
-
-  drawEMA(
-    ema200,
-    "#c77dff"
-  );
-
-
-  /* EVENTS */
-
-  const events =
-    detectEvents(
-      candles
-    );
-
-
-  const importantEvents =
-    getImportantEvents(
-      events,
-      firstIndex,
-      candles.length-1
-    );
-
-
-  const uniqueEvents = [];
-
-
-  importantEvents.forEach(
-    event => {
-
-      const duplicate =
-        uniqueEvents.some(
-          e =>
-            e.index ===
-              event.index &&
-            e.type ===
-              event.type
-        );
-
-
-      if(!duplicate){
-
-        uniqueEvents.push(
-          event
-        );
-
-      }
-
-    }
-  );
-
-
-  const labelBuckets =
-    new Map();
-
-
-  uniqueEvents.forEach(
-    event => {
-
-      const vi =
-        event.index -
-        firstIndex;
-
-
-      if(
-        vi < 0 ||
-        vi >= visible.length
-      ){
-
-        return;
-
-      }
-
-
-      const px =
-        x(vi);
-
-
-      const py =
-        y(event.price);
-
-
-      let color =
-        "#27d17f";
-
-
-      if(
-        event.type ===
-        "CHoCH"
-      ){
-
-        color =
-          "#ff9f43";
-
-      }
-
-
-      if(
-        event.type ===
-        "LIQUIDITY"
-      ){
-
-        color =
-          "#c77dff";
-
-      }
-
-
-      const bucket =
-        Math.round(
-          px /
-          (
-            50*dpr
+    values.forEach(
+      (value, i) => {
+
+        if (
+          !Number.isFinite(
+            value
           )
-        );
+        ) {
+          return;
+        }
 
 
-      const count =
-        labelBuckets.get(
-          bucket
-        ) || 0;
+        if (!started) {
 
+          ctx.moveTo(
+            x(i),
+            y(value)
+          );
 
-      if(
-        count >= 2
-      ){
+          started =
+            true;
 
-        return;
+        } else {
 
+          ctx.lineTo(
+            x(i),
+            y(value)
+          );
+        }
       }
-
-
-      labelBuckets.set(
-        bucket,
-        count + 1
-      );
-
-
-      const sell =
-        event.direction ===
-        "SELL";
-
-
-      const baseOffset =
-        sell
-          ? -20*dpr
-          : 20*dpr;
-
-
-      const laneOffset =
-        sell
-          ? -count * 15*dpr
-          : count * 15*dpr;
-
-
-      let label =
-        event.type;
-
-
-      if(
-        event.type ===
-        "LIQUIDITY"
-      ){
-
-        label =
-          "LIQ";
-
-      }
-
-
-      ctx.fillStyle =
-        color;
-
-
-      ctx.beginPath();
-
-      ctx.arc(
-        px,
-        py,
-        3.2*dpr,
-        0,
-        Math.PI*2
-      );
-
-      ctx.fill();
-
-
-      const labelY =
-        py +
-        baseOffset +
-        laneOffset;
-
-
-      ctx.font =
-        `${8*dpr}px -apple-system,BlinkMacSystemFont,Arial`;
-
-
-      const textWidth =
-        ctx.measureText(
-          label
-        ).width;
-
-
-      ctx.fillStyle =
-        "rgba(7,10,14,.90)";
-
-
-      ctx.fillRect(
-        px -
-        textWidth/2 -
-        4*dpr,
-        labelY -
-        6*dpr,
-        textWidth +
-        8*dpr,
-        12*dpr
-      );
-
-
-      drawText(
-        ctx,
-        label,
-        px,
-        labelY,
-        8*dpr,
-        color,
-        "center"
-      );
-
-    }
-  );
-
-
-  /* CURRENT PRICE */
-
-  const latest =
-    candles[
-      candles.length - 1
-    ];
-
-
-  if(latest){
-
-    const latestY =
-      y(latest.close);
-
-
-    ctx.setLineDash([
-      4*dpr,
-      4*dpr
-    ]);
-
-
-    ctx.strokeStyle =
-      "#343d47";
-
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-      left,
-      latestY
     );
 
-    ctx.lineTo(
-      width-right,
-      latestY
-    );
 
     ctx.stroke();
-
-
-    ctx.setLineDash([]);
-
-
-    drawText(
-      ctx,
-      latest.close.toFixed(2),
-      left + 4*dpr,
-      latestY - 8*dpr,
-      8*dpr,
-      "#aab3bd",
-      "left"
-    );
-
   }
 
 
-  /* TIME LABELS */
-
-  const labelCount =
-    5;
-
-
-  for(
-    let i=0;
-    i<labelCount;
-    i++
-  ){
-
-    const index =
-      Math.round(
-        i *
-        (
-          visible.length-1
-        ) /
-        (
-          labelCount-1
-        )
-      );
-
-
-    const candle =
-      visible[index];
-
-
-    if(!candle){
-      continue;
-    }
-
-
-    const px =
-      x(index);
-
-
-    const date =
-      new Date(
-        candle.time
-      );
-
-
-    let label =
-      "";
-
-
-    if(
-      !Number.isNaN(
-        date.getTime()
-      )
-    ){
-
-      label =
-        date.toLocaleTimeString(
-          [],
-          {
-            hour:"2-digit",
-            minute:"2-digit"
-          }
-        );
-
-    }
-
-
-    drawText(
-      ctx,
-      label,
-      px,
-      height -
-      10*dpr,
-      8*dpr,
-      "#4e5965",
-      "center"
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   RENDER CHART
-========================================================= */
-
-async function renderChart(
-  tf
-){
-
-  const status =
-    document.getElementById(
-      "chartStatus"
-    );
-
-
-  status.textContent =
-    "LOADING";
-
-
-  try{
-
-    const data =
-      await fetchMarket(
-        tf
-      );
-
-
-    const candles =
-      normalizeCandles(
-        data
-      );
-
-
-    if(
-      !candles.length
-    ){
-
-      throw new Error(
-        "No candles"
-      );
-
-    }
-
-
-    drawChart(
-      candles
-    );
-
-
-    const freshness =
-      data?.freshness;
-
-
-    if(
-      freshness &&
-      freshness.fresh
-    ){
-
-      status.textContent =
-        "FRESH";
-
-    }
-    else if(
-      freshness
-    ){
-
-      status.textContent =
-        "STALE";
-
-    }
-    else{
-
-      status.textContent =
-        "LIVE DATA";
-
-    }
-
-  }
-  catch(error){
-
-    console.error(
-      error
-    );
-
-
-    status.textContent =
-      "DATA ERROR";
-
-
-    const canvas =
-      document.getElementById(
-        "chartCanvas"
-      );
-
-
-    const {
-      width,
-      height
-    } =
-      resizeCanvas(
-        canvas
-      );
-
-
-    const ctx =
-      canvas.getContext(
-        "2d"
-      );
-
-
-    ctx.clearRect(
-      0,
-      0,
-      width,
-      height
-    );
-
-
-    drawText(
-      ctx,
-      "MARKET DATA UNAVAILABLE",
-      width/2,
-      height/2,
-      11,
-      "#697582",
-      "center"
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   LOAD ANALYSIS
-========================================================= */
-
-async function loadAnalysis(){
-
-  try{
-
-    const data =
-      await fetchAnalysis();
-
-
-    /*
-      Basic backend validation.
-    */
-
-    if(
-      !data ||
-      data.ok === false
-    ){
-
-      throw new Error(
-        "Invalid analysis response"
-      );
-
-    }
-
-
-    renderDashboard(
-      data
-    );
-
-
-    document
-      .getElementById(
-        "livePill"
-      )
-      .innerHTML = `
-        <span class="live-dot"></span>
-        API ONLINE
-      `;
-
-  }
-  catch(error){
-
-    console.error(
-      error
-    );
-
-
-    document
-      .getElementById(
-        "decision"
-      )
-      .textContent =
-      "DATA ERROR";
-
-
-    document
-      .getElementById(
-        "decision"
-      )
-      .className =
-      "decision decision-neutral";
-
-
-    document
-      .getElementById(
-        "decisionSub"
-      )
-      .textContent =
-      "API UNAVAILABLE";
-
-
-    document
-      .getElementById(
-        "scoreValue"
-      )
-      .textContent =
-      "—";
-
-
-    document
-      .getElementById(
-        "scoreFill"
-      )
-      .style.width =
-      "0%";
-
-
-    document
-      .getElementById(
-        "livePill"
-      )
-      .innerHTML = `
-        <span
-          class="live-dot"
-          style="
-            background:#ff5c67;
-            box-shadow:
-              0 0 8px
-              rgba(255,92,103,.55);
-          ">
-        </span>
-        API ERROR
-      `;
-
-  }
-
+  /* EMA lines */
+
+  drawLine(
+    ema20,
+    "#e7edf5",
+    1.5
+  );
+
+  drawLine(
+    ema50,
+    "#8f9baa",
+    1.2
+  );
+
+  drawLine(
+    ema200,
+    "#566271",
+    1
+  );
 }
 
 
@@ -4872,36 +3399,15 @@ async function loadAnalysis(){
    NAVIGATION
 ========================================================= */
 
-const pages = {
+function setupNavigation() {
 
-  dashboard:
-    document.getElementById(
-      "dashboardPage"
-    ),
-
-  chart:
-    document.getElementById(
-      "chartPage"
-    ),
-
-  ai:
-    document.getElementById(
-      "aiPage"
-    ),
-
-  journal:
-    document.getElementById(
-      "journalPage"
-    )
-
-};
+  const buttons =
+    document.querySelectorAll(
+      ".nav button"
+    );
 
 
-document
-  .querySelectorAll(
-    ".nav-btn"
-  )
-  .forEach(
+  buttons.forEach(
     button => {
 
       button.addEventListener(
@@ -4912,16 +3418,12 @@ document
             button.dataset.page;
 
 
-          document
-            .querySelectorAll(
-              ".nav-btn"
-            )
-            .forEach(
-              b =>
-                b.classList.remove(
-                  "active"
-                )
-            );
+          buttons.forEach(
+            b =>
+              b.classList.remove(
+                "active"
+              )
+          );
 
 
           button.classList.add(
@@ -4929,174 +3431,89 @@ document
           );
 
 
-          Object
-            .values(pages)
+          document
+            .querySelectorAll(
+              ".page"
+            )
             .forEach(
-              p => {
-
-                if(p){
-
-                  p.style.display =
-                    "none";
-
-                }
-
-              }
+              section =>
+                section.classList.remove(
+                  "active"
+                )
             );
 
 
-          if(
-            pages[page]
-          ){
+          const target =
+            byId(
+              page
+            );
 
-            pages[page]
-              .style.display =
-              "block";
-
+          if (target) {
+            target.classList.add(
+              "active"
+            );
           }
 
 
-          if(
+          if (
             page === "chart"
-          ){
-
-            setTimeout(
-              () => {
-
-                renderChart(
-                  currentTF
-                );
-
-              },
-              50
-            );
-
+          ) {
+            fetchChart();
           }
-
         }
       );
-
     }
   );
+}
 
 
 /* =========================================================
-   TIMEFRAME BUTTONS
+   START
 ========================================================= */
 
-document
-  .querySelectorAll(
-    ".tf-button"
-  )
-  .forEach(
-    button => {
+async function startApp() {
 
-      button.addEventListener(
-        "click",
-        () => {
+  setupNavigation();
 
-          currentTF =
-            button.dataset.tf;
+  await fetchAnalysis();
 
-
-          document
-            .querySelectorAll(
-              ".tf-button"
-            )
-            .forEach(
-              b =>
-                b.classList.remove(
-                  "active"
-                )
-            );
-
-
-          button.classList.add(
-            "active"
-          );
-
-
-          renderChart(
-            currentTF
-          );
-
-        }
-      );
-
-    }
-  );
+  refreshTimer =
+    setInterval(
+      fetchAnalysis,
+      REFRESH_MS
+    );
+}
 
 
 /* =========================================================
-   WINDOW RESIZE
+   RESIZE
 ========================================================= */
 
 window.addEventListener(
   "resize",
   () => {
 
-    if(
-      pages.chart.style.display !==
-      "none"
-    ){
+    if (
+      document
+        .getElementById(
+          "chart"
+        )
+        ?.classList.contains(
+          "active"
+        )
+    ) {
 
-      renderChart(
-        currentTF
-      );
-
+      fetchChart();
     }
-
   }
 );
 
 
 /* =========================================================
-   STARTUP
+   INIT
 ========================================================= */
 
-document.addEventListener(
-  "DOMContentLoaded",
-  async () => {
-
-    await loadAnalysis();
-
-  }
-);
-
-
-/* =========================================================
-   AUTO REFRESH
-========================================================= */
-
-/*
-  Worker analysis cache = 30 seconds.
-
-  Frontend refresh = 35 seconds.
-
-  This avoids unnecessary requests while
-  keeping the dashboard reasonably current.
-*/
-
-setInterval(
-  async () => {
-
-    await loadAnalysis();
-
-
-    if(
-      pages.chart.style.display !==
-      "none"
-    ){
-
-      await renderChart(
-        currentTF
-      );
-
-    }
-
-  },
-  35000
-);
+startApp();
 
 </script>
 
