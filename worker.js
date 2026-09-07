@@ -1,72 +1,237 @@
-const ENGINE_VERSION = "V3.2";
+const ENGINE_VERSION = "V3.3";
 const CACHE_TTL = 15;
+const SYMBOL = "XAU/USD";
+
+const TIMEFRAMES = {
+  "1min": "1min",
+  "5min": "5min",
+  "15min": "15min",
+  "1h": "1h",
+  "4h": "4h"
+};
 
 const FRESHNESS_LIMITS = {
-  "1min": 10 * 60 * 1000,
-  "5min": 30 * 60 * 1000,
-  "15min": 90 * 60 * 1000,
-  "1h": 4 * 60 * 60 * 1000,
-  "4h": 16 * 60 * 60 * 1000
+  "1min": 10,
+  "5min": 30,
+  "15min": 90,
+  "1h": 240,
+  "4h": 960
 };
 
-const SESSION_UTC = {
-  ASIA: { start: 0, end: 7 },
-  LONDON: { start: 7, end: 13 },
-  LONDON_NEW_YORK_OVERLAP: { start: 13, end: 16 },
-  NEW_YORK: { start: 16, end: 21 },
-  OFF_SESSION: { start: 21, end: 24 }
+const ENTRY_CONFIG = {
+  minScore: 70,
+  minRR: 2,
+  pullbackMaxATR: 1.2,
+  confirmationLookback: 5
 };
 
-const TIMEFRAMES = [
-  "1min",
-  "5min",
-  "15min",
-  "1h",
-  "4h"
-];
-
-function json(data, status = 200, extraHeaders = {}) {
-  return new Response(
-    JSON.stringify(data, null, 2),
-    {
-      status,
-      headers: {
-        "content-type": "application/json; charset=utf-8",
-        "access-control-allow-origin": "*",
-        "access-control-allow-methods": "GET,OPTIONS",
-        "access-control-allow-headers": "*",
-        "cache-control": "no-store",
-        ...extraHeaders
-      }
+function json(data, status = 200) {
+  return new Response(JSON.stringify(data, null, 2), {
+    status,
+    headers: {
+      "content-type": "application/json; charset=UTF-8",
+      "cache-control": "no-store",
+      "access-control-allow-origin": "*",
+      "access-control-allow-methods": "GET,OPTIONS",
+      "access-control-allow-headers": "Content-Type"
     }
+  });
+}
+
+function num(v, fallback = null) {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : fallback;
+}
+
+function round(v, d = 2) {
+  const n = num(v);
+  if (n === null) return null;
+  const p = 10 ** d;
+  return Math.round(n * p) / p;
+}
+
+function average(values) {
+  const a = values.filter(v => Number.isFinite(v));
+  return a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0;
+}
+
+function ema(values, period) {
+  if (!values.length) return [];
+
+  const k = 2 / (period + 1);
+  const out = [values[0]];
+
+  for (let i = 1; i < values.length; i++) {
+    out.push(
+      values[i] * k +
+      out[i - 1] * (1 - k)
+    );
+  }
+
+  return out;
+}
+
+function rsi(values, period = 14) {
+  if (values.length < period + 1) return 50;
+
+  let gains = 0;
+  let losses = 0;
+
+  for (let i = 1; i <= period; i++) {
+    const diff = values[i] - values[i - 1];
+
+    if (diff >= 0) {
+      gains += diff;
+    } else {
+      losses -= diff;
+    }
+  }
+
+  let avgGain = gains / period;
+  let avgLoss = losses / period;
+
+  for (let i = period + 1; i < values.length; i++) {
+    const diff = values[i] - values[i - 1];
+
+    const gain = Math.max(diff, 0);
+    const loss = Math.max(-diff, 0);
+
+    avgGain =
+      (avgGain * (period - 1) + gain) /
+      period;
+
+    avgLoss =
+      (avgLoss * (period - 1) + loss) /
+      period;
+  }
+
+  if (avgLoss === 0) return 100;
+
+  const rs = avgGain / avgLoss;
+
+  return 100 - 100 / (1 + rs);
+}
+
+function atr(candles, period = 14) {
+  if (candles.length < 2) return 0;
+
+  const trs = [];
+
+  for (let i = 1; i < candles.length; i++) {
+    const c = candles[i];
+    const p = candles[i - 1];
+
+    trs.push(
+      Math.max(
+        c.high - c.low,
+        Math.abs(c.high - p.close),
+        Math.abs(c.low - p.close)
+      )
+    );
+  }
+
+  if (!trs.length) return 0;
+
+  return average(
+    trs.slice(-period)
   );
 }
 
-function getTradingSession() {
-  const hour = new Date().getUTCHours();
+function macd(
+  values,
+  fast = 12,
+  slow = 26,
+  signalPeriod = 9
+) {
+  if (!values.length) {
+    return {
+      macd: 0,
+      signal: 0,
+      histogram: 0
+    };
+  }
 
-  if (hour >= 0 && hour < 7) {
+  const fastE = ema(values, fast);
+  const slowE = ema(values, slow);
+
+  const line = values.map(
+    (_, i) =>
+      fastE[i] - slowE[i]
+  );
+
+  const signal = ema(
+    line,
+    signalPeriod
+  );
+
+  const m =
+    line[line.length - 1] || 0;
+
+  const s =
+    signal[signal.length - 1] || 0;
+
+  return {
+    macd: m,
+    signal: s,
+    histogram: m - s
+  };
+}
+
+function normalizeCandles(raw) {
+  const values =
+    Array.isArray(raw?.values)
+      ? raw.values
+      : [];
+
+  return values
+    .map(x => ({
+      datetime: x.datetime,
+      open: num(x.open),
+      high: num(x.high),
+      low: num(x.low),
+      close: num(x.close)
+    }))
+    .filter(x =>
+      x.datetime &&
+      x.open !== null &&
+      x.high !== null &&
+      x.low !== null &&
+      x.close !== null
+    )
+    .sort(
+      (a, b) =>
+        new Date(a.datetime) -
+        new Date(b.datetime)
+    );
+}
+
+function getTradingSession() {
+  const hour =
+    new Date().getUTCHours();
+
+  if (hour < 7) {
     return {
       name: "ASIA",
       quality: "LOW"
     };
   }
 
-  if (hour >= 7 && hour < 13) {
+  if (hour < 13) {
     return {
       name: "LONDON",
       quality: "GOOD"
     };
   }
 
-  if (hour >= 13 && hour < 16) {
+  if (hour < 16) {
     return {
-      name: "LONDON / NEW YORK OVERLAP",
+      name:
+        "LONDON / NEW YORK OVERLAP",
       quality: "BEST"
     };
   }
 
-  if (hour >= 16 && hour < 21) {
+  if (hour < 21) {
     return {
       name: "NEW YORK",
       quality: "GOOD"
@@ -80,350 +245,19 @@ function getTradingSession() {
 }
 
 function isWeekend() {
-  const day = new Date().getUTCDay();
+  const day =
+    new Date().getUTCDay();
 
-  return day === 0 || day === 6;
-}
-
-function num(value) {
-  const n = Number(value);
-
-  return Number.isFinite(n)
-    ? n
-    : null;
-}
-
-function round(value, digits = 2) {
-  if (!Number.isFinite(value)) {
-    return null;
-  }
-
-  const multiplier = 10 ** digits;
-
-  return Math.round(
-    value * multiplier
-  ) / multiplier;
-}
-
-function clamp(value, min, max) {
-  return Math.max(
-    min,
-    Math.min(max, value)
+  return (
+    day === 0 ||
+    day === 6
   );
-}
-
-function average(values) {
-  const filtered = values.filter(
-    Number.isFinite
-  );
-
-  if (!filtered.length) {
-    return null;
-  }
-
-  return filtered.reduce(
-    (sum, value) => sum + value,
-    0
-  ) / filtered.length;
-}
-
-function sma(values, period) {
-  if (values.length < period) {
-    return null;
-  }
-
-  return average(
-    values.slice(-period)
-  );
-}
-
-function ema(values, period) {
-  if (values.length < period) {
-    return null;
-  }
-
-  const multiplier =
-    2 / (period + 1);
-
-  let current =
-    average(
-      values.slice(0, period)
-    );
-
-  for (
-    let i = period;
-    i < values.length;
-    i++
-  ) {
-    current =
-      values[i] * multiplier +
-      current * (1 - multiplier);
-  }
-
-  return current;
-}
-
-function rsi(values, period = 14) {
-  if (values.length <= period) {
-    return null;
-  }
-
-  let gain = 0;
-  let loss = 0;
-
-  for (
-    let i = 1;
-    i <= period;
-    i++
-  ) {
-    const difference =
-      values[i] -
-      values[i - 1];
-
-    if (difference >= 0) {
-      gain += difference;
-    } else {
-      loss += Math.abs(
-        difference
-      );
-    }
-  }
-
-  let averageGain =
-    gain / period;
-
-  let averageLoss =
-    loss / period;
-
-  for (
-    let i = period + 1;
-    i < values.length;
-    i++
-  ) {
-    const difference =
-      values[i] -
-      values[i - 1];
-
-    const currentGain =
-      Math.max(difference, 0);
-
-    const currentLoss =
-      Math.max(-difference, 0);
-
-    averageGain =
-      (
-        averageGain *
-        (period - 1) +
-        currentGain
-      ) / period;
-
-    averageLoss =
-      (
-        averageLoss *
-        (period - 1) +
-        currentLoss
-      ) / period;
-  }
-
-  if (averageLoss === 0) {
-    return 100;
-  }
-
-  const relativeStrength =
-    averageGain /
-    averageLoss;
-
-  return 100 -
-    (
-      100 /
-      (1 + relativeStrength)
-    );
-}
-
-function trueRanges(candles) {
-  const ranges = [];
-
-  for (
-    let i = 0;
-    i < candles.length;
-    i++
-  ) {
-    const candle =
-      candles[i];
-
-    if (i === 0) {
-      ranges.push(
-        candle.high -
-        candle.low
-      );
-
-      continue;
-    }
-
-    const previousClose =
-      candles[i - 1].close;
-
-    ranges.push(
-      Math.max(
-        candle.high -
-          candle.low,
-
-        Math.abs(
-          candle.high -
-          previousClose
-        ),
-
-        Math.abs(
-          candle.low -
-          previousClose
-        )
-      )
-    );
-  }
-
-  return ranges;
-}
-
-function atr(candles, period = 14) {
-  const ranges =
-    trueRanges(candles);
-
-  return ema(
-    ranges,
-    period
-  );
-}
-
-function macd(values) {
-  const ema12 =
-    ema(values, 12);
-
-  const ema26 =
-    ema(values, 26);
-
-  if (
-    ema12 == null ||
-    ema26 == null
-  ) {
-    return {
-      macd: null,
-      signal: null,
-      histogram: null
-    };
-  }
-
-  const macdLine = [];
-
-  let currentEma12 = null;
-  let currentEma26 = null;
-
-  const multiplier12 =
-    2 / 13;
-
-  const multiplier26 =
-    2 / 27;
-
-  for (
-    let i = 0;
-    i < values.length;
-    i++
-  ) {
-    if (i === 11) {
-      currentEma12 =
-        average(
-          values.slice(0, 12)
-        );
-    } else if (i > 11) {
-      currentEma12 =
-        values[i] *
-          multiplier12 +
-        currentEma12 *
-          (1 - multiplier12);
-    }
-
-    if (i === 25) {
-      currentEma26 =
-        average(
-          values.slice(0, 26)
-        );
-    } else if (i > 25) {
-      currentEma26 =
-        values[i] *
-          multiplier26 +
-        currentEma26 *
-          (1 - multiplier26);
-    }
-
-    if (
-      i >= 25 &&
-      currentEma12 != null &&
-      currentEma26 != null
-    ) {
-      macdLine.push(
-        currentEma12 -
-        currentEma26
-      );
-    }
-  }
-
-  const signal =
-    ema(macdLine, 9);
-
-  const current =
-    macdLine[
-      macdLine.length - 1
-    ] ?? null;
-
-  return {
-    macd: current,
-    signal,
-    histogram:
-      current != null &&
-      signal != null
-        ? current - signal
-        : null
-  };
-}
-
-function normalizeCandles(raw) {
-  const values =
-    Array.isArray(raw?.values)
-      ? raw.values
-      : [];
-
-  return values
-    .map(item => ({
-      datetime:
-        item.datetime,
-
-      open:
-        num(item.open),
-
-      high:
-        num(item.high),
-
-      low:
-        num(item.low),
-
-      close:
-        num(item.close),
-
-      volume:
-        num(item.volume)
-    }))
-    .filter(item =>
-      item.open != null &&
-      item.high != null &&
-      item.low != null &&
-      item.close != null
-    )
-    .reverse();
 }
 
 function detectStructure(candles) {
   if (candles.length < 20) {
     return {
-      structure: "RANGE",
+      structure: "UNKNOWN",
       bos: "NONE",
       swingHigh: null,
       swingLow: null
@@ -433,127 +267,102 @@ function detectStructure(candles) {
   const recent =
     candles.slice(-20);
 
-  const previous =
-    candles.slice(-40, -20);
+  const mid = 10;
 
-  const recentHigh =
+  const first =
+    recent.slice(0, mid);
+
+  const second =
+    recent.slice(mid);
+
+  const high1 =
     Math.max(
-      ...recent.map(
-        candle => candle.high
-      )
+      ...first.map(x => x.high)
     );
 
-  const recentLow =
+  const high2 =
+    Math.max(
+      ...second.map(x => x.high)
+    );
+
+  const low1 =
     Math.min(
-      ...recent.map(
-        candle => candle.low
-      )
+      ...first.map(x => x.low)
     );
 
-  const previousHigh =
-    previous.length
-      ? Math.max(
-          ...previous.map(
-            candle =>
-              candle.high
-          )
-        )
-      : recentHigh;
-
-  const previousLow =
-    previous.length
-      ? Math.min(
-          ...previous.map(
-            candle =>
-              candle.low
-          )
-        )
-      : recentLow;
+  const low2 =
+    Math.min(
+      ...second.map(x => x.low)
+    );
 
   const last =
     candles[
       candles.length - 1
-    ];
+    ].close;
 
-  let structure =
-    "RANGE";
-
-  let bos =
-    "NONE";
+  let structure = "RANGE";
 
   if (
-    recentHigh > previousHigh &&
-    recentLow > previousLow
+    high2 > high1 &&
+    low2 > low1
   ) {
     structure = "HH_HL";
   } else if (
-    recentHigh < previousHigh &&
-    recentLow < previousLow
+    high2 < high1 &&
+    low2 < low1
   ) {
     structure = "LH_LL";
   }
 
-  if (
-    last.close >
-    previousHigh
-  ) {
+  let bos = "NONE";
+
+  if (last > high1) {
     bos = "BULLISH";
-  } else if (
-    last.close <
-    previousLow
-  ) {
+  } else if (last < low1) {
     bos = "BEARISH";
   }
 
   return {
     structure,
     bos,
-    swingHigh: recentHigh,
-    swingLow: recentLow
+    swingHigh:
+      Math.max(high1, high2),
+    swingLow:
+      Math.min(low1, low2)
   };
 }
 
 function liquiditySweep(candles) {
-  if (candles.length < 10) {
+  if (candles.length < 25) {
     return "NONE";
   }
 
-  const last =
-    candles[
-      candles.length - 1
-    ];
+  const recent =
+    candles.slice(-21, -1);
 
-  const previous =
-    candles.slice(-10, -1);
-
-  const previousHigh =
+  const high =
     Math.max(
-      ...previous.map(
-        candle => candle.high
-      )
+      ...recent.map(x => x.high)
     );
 
-  const previousLow =
+  const low =
     Math.min(
-      ...previous.map(
-        candle => candle.low
-      )
+      ...recent.map(x => x.low)
     );
+
+  const c =
+    candles[candles.length - 1];
 
   if (
-    last.high >
-      previousHigh &&
-    last.close <
-      previousHigh
+    c.high > high &&
+    c.close < high
   ) {
     return "BEARISH_SWEEP";
   }
 
   if (
-    last.low <
-      previousLow &&
-    last.close >
-      previousLow
+    c.low < low &&
+    c.close > low
   ) {
     return "BULLISH_SWEEP";
   }
@@ -561,34 +370,285 @@ function liquiditySweep(candles) {
   return "NONE";
 }
 
-function analyzeTimeframe(candles, timeframe) {
-  const closes =
-    candles.map(
-      candle => candle.close
+function candleMetrics(candles) {
+  const c =
+    candles[candles.length - 1];
+
+  const p =
+    candles[candles.length - 2];
+
+  const body =
+    Math.abs(
+      c.close - c.open
     );
 
-  const last =
+  const range =
+    Math.max(
+      c.high - c.low,
+      0.00001
+    );
+
+  const upperWick =
+    c.high -
+    Math.max(
+      c.open,
+      c.close
+    );
+
+  const lowerWick =
+    Math.min(
+      c.open,
+      c.close
+    ) -
+    c.low;
+
+  let direction = "NEUTRAL";
+
+  if (c.close > c.open) {
+    direction = "BULLISH";
+  }
+
+  if (c.close < c.open) {
+    direction = "BEARISH";
+  }
+
+  let pattern = "NORMAL";
+
+  if (
+    lowerWick > body * 1.5 &&
+    lowerWick > upperWick * 1.2
+  ) {
+    pattern =
+      "BULLISH_REJECTION";
+  } else if (
+    upperWick > body * 1.5 &&
+    upperWick > lowerWick * 1.2
+  ) {
+    pattern =
+      "BEARISH_REJECTION";
+  } else if (
+    body / range > 0.65
+  ) {
+    pattern =
+      direction === "BULLISH"
+        ? "BULLISH_IMPULSE"
+        : "BEARISH_IMPULSE";
+  }
+
+  return {
+    direction,
+    pattern,
+    body: round(body, 3),
+    range: round(range, 3),
+    closeChange:
+      round(
+        c.close - p.close,
+        3
+      )
+  };
+}
+
+function confirmationCandle(
+  candles,
+  direction
+) {
+  if (candles.length < 3) {
+    return {
+      confirmed: false,
+      pattern: "NONE"
+    };
+  }
+
+  const c =
+    candles[candles.length - 1];
+
+  const m =
+    candleMetrics(candles);
+
+  if (direction === "BUY") {
+    const confirmed =
+      (
+        m.direction === "BULLISH" &&
+        (
+          m.pattern ===
+            "BULLISH_IMPULSE" ||
+          m.pattern ===
+            "BULLISH_REJECTION"
+        )
+      ) ||
+      (
+        c.close >
+        candles[
+          candles.length - 2
+        ].high
+      );
+
+    return {
+      confirmed,
+      pattern: m.pattern
+    };
+  }
+
+  const confirmed =
+    (
+      m.direction === "BEARISH" &&
+      (
+        m.pattern ===
+          "BEARISH_IMPULSE" ||
+        m.pattern ===
+          "BEARISH_REJECTION"
+      )
+    ) ||
+    (
+      c.close <
+      candles[
+        candles.length - 2
+      ].low
+    );
+
+  return {
+    confirmed,
+    pattern: m.pattern
+  };
+}
+
+function detectPullback(
+  candles,
+  direction,
+  atrValue
+) {
+  if (
+    candles.length < 10 ||
+    !atrValue
+  ) {
+    return {
+      valid: false,
+      depthATR: null,
+      state: "UNKNOWN"
+    };
+  }
+
+  const current =
     candles[
       candles.length - 1
-    ];
+    ].close;
 
-  const ema20 =
-    ema(closes, 20);
+  const lookback =
+    candles.slice(-10, -1);
 
-  const ema50 =
-    ema(closes, 50);
+  const high =
+    Math.max(
+      ...lookback.map(
+        x => x.high
+      )
+    );
 
-  const ema200 =
-    ema(closes, 200);
+  const low =
+    Math.min(
+      ...lookback.map(
+        x => x.low
+      )
+    );
+
+  let depth;
+
+  if (direction === "BUY") {
+    depth =
+      Math.max(
+        0,
+        high - current
+      ) / atrValue;
+  } else {
+    depth =
+      Math.max(
+        0,
+        current - low
+      ) / atrValue;
+  }
+
+  const valid =
+    depth > 0.05 &&
+    depth <=
+      ENTRY_CONFIG.pullbackMaxATR;
+
+  return {
+    valid,
+    depthATR: round(depth, 2),
+    state:
+      valid
+        ? "VALID_PULLBACK"
+        : depth <= 0.05
+          ? "CHASING"
+          : "DEEP_PULLBACK"
+  };
+}
+
+function analyzeTimeframe(candles) {
+  if (candles.length < 50) {
+    return {
+      bias: "NEUTRAL",
+      setupScore: 0,
+      trend: "NEUTRAL",
+      structure:
+        detectStructure(candles),
+      momentum: {
+        rsi: 50,
+        macd: 0,
+        signal: 0,
+        histogram: 0
+      },
+      liquidity: "NONE",
+      atr: 0,
+      price:
+        candles.at(-1)?.close ||
+        null,
+      ema20: null,
+      ema50: null,
+      ema200: null,
+      candleTime:
+        candles.at(-1)?.datetime ||
+        null,
+      candleMetrics: null
+    };
+  }
+
+  const closes =
+    candles.map(
+      x => x.close
+    );
+
+  const e20 =
+    ema(
+      closes,
+      20
+    ).at(-1);
+
+  const e50 =
+    ema(
+      closes,
+      50
+    ).at(-1);
+
+  const e200 =
+    ema(
+      closes,
+      200
+    ).at(-1);
+
+  const price =
+    closes.at(-1);
 
   const r =
-    rsi(closes, 14);
-
-  const a =
-    atr(candles, 14);
+    rsi(
+      closes,
+      14
+    );
 
   const m =
     macd(closes);
+
+  const a =
+    atr(candles);
 
   const structure =
     detectStructure(candles);
@@ -596,595 +656,509 @@ function analyzeTimeframe(candles, timeframe) {
   const liquidity =
     liquiditySweep(candles);
 
-  let bullish = 0;
-  let bearish = 0;
+  const cm =
+    candleMetrics(candles);
 
-  if (
-    ema20 != null &&
-    last.close > ema20
-  ) {
-    bullish++;
-  } else if (
-    ema20 != null
-  ) {
-    bearish++;
+  let bull = 0;
+  let bear = 0;
+
+  if (price > e20) {
+    bull += 1;
+  } else {
+    bear += 1;
   }
 
-  if (
-    ema50 != null &&
-    last.close > ema50
-  ) {
-    bullish++;
-  } else if (
-    ema50 != null
-  ) {
-    bearish++;
+  if (e20 > e50) {
+    bull += 1;
+  } else {
+    bear += 1;
   }
 
-  if (
-    ema200 != null &&
-    last.close > ema200
-  ) {
-    bullish++;
-  } else if (
-    ema200 != null
-  ) {
-    bearish++;
+  if (e50 > e200) {
+    bull += 1;
+  } else {
+    bear += 1;
   }
 
-  if (r != null) {
-    if (
-      r >= 52 &&
-      r < 75
-    ) {
-      bullish++;
-    } else if (
-      r <= 48 &&
-      r > 25
-    ) {
-      bearish++;
-    }
+  if (r > 52) {
+    bull += 1;
+  } else if (r < 48) {
+    bear += 1;
   }
 
-  if (m.histogram != null) {
-    if (
-      m.histogram > 0
-    ) {
-      bullish++;
-    } else if (
-      m.histogram < 0
-    ) {
-      bearish++;
-    }
+  if (m.histogram > 0) {
+    bull += 1;
+  } else if (m.histogram < 0) {
+    bear += 1;
   }
 
   if (
     structure.structure ===
-    "HH_HL"
+      "HH_HL" ||
+    structure.bos ===
+      "BULLISH"
   ) {
-    bullish += 2;
+    bull += 2;
   }
 
   if (
     structure.structure ===
-    "LH_LL"
-  ) {
-    bearish += 2;
-  }
-
-  if (
+      "LH_LL" ||
     structure.bos ===
-    "BULLISH"
+      "BEARISH"
   ) {
-    bullish += 2;
+    bear += 2;
   }
 
-  if (
-    structure.bos ===
-    "BEARISH"
-  ) {
-    bearish += 2;
-  }
-
-  let bias =
-    "NEUTRAL";
+  let bias = "NEUTRAL";
 
   if (
-    bullish >
-    bearish + 1
+    bull >= bear + 2
   ) {
-    bias =
-      "BULLISH";
+    bias = "BULLISH";
   } else if (
-    bearish >
-    bullish + 1
+    bear >= bull + 2
   ) {
-    bias =
-      "BEARISH";
+    bias = "BEARISH";
   }
 
-  const strength =
-    bullish + bearish;
-
-  let score = 50;
-
-  if (strength > 0) {
-    score +=
-      (
-        (bullish - bearish) /
-        strength
-      ) * 30;
-  }
-
-  if (
-    liquidity ===
-    "BULLISH_SWEEP"
-  ) {
-    score += 7;
-  }
-
-  if (
-    liquidity ===
-    "BEARISH_SWEEP"
-  ) {
-    score -= 7;
-  }
-
-  if (
-    m.histogram != null
-  ) {
-    const macdDirection =
-      m.histogram > 0
-        ? 1
-        : -1;
-
-    if (
-      (
-        bias ===
-        "BULLISH" &&
-        macdDirection > 0
-      ) ||
-      (
-        bias ===
-        "BEARISH" &&
-        macdDirection < 0
-      )
-    ) {
-      score += 5;
-    }
-  }
-
-  score =
-    Math.round(
-      clamp(
-        score,
-        0,
-        100
+  const setupScore =
+    Math.max(
+      0,
+      Math.min(
+        100,
+        Math.round(
+          50 +
+          (bull - bear) * 8 +
+          (
+            structure.bos !==
+            "NONE"
+              ? 5
+              : 0
+          )
+        )
       )
     );
 
   return {
-    timeframe,
-
     bias,
-
-    setupScore:
-      score,
-
-    trend:
-      bias,
-
+    setupScore,
+    trend: bias,
     structure,
-
     momentum: {
-      rsi:
-        round(r, 2),
-
-      macd:
-        round(
-          m.macd,
-          4
-        ),
-
-      signal:
-        round(
-          m.signal,
-          4
-        ),
-
+      rsi: round(r, 2),
+      macd: round(m.macd, 4),
+      signal: round(m.signal, 4),
       histogram:
         round(
           m.histogram,
           4
         )
     },
-
     liquidity,
-
-    atr:
-      round(
-        a,
-        3
-      ),
-
-    price:
-      round(
-        last.close,
-        2
-      ),
-
-    ema20:
-      round(
-        ema20,
-        2
-      ),
-
-    ema50:
-      round(
-        ema50,
-        2
-      ),
-
-    ema200:
-      round(
-        ema200,
-        2
-      ),
-
+    atr: round(a, 3),
+    price: round(price, 2),
+    ema20: round(e20, 2),
+    ema50: round(e50, 2),
+    ema200: round(e200, 2),
     candleTime:
-      last.datetime
+      candles.at(-1)?.datetime ||
+      null,
+    candleMetrics: cm
   };
 }
 
-function freshnessInfo(
-  candles,
-  timeframe
-) {
-  if (!candles.length) {
-    return {
-      fresh: false,
-      ageMs: null,
-      ageMinutes: null,
-      reason:
-        "NO_DATA"
-    };
+function weightedSetupScore(scores) {
+  const weights = {
+    "1min": 0.10,
+    "5min": 0.20,
+    "15min": 0.25,
+    "1h": 0.20,
+    "4h": 0.25
+  };
+
+  let total = 0;
+  let weight = 0;
+
+  for (
+    const tf of Object.keys(weights)
+  ) {
+    if (scores[tf]) {
+      total +=
+        scores[tf].setupScore *
+        weights[tf];
+
+      weight +=
+        weights[tf];
+    }
   }
 
-  const last =
-    candles[
-      candles.length - 1
-    ];
+  return Math.round(
+    weight
+      ? total / weight
+      : 0
+  );
+}
 
-  const timestamp =
-    Date.parse(
-      last.datetime
-    );
+function getHigherDirection(scores) {
+  const h4 =
+    scores["4h"]?.bias;
+
+  const h1 =
+    scores["1h"]?.bias;
+
+  const m15 =
+    scores["15min"]?.bias;
+
+  const bull =
+    [h4, h1, m15]
+      .filter(
+        x => x === "BULLISH"
+      ).length;
+
+  const bear =
+    [h4, h1, m15]
+      .filter(
+        x => x === "BEARISH"
+      ).length;
 
   if (
-    !Number.isFinite(
-      timestamp
-    )
+    bull >= 2 &&
+    bull > bear
   ) {
-    return {
-      fresh: false,
-      ageMs: null,
-      ageMinutes: null,
-      reason:
-        "INVALID_TIMESTAMP"
-    };
+    return "BUY";
   }
 
-  const ageMs =
-    Date.now() -
-    timestamp;
+  if (
+    bear >= 2 &&
+    bear > bull
+  ) {
+    return "SELL";
+  }
 
-  const limit =
-    FRESHNESS_LIMITS[
-      timeframe
-    ];
-
-  return {
-    fresh:
-      ageMs >= 0 &&
-      ageMs <= limit,
-
-    ageMs,
-
-    ageMinutes:
-      Math.round(
-        Math.max(
-          0,
-          ageMs
-        ) / 60000
-      ),
-
-    reason:
-      ageMs < 0
-        ? "FUTURE_TIMESTAMP"
-        : ageMs > limit
-          ? "STALE_DATA"
-          : "FRESH"
-  };
+  return "NONE";
 }
 
-function volatilityCondition(
-  analysis
+function chooseBaseDecision(scores) {
+  const score =
+    weightedSetupScore(scores);
+
+  const higher =
+    getHigherDirection(scores);
+
+  const m5 =
+    scores["5min"]?.bias;
+
+  const m1 =
+    scores["1min"]?.bias;
+
+  const buyAlignment =
+    higher === "BUY" &&
+    m5 === "BULLISH" &&
+    m1 !== "BEARISH";
+
+  const sellAlignment =
+    higher === "SELL" &&
+    m5 === "BEARISH" &&
+    m1 !== "BULLISH";
+
+  if (
+    buyAlignment &&
+    score >=
+      ENTRY_CONFIG.minScore
+  ) {
+    return "BUY";
+  }
+
+  if (
+    sellAlignment &&
+    score >=
+      ENTRY_CONFIG.minScore
+  ) {
+    return "SELL";
+  }
+
+  if (
+    buyAlignment &&
+    score >= 50
+  ) {
+    return "WATCH — BUY SETUP";
+  }
+
+  if (
+    sellAlignment &&
+    score >= 50
+  ) {
+    return "WATCH — SELL SETUP";
+  }
+
+  return "NO TRADE";
+}
+
+function entryAnalysis(
+  candles,
+  direction,
+  tfAnalysis
 ) {
-  const atrValue =
-    analysis[
-      "15min"
-    ]?.atr;
+  const a =
+    tfAnalysis.atr;
 
   const price =
-    analysis[
-      "15min"
-    ]?.price;
+    tfAnalysis.price;
 
-  if (
-    atrValue == null ||
-    price == null ||
-    price === 0
-  ) {
-    return {
-      state:
-        "UNKNOWN",
+  const structure =
+    tfAnalysis.structure;
 
-      atrPercent:
-        null,
+  const liquidity =
+    tfAnalysis.liquidity;
 
-      warning:
-        false
-    };
+  const pullback =
+    detectPullback(
+      candles,
+      direction,
+      a
+    );
+
+  const confirmation =
+    confirmationCandle(
+      candles,
+      direction
+    );
+
+  const cleanBos =
+    direction === "BUY"
+      ? structure.bos ===
+        "BULLISH"
+      : structure.bos ===
+        "BEARISH";
+
+  const sweep =
+    direction === "BUY"
+      ? liquidity ===
+        "BULLISH_SWEEP"
+      : liquidity ===
+        "BEARISH_SWEEP";
+
+  const structureValid =
+    direction === "BUY"
+      ? (
+          structure.structure ===
+            "HH_HL" ||
+          cleanBos
+        )
+      : (
+          structure.structure ===
+            "LH_LL" ||
+          cleanBos
+        );
+
+  const structureGate =
+    structureValid;
+
+  const liquidityOrBos =
+    sweep ||
+    cleanBos;
+
+  const confirmationScore =
+    (structureGate
+      ? 25
+      : 0) +
+    (liquidityOrBos
+      ? 25
+      : 0) +
+    (pullback.valid
+      ? 20
+      : 0) +
+    (confirmation.confirmed
+      ? 30
+      : 0);
+
+  const confirmed =
+    structureGate &&
+    liquidityOrBos &&
+    pullback.valid &&
+    confirmation.confirmed;
+
+  const entryZone =
+    confirmed
+      ? {
+          low: round(
+            direction === "BUY"
+              ? price - a * 0.20
+              : price - a * 0.10,
+            2
+          ),
+          high: round(
+            direction === "BUY"
+              ? price + a * 0.10
+              : price + a * 0.20,
+            2
+          )
+        }
+      : null;
+
+  const invalidation =
+    direction === "BUY"
+      ? round(
+          structure.swingLow -
+            a * 0.15,
+          2
+        )
+      : round(
+          structure.swingHigh +
+            a * 0.15,
+          2
+        );
+
+  const reasons = [];
+
+  if (!structureGate) {
+    reasons.push(
+      "INVALID_STRUCTURE"
+    );
   }
+
+  if (!liquidityOrBos) {
+    reasons.push(
+      "NO_SWEEP_OR_BOS"
+    );
+  }
+
+  if (!pullback.valid) {
+    reasons.push(
+      pullback.state
+    );
+  }
+
+  if (!confirmation.confirmed) {
+    reasons.push(
+      "NO_M1_CONFIRMATION"
+    );
+  }
+
+  return {
+    entryConfirmation:
+      confirmed,
+
+    pullback,
+
+    liquidityLevel:
+      liquidity === "NONE"
+        ? "NONE"
+        : liquidity,
+
+    breakOfStructure:
+      structure.bos,
+
+    confirmationCandle:
+      confirmation,
+
+    entryZone,
+
+    invalidation,
+
+    confirmationScore,
+
+    executionReason:
+      confirmed
+        ? "Structure + liquidity/BOS + pullback + confirmation aligned"
+        : (
+            reasons.join(
+              " + "
+            ) ||
+            "WAIT_FOR_CONFIRMATION"
+          )
+  };
+}
+
+function volatilityStatus(scores) {
+  const a =
+    scores["1h"]?.atr ||
+    0;
+
+  const price =
+    scores["1h"]?.price ||
+    0;
 
   const atrPercent =
-    (
-      atrValue /
-      price
-    ) * 100;
+    price
+      ? (a / price) * 100
+      : 0;
 
   if (
-    atrPercent >=
-    0.25
+    atrPercent >= 0.30
   ) {
     return {
-      state:
-        "HIGH",
-
+      state: "HIGH",
       atrPercent:
         round(
           atrPercent,
           3
         ),
-
-      warning:
-        true
+      warning: true
     };
   }
 
   if (
-    atrPercent <=
-    0.08
+    atrPercent <= 0.05
   ) {
     return {
-      state:
-        "LOW",
-
+      state: "LOW",
       atrPercent:
         round(
           atrPercent,
           3
         ),
-
-      warning:
-        false
+      warning: true
     };
   }
 
   return {
-    state:
-      "NORMAL",
-
+    state: "NORMAL",
     atrPercent:
       round(
         atrPercent,
         3
       ),
-
-    warning:
-      false
+    warning: false
   };
 }
 
-function marketCondition(
-  analysis
-) {
-  const biases =
-    TIMEFRAMES
-      .map(
-        timeframe =>
-          analysis[
-            timeframe
-          ]?.bias
-      )
-      .filter(Boolean);
+function marketCondition(scores) {
+  const values =
+    Object.values(scores);
 
-  const bullish =
-    biases.filter(
-      value =>
-        value ===
+  const bull =
+    values.filter(
+      x =>
+        x.bias ===
         "BULLISH"
     ).length;
 
-  const bearish =
-    biases.filter(
-      value =>
-        value ===
+  const bear =
+    values.filter(
+      x =>
+        x.bias ===
         "BEARISH"
     ).length;
 
-  if (
-    bullish >= 4
-  ) {
+  if (bull >= 4) {
     return "STRONG_BULLISH";
   }
 
-  if (
-    bearish >= 4
-  ) {
+  if (bear >= 4) {
     return "STRONG_BEARISH";
   }
 
-  if (
-    bullish >= 3
-  ) {
+  if (bull >= 3) {
     return "BULLISH";
   }
 
-  if (
-    bearish >= 3
-  ) {
+  if (bear >= 3) {
     return "BEARISH";
   }
 
   return "MIXED";
-}
-
-function multiTimeframeBias(
-  analysis
-) {
-  const h4 =
-    analysis[
-      "4h"
-    ]?.bias;
-
-  const h1 =
-    analysis[
-      "1h"
-    ]?.bias;
-
-  const m15 =
-    analysis[
-      "15min"
-    ]?.bias;
-
-  const m5 =
-    analysis[
-      "5min"
-    ]?.bias;
-
-  const m1 =
-    analysis[
-      "1min"
-    ]?.bias;
-
-  const higherBull =
-    [
-      h4,
-      h1,
-      m15
-    ].filter(
-      value =>
-        value ===
-        "BULLISH"
-    ).length;
-
-  const higherBear =
-    [
-      h4,
-      h1,
-      m15
-    ].filter(
-      value =>
-        value ===
-        "BEARISH"
-    ).length;
-
-  if (
-    higherBull >= 2 &&
-    m5 ===
-      "BULLISH" &&
-    m1 !==
-      "BEARISH"
-  ) {
-    return "BULLISH";
-  }
-
-  if (
-    higherBear >= 2 &&
-    m5 ===
-      "BEARISH" &&
-    m1 !==
-      "BULLISH"
-  ) {
-    return "BEARISH";
-  }
-
-  if (
-    higherBull >
-    higherBear
-  ) {
-    return "BULLISH";
-  }
-
-  if (
-    higherBear >
-    higherBull
-  ) {
-    return "BEARISH";
-  }
-
-  return "NEUTRAL";
-}
-
-function calculateSetupScore(
-  analysis
-) {
-  const weights = {
-    "4h": 0.30,
-    "1h": 0.25,
-    "15min": 0.20,
-    "5min": 0.15,
-    "1min": 0.10
-  };
-
-  let score = 0;
-  let total = 0;
-
-  for (
-    const timeframe of
-    TIMEFRAMES
-  ) {
-    const value =
-      analysis[
-        timeframe
-      ]?.setupScore;
-
-    if (
-      Number.isFinite(
-        value
-      )
-    ) {
-      score +=
-        value *
-        weights[
-          timeframe
-        ];
-
-      total +=
-        weights[
-          timeframe
-        ];
-    }
-  }
-
-  if (!total) {
-    return 0;
-  }
-
-  return Math.round(
-    score / total
-  );
 }
 
 function riskPlan(
@@ -1193,310 +1167,93 @@ function riskPlan(
   atrValue
 ) {
   if (
-    ![
-      "BUY",
-      "SELL"
-    ].includes(
-      direction
-    )
-  ) {
-    return null;
-  }
-
-  if (
-    !Number.isFinite(
-      price
-    ) ||
-    !Number.isFinite(
-      atrValue
-    )
+    !["BUY", "SELL"]
+      .includes(direction) ||
+    !price ||
+    !atrValue
   ) {
     return null;
   }
 
   const stopDistance =
-    Math.max(
-      atrValue * 1.5,
-      price * 0.001
-    );
+    atrValue * 1.25;
 
-  const rewardDistance =
+  const targetDistance =
     stopDistance * 2;
 
-  const entry =
-    price;
+  const sl =
+    direction === "BUY"
+      ? price - stopDistance
+      : price + stopDistance;
 
-  let stopLoss;
-  let takeProfit;
-
-  if (
-    direction ===
-    "BUY"
-  ) {
-    stopLoss =
-      price -
-      stopDistance;
-
-    takeProfit =
-      price +
-      rewardDistance;
-  } else {
-    stopLoss =
-      price +
-      stopDistance;
-
-    takeProfit =
-      price -
-      rewardDistance;
-  }
+  const tp =
+    direction === "BUY"
+      ? price + targetDistance
+      : price - targetDistance;
 
   return {
-    entry:
-      round(
-        entry,
-        2
-      ),
+    entry: round(
+      price,
+      2
+    ),
 
-    stopLoss:
-      round(
-        stopLoss,
-        2
-      ),
+    sl: round(
+      sl,
+      2
+    ),
 
-    takeProfit:
-      round(
-        takeProfit,
-        2
-      ),
+    tp: round(
+      tp,
+      2
+    ),
 
-    rr:
-      "1:2"
+    rr: 2,
+
+    method:
+      "ATR_1.25",
+
+    note:
+      "Position size must be calculated from account risk; this engine does not assume account balance."
   };
 }
 
-function executionState(decision) {
-  if (decision === "BUY") {
-    return {
-      state: "TRADE",
-      executable: true
-    };
-  }
-
-  if (decision === "SELL") {
-    return {
-      state: "TRADE",
-      executable: true
-    };
-  }
-
-  if (
-    decision ===
-    "WATCH — BUY SETUP"
-  ) {
-    return {
-      state: "WATCH",
-      executable: false
-    };
-  }
-
-  if (
-    decision ===
-    "WATCH — SELL SETUP"
-  ) {
-    return {
-      state: "WATCH",
-      executable: false
-    };
-  }
-
-  return {
-    state: "NO_TRADE",
-    executable: false
-  };
-}
-
-function executionGate({
-  decision,
-  setupScore,
-  session,
-  volatility,
-  dataFresh,
-  unavailable
-}) {
-  const reasons = [];
-
-  if (!dataFresh) {
-    reasons.push(
-      "DATA_NOT_FRESH"
-    );
-  }
-
-  if (
-    unavailable.length
-  ) {
-    reasons.push(
-      "TIMEFRAME_UNAVAILABLE"
-    );
-  }
-
-  if (
-    session.quality ===
-    "LOW"
-  ) {
-    reasons.push(
-      "LOW_SESSION_QUALITY"
-    );
-  }
-
-  if (
-    volatility.warning
-  ) {
-    reasons.push(
-      "HIGH_VOLATILITY_WARNING"
-    );
-  }
-
-  if (
-    decision === "BUY" ||
-    decision === "SELL"
-  ) {
-    if (
-      setupScore < 70
-    ) {
-      reasons.push(
-        "SCORE_BELOW_70"
-      );
-    }
-  } else {
-    reasons.push(
-      "NO_EXECUTABLE_SIGNAL"
-    );
-  }
-
-  return {
-    passed:
-      dataFresh &&
-      unavailable.length === 0 &&
-      (
-        decision === "BUY" ||
-        decision === "SELL"
-      ) &&
-      setupScore >= 70,
-
-    reasons
-  };
-}
-
-function chooseDecision(
-  analysis
-) {
-  const scores = {};
-
-  for (
-    const timeframe of
-    TIMEFRAMES
-  ) {
-    scores[timeframe] =
-      analysis[
-        timeframe
-      ];
-  }
-
-  const bull =
-    [
-      "4h",
-      "1h",
-      "15min"
-    ].filter(
-      timeframe =>
-        scores[
-          timeframe
-        ]?.bias ===
-        "BULLISH"
-    ).length;
-
-  const bear =
-    [
-      "4h",
-      "1h",
-      "15min"
-    ].filter(
-      timeframe =>
-        scores[
-          timeframe
-        ]?.bias ===
-        "BEARISH"
-    ).length;
-
-  const setupScore =
-    calculateSetupScore(
-      analysis
-    );
-
-  const buyAlignment =
-    bull >= 2 &&
-    scores[
-      "5min"
-    ]?.bias ===
-      "BULLISH" &&
-    scores[
-      "1min"
-    ]?.bias !==
-      "BEARISH";
-
-  const sellAlignment =
-    bear >= 2 &&
-    scores[
-      "5min"
-    ]?.bias ===
-      "BEARISH" &&
-    scores[
-      "1min"
-    ]?.bias !==
-      "BULLISH";
-
-  if (
-    buyAlignment &&
-    setupScore >= 70
-  ) {
-    return "BUY";
-  }
-
-  if (
-    sellAlignment &&
-    setupScore >= 70
-  ) {
-    return "SELL";
-  }
-
-  if (
-    buyAlignment &&
-    setupScore >= 50
-  ) {
-    return "WATCH — BUY SETUP";
-  }
-
-  if (
-    sellAlignment &&
-    setupScore >= 50
-  ) {
-    return "WATCH — SELL SETUP";
-  }
-
-  return "NO TRADE";
-}
-
-async function fetchTwelveData(
+async function getMarket(
   env,
   interval
 ) {
-  const apiKey =
+  const key =
     env.TWELVE_DATA_API_KEY;
 
-  if (!apiKey) {
-    throw new Error(
-      "TWELVE_DATA_API_KEY is not configured"
+  if (!key) {
+    throw Object.assign(
+      new Error(
+        "TWELVE_DATA_API_KEY missing"
+      ),
+      {
+        code:
+          "CONFIG_ERROR"
+      }
     );
+  }
+
+  const cache =
+    caches.default;
+
+  const cacheKey =
+    new Request(
+      `https://cache.xau-ai.local/market?interval=${encodeURIComponent(interval)}`,
+      {
+        method: "GET"
+      }
+    );
+
+  const cached =
+    await cache.match(
+      cacheKey
+    );
+
+  if (cached) {
+    return await cached.json();
   }
 
   const url =
@@ -1506,7 +1263,7 @@ async function fetchTwelveData(
 
   url.searchParams.set(
     "symbol",
-    "XAU/USD"
+    SYMBOL
   );
 
   url.searchParams.set(
@@ -1526,199 +1283,170 @@ async function fetchTwelveData(
 
   url.searchParams.set(
     "apikey",
-    apiKey
+    key
   );
 
   const response =
-    await fetch(
-      url.toString(),
-      {
-        method: "GET",
+    await fetch(url);
 
-        headers: {
-          "accept":
-            "application/json"
-        }
-      }
-    );
-
-  const text =
-    await response.text();
-
-  let data;
-
-  try {
-    data =
-      JSON.parse(text);
-  } catch {
-    throw new Error(
-      `INVALID_PROVIDER_RESPONSE:${response.status}`
-    );
-  }
-
-  if (
-    response.status === 429 ||
-    data?.code === 429
-  ) {
-    const error =
-      new Error(
-        "DATA_LIMIT"
-      );
-
-    error.status =
-      429;
-
-    error.details =
-      data?.message ||
-      "Twelve Data API credit limit reached";
-
-    throw error;
-  }
+  const data =
+    await response.json();
 
   if (
     !response.ok ||
     data?.status ===
       "error"
   ) {
-    const error =
-      new Error(
-        data?.message ||
-        `Provider HTTP ${response.status}`
-      );
+    const message =
+      data?.message ||
+      `Twelve Data HTTP ${response.status}`;
 
-    error.status =
+    const error =
+      new Error(message);
+
+    error.code =
+      data?.code ||
       response.status;
 
-    error.details =
-      data;
-
     throw error;
   }
 
-  return normalizeCandles(
-    data
-  );
-}
+  const candles =
+    normalizeCandles(data);
 
-async function getMarket(
-  env,
-  interval,
-  ctx
-) {
-  const cache =
-    caches.default;
-
-  const cacheUrl =
-    `https://xau-ai-cache.local/api/market?interval=${encodeURIComponent(interval)}`;
-
-  const request =
-    new Request(
-      cacheUrl,
+  if (!candles.length) {
+    throw Object.assign(
+      new Error(
+        "No market data returned"
+      ),
       {
-        method: "GET"
+        code:
+          "NO_DATA"
       }
     );
-
-  const cached =
-    await cache.match(
-      request
-    );
-
-  if (cached) {
-    const data =
-      await cached.json();
-
-    return {
-      ...data,
-      cached: true
-    };
   }
 
-  let candles;
-
-  try {
-    candles =
-      await fetchTwelveData(
-        env,
-        interval
-      );
-  } catch (error) {
-    if (
-      error?.status ===
-        429 ||
-      error?.message ===
-        "DATA_LIMIT"
-    ) {
-      throw {
-        type:
-          "DATA_LIMIT",
-
-        status:
-          429,
-
-        message:
-          error.details ||
-          "Twelve Data credit limit reached"
-      };
-    }
-
-    throw error;
-  }
-
-  const freshness =
-    freshnessInfo(
-      candles,
-      interval
-    );
-
-  const payload = {
+  const result = {
     ok: true,
-
-    symbol:
-      "XAU/USD",
-
     interval,
-
-    candles,
-
-    freshness,
-
-    fetchedAt:
-      new Date().toISOString(),
-
-    cached:
-      false
+    symbol: SYMBOL,
+    candles
   };
 
-  const response =
+  const cachedResponse =
     new Response(
-      JSON.stringify(
-        payload
-      ),
+      JSON.stringify(result),
       {
         headers: {
           "content-type":
             "application/json",
-
           "cache-control":
-            `public, max-age=${CACHE_TTL}`
+            `max-age=${CACHE_TTL}`
         }
       }
     );
 
-  ctx.waitUntil(
-    cache.put(
-      request,
-      response.clone()
-    )
+  await cache.put(
+    cacheKey,
+    cachedResponse.clone()
   );
 
-  return payload;
+  return result;
+}
+
+function freshnessFor(
+  candles,
+  tf
+) {
+  const last =
+    candles?.at(-1)?.datetime;
+
+  if (!last) {
+    return {
+      fresh: false,
+      ageMs: null,
+      ageMinutes: null,
+      reason:
+        "NO_TIMESTAMP"
+    };
+  }
+
+  const t =
+    new Date(last).getTime();
+
+  const now =
+    Date.now();
+
+  const ageMs =
+    Math.max(
+      0,
+      now - t
+    );
+
+  const ageMinutes =
+    Math.round(
+      ageMs / 60000
+    );
+
+  const limit =
+    FRESHNESS_LIMITS[tf];
+
+  if (!Number.isFinite(t)) {
+    return {
+      fresh: false,
+      ageMs: null,
+      ageMinutes: null,
+      reason:
+        "INVALID_TIMESTAMP"
+    };
+  }
+
+  return {
+    fresh:
+      ageMinutes <= limit,
+
+    ageMs,
+
+    ageMinutes,
+
+    reason:
+      ageMinutes <= limit
+        ? "FRESH"
+        : `STALE>${limit}MIN`
+  };
+}
+
+function unavailableResult(
+  tf,
+  error
+) {
+  return {
+    timeframe: tf,
+
+    error:
+      error?.message ||
+      String(error),
+
+    code:
+      error?.code ||
+      "DATA_ERROR"
+  };
+}
+
+function stripInternalCandles(
+  result
+) {
+  const copy = {
+    ...result
+  };
+
+  delete copy._candles;
+
+  return copy;
 }
 
 async function analyzeAll(
-  env,
-  ctx
+  env
 ) {
   if (isWeekend()) {
     return {
@@ -1728,42 +1456,37 @@ async function analyzeAll(
         ENGINE_VERSION,
 
       symbol:
-        "XAU/USD",
+        SYMBOL,
 
       decision:
         "NO TRADE",
 
-      setupScore:
-        0,
+      setupScore: 0,
 
-      price:
-        null,
+      price: null,
 
-      analysis:
-        {},
+      multiTimeframeBias:
+        "NONE",
+
+      analysis: {},
+
+      freshness: {},
 
       dataStatus:
         "WEEKEND",
 
-      unavailable:
-        [],
+      unavailable: [],
 
       safety: {
-        weekend:
-          true,
+        weekend: true,
 
         session:
           getTradingSession(),
 
         volatility: {
-          state:
-            "UNKNOWN",
-
-          atrPercent:
-            null,
-
-          warning:
-            false
+          state: "N/A",
+          atrPercent: 0,
+          warning: false
         },
 
         marketCondition:
@@ -1782,15 +1505,15 @@ async function analyzeAll(
       riskPlan:
         null,
 
-      execution:
-        executionState(
-          "NO TRADE"
-        ),
+      execution: {
+        state:
+          "NO_TRADE",
+        executable:
+          false
+      },
 
       executionGate: {
-        passed:
-          false,
-
+        passed: false,
         reasons: [
           "WEEKEND"
         ]
@@ -1801,260 +1524,369 @@ async function analyzeAll(
     };
   }
 
-  const results =
+  const entries =
     await Promise.allSettled(
-      TIMEFRAMES.map(
-        timeframe =>
-          getMarket(
-            env,
-            timeframe,
-            ctx
-          )
+      Object.entries(
+        TIMEFRAMES
+      ).map(
+        async (
+          [tf, interval]
+        ) => {
+          const data =
+            await getMarket(
+              env,
+              interval
+            );
+
+          return {
+            tf,
+
+            candles:
+              data.candles,
+
+            freshness:
+              freshnessFor(
+                data.candles,
+                tf
+              )
+          };
+        }
       )
     );
 
-  const analysis = {};
-  const unavailable = {};
+  const scores = {};
   const freshness = {};
+  const unavailable = [];
 
-  results.forEach(
-    (result, index) => {
-      const timeframe =
-        TIMEFRAMES[index];
+  for (
+    let i = 0;
+    i < entries.length;
+    i++
+  ) {
+    const tf =
+      Object.keys(
+        TIMEFRAMES
+      )[i];
+
+    const result =
+      entries[i];
+
+    if (
+      result.status ===
+      "fulfilled"
+    ) {
+      const candles =
+        result.value.candles;
+
+      freshness[tf] =
+        result.value.freshness;
 
       if (
-        result.status ===
-        "fulfilled"
+        !result.value
+          .freshness
+          .fresh
       ) {
-        const market =
-          result.value;
+        unavailable.push({
+          timeframe: tf,
 
-        if (
-          !market.candles ||
-          !market.candles.length
-        ) {
-          unavailable[
-            timeframe
-          ] = "NO_DATA";
+          code:
+            "STALE_DATA",
 
-          return;
-        }
+          error:
+            result.value
+              .freshness
+              .reason
+        });
 
-        const fresh =
-          freshnessInfo(
-            market.candles,
-            timeframe
-          );
-
-        freshness[
-          timeframe
-        ] = fresh;
-
-        if (
-          !fresh.fresh
-        ) {
-          unavailable[
-            timeframe
-          ] =
-            fresh.reason;
-
-          return;
-        }
-
-        analysis[
-          timeframe
-        ] =
-          analyzeTimeframe(
-            market.candles,
-            timeframe
-          );
-      } else {
-        unavailable[
-          timeframe
-        ] =
-          result.reason?.message ||
-          "FETCH_FAILED";
+        continue;
       }
-    }
-  );
 
-  const unavailableList =
+      const analysis =
+        analyzeTimeframe(
+          candles
+        );
+
+      analysis._candles =
+        candles;
+
+      scores[tf] =
+        analysis;
+    } else {
+      unavailable.push(
+        unavailableResult(
+          tf,
+          result.reason
+        )
+      );
+    }
+  }
+
+  const allFresh =
     Object.keys(
-      unavailable
+      TIMEFRAMES
+    ).every(
+      tf =>
+        freshness[tf]?.fresh ===
+        true
     );
+
+  const baseDecision =
+    allFresh &&
+    unavailable.length === 0
+      ? chooseBaseDecision(
+          scores
+        )
+      : "NO TRADE";
+
+  const setupScore =
+    weightedSetupScore(
+      scores
+    );
+
+  const higherDirection =
+    getHigherDirection(
+      scores
+    );
+
+  const price =
+    scores["1min"]?.price ||
+    scores["5min"]?.price ||
+    null;
 
   const session =
     getTradingSession();
 
-  if (
-    unavailableList.length >
-    0
-  ) {
-    return {
-      ok: true,
-
-      engine:
-        ENGINE_VERSION,
-
-      symbol:
-        "XAU/USD",
-
-      decision:
-        "NO TRADE",
-
-      setupScore:
-        0,
-
-      price:
-        analysis[
-          "1min"
-        ]?.price ??
-        analysis[
-          "5min"
-        ]?.price ??
-        analysis[
-          "15min"
-        ]?.price ??
-        null,
-
-      analysis,
-
-      freshness,
-
-      dataStatus:
-        "NOT FRESH",
-
-      unavailable:
-        unavailableList,
-
-      unavailableDetails:
-        unavailable,
-
-      safety: {
-        weekend:
-          false,
-
-        session,
-
-        volatility:
-          volatilityCondition(
-            analysis
-          ),
-
-        marketCondition:
-          marketCondition(
-            analysis
-          ),
-
-        newsRisk:
-          "NOT CHECKED",
-
-        spread:
-          "NOT CHECKED",
-
-        slippage:
-          "NOT CHECKED"
-      },
-
-      riskPlan:
-        null,
-
-      execution:
-        executionState(
-          "NO TRADE"
-        ),
-
-      executionGate: {
-        passed:
-          false,
-
-        reasons: [
-          "TIMEFRAME_DATA_NOT_READY"
-        ]
-      },
-
-      generatedAt:
-        new Date().toISOString()
-    };
-  }
-
-  const setupScore =
-    calculateSetupScore(
-      analysis
-    );
-
-  const decision =
-    chooseDecision(
-      analysis
-    );
-
-  const price =
-    analysis[
-      "1min"
-    ]?.price ??
-    analysis[
-      "5min"
-    ]?.price ??
-    analysis[
-      "15min"
-    ]?.price ??
-    null;
-
-  const atrValue =
-    analysis[
-      "15min"
-    ]?.atr ??
-    analysis[
-      "5min"
-    ]?.atr ??
-    analysis[
-      "1min"
-    ]?.atr ??
-    null;
-
   const volatility =
-    volatilityCondition(
-      analysis
+    volatilityStatus(
+      scores
     );
 
   const condition =
     marketCondition(
-      analysis
+      scores
     );
 
-  const mtfBias =
-    multiTimeframeBias(
-      analysis
+  let entry = null;
+
+  let finalDecision =
+    baseDecision;
+
+  let executable =
+    false;
+
+  const gateReasons = [];
+
+  if (
+    baseDecision ===
+      "BUY" ||
+    baseDecision ===
+      "SELL"
+  ) {
+    entry =
+      entryAnalysis(
+        scores["1min"]
+          ._candles,
+        baseDecision,
+        scores["1min"]
+      );
+
+    const m5 =
+      scores["5min"];
+
+    const m15 =
+      scores["15min"];
+
+    const h1 =
+      scores["1h"];
+
+    const h4 =
+      scores["4h"];
+
+    const higherAligned =
+      baseDecision ===
+      "BUY"
+        ? [
+            m15,
+            h1,
+            h4
+          ].filter(
+            x =>
+              x?.bias ===
+              "BULLISH"
+          ).length >= 2
+        : [
+            m15,
+            h1,
+            h4
+          ].filter(
+            x =>
+              x?.bias ===
+              "BEARISH"
+          ).length >= 2;
+
+    const m5Aligned =
+      baseDecision ===
+      "BUY"
+        ? m5?.bias ===
+          "BULLISH"
+        : m5?.bias ===
+          "BEARISH";
+
+    const m1Aligned =
+      baseDecision ===
+      "BUY"
+        ? scores["1min"]
+            ?.bias !==
+          "BEARISH"
+        : scores["1min"]
+            ?.bias !==
+          "BULLISH";
+
+    if (!allFresh) {
+      gateReasons.push(
+        "DATA_NOT_FRESH"
+      );
+    }
+
+    if (!higherAligned) {
+      gateReasons.push(
+        "HIGHER_TF_NOT_ALIGNED"
+      );
+    }
+
+    if (!m5Aligned) {
+      gateReasons.push(
+        "M5_NOT_ALIGNED"
+      );
+    }
+
+    if (!m1Aligned) {
+      gateReasons.push(
+        "M1_NOT_ALIGNED"
+      );
+    }
+
+    if (
+      setupScore <
+      ENTRY_CONFIG.minScore
+    ) {
+      gateReasons.push(
+        "SCORE_BELOW_70"
+      );
+    }
+
+    if (
+      !entry.entryConfirmation
+    ) {
+      gateReasons.push(
+        "ENTRY_CONFIRMATION_FAILED"
+      );
+    }
+
+    if (
+      volatility.warning
+    ) {
+      gateReasons.push(
+        "VOLATILITY_WARNING"
+      );
+    }
+
+    const rr =
+      ENTRY_CONFIG.minRR;
+
+    const plan =
+      riskPlan(
+        baseDecision,
+        price,
+        scores["1min"]?.atr
+      );
+
+    if (
+      !plan ||
+      plan.rr < rr
+    ) {
+      gateReasons.push(
+        "RR_BELOW_1_TO_2"
+      );
+    }
+
+    executable =
+      allFresh &&
+      unavailable.length === 0 &&
+      higherAligned &&
+      m5Aligned &&
+      m1Aligned &&
+      setupScore >=
+        ENTRY_CONFIG.minScore &&
+      entry.entryConfirmation &&
+      !volatility.warning &&
+      !!plan &&
+      plan.rr >= rr;
+
+    if (!executable) {
+      finalDecision =
+        "NO TRADE";
+    }
+  }
+
+  if (
+    baseDecision ===
+      "WATCH — BUY SETUP" ||
+    baseDecision ===
+      "WATCH — SELL SETUP"
+  ) {
+    gateReasons.push(
+      "WATCH_ONLY"
     );
+  }
 
-  const risk =
-    riskPlan(
-      decision,
-      price,
-      atrValue
+  if (
+    baseDecision ===
+      "NO TRADE" &&
+    !gateReasons.length
+  ) {
+    gateReasons.push(
+      "NO_EXECUTABLE_SIGNAL"
     );
+  }
 
-  const execution =
-    executionState(
-      decision
-    );
+  const executionState =
+    executable
+      ? (
+          baseDecision ===
+          "BUY"
+            ? "TRADE_BUY"
+            : "TRADE_SELL"
+        )
+      : finalDecision.startsWith(
+          "WATCH"
+        )
+        ? "WATCH"
+        : "NO_TRADE";
 
-  const gate =
-    executionGate({
-      decision,
+  const cleanAnalysis = {};
 
-      setupScore,
+  for (
+    const tf of Object.keys(
+      TIMEFRAMES
+    )
+  ) {
+    if (scores[tf]) {
+      cleanAnalysis[tf] =
+        stripInternalCandles(
+          scores[tf]
+        );
+    }
+  }
 
-      session,
-
-      volatility,
-
-      dataFresh:
-        true,
-
-      unavailable:
-        unavailableList
-    });
+  const plan =
+    executable
+      ? riskPlan(
+          baseDecision,
+          price,
+          scores["1min"]?.atr
+        )
+      : null;
 
   return {
     ok: true,
@@ -2063,30 +1895,40 @@ async function analyzeAll(
       ENGINE_VERSION,
 
     symbol:
-      "XAU/USD",
+      SYMBOL,
 
-    decision,
+    decision:
+      finalDecision,
 
     setupScore,
 
-    price,
+    price:
+      round(price, 2),
 
     multiTimeframeBias:
-      mtfBias,
+      higherDirection ===
+        "BUY"
+        ? "BULLISH"
+        : higherDirection ===
+            "SELL"
+          ? "BEARISH"
+          : "MIXED",
 
-    analysis,
+    analysis:
+      cleanAnalysis,
 
     freshness,
 
     dataStatus:
-      "FRESH",
+      unavailable.length ||
+      !allFresh
+        ? "DEGRADED"
+        : "FRESH",
 
-    unavailable:
-      unavailableList,
+    unavailable,
 
     safety: {
-      weekend:
-        false,
+      weekend: false,
 
       session,
 
@@ -2105,13 +1947,26 @@ async function analyzeAll(
         "NOT CHECKED"
     },
 
+    entryConfirmation:
+      entry,
+
     riskPlan:
-      risk,
+      plan,
 
-    execution,
+    execution: {
+      state:
+        executionState,
 
-    executionGate:
-      gate,
+      executable
+    },
+
+    executionGate: {
+      passed:
+        executable,
+
+      reasons:
+        gateReasons
+    },
 
     generatedAt:
       new Date().toISOString()
@@ -2119,179 +1974,217 @@ async function analyzeAll(
 }
 
 export default {
-  async fetch(request, env, ctx) {
-    if (request.method === "OPTIONS") {
-      return new Response(null, {
-        status: 204,
-        headers: {
-          "access-control-allow-origin": "*",
-          "access-control-allow-methods": "GET,OPTIONS",
-          "access-control-allow-headers": "*",
-          "access-control-max-age": "86400"
+  async fetch(
+    request,
+    env
+  ) {
+    const url =
+      new URL(
+        request.url
+      );
+
+    if (
+      request.method ===
+      "OPTIONS"
+    ) {
+      return new Response(
+        null,
+        {
+          status: 204,
+
+          headers: {
+            "access-control-allow-origin":
+              "*",
+
+            "access-control-allow-methods":
+              "GET,OPTIONS",
+
+            "access-control-allow-headers":
+              "Content-Type"
+          }
         }
+      );
+    }
+
+    if (
+      url.pathname ===
+      "/health"
+    ) {
+      return json({
+        ok: true,
+
+        service:
+          "XAU AI API",
+
+        status:
+          "online",
+
+        symbol:
+          SYMBOL,
+
+        engine:
+          ENGINE_VERSION,
+
+        cacheTtlSeconds:
+          CACHE_TTL
       });
     }
 
-    const url =
-      new URL(request.url);
-
-    try {
-      if (
-        url.pathname ===
-        "/health"
-      ) {
-        return json({
-          ok: true,
-
-          service:
-            "XAU AI API",
-
-          status:
-            "online",
-
-          symbol:
-            "XAU/USD",
-
-          engine:
-            ENGINE_VERSION,
-
-          cacheTtlSeconds:
-            CACHE_TTL
-        });
-      }
+    if (
+      url.pathname ===
+      "/api/market"
+    ) {
+      const interval =
+        url.searchParams.get(
+          "interval"
+        ) ||
+        "1min";
 
       if (
-        url.pathname ===
-        "/api/market"
+        !Object.values(
+          TIMEFRAMES
+        ).includes(
+          interval
+        )
       ) {
-        const interval =
-          url.searchParams.get(
-            "interval"
-          ) || "1min";
-
-        if (
-          !TIMEFRAMES.includes(
-            interval
-          )
-        ) {
-          return json({
+        return json(
+          {
             ok: false,
 
             error:
               "INVALID_INTERVAL",
 
             allowed:
-              TIMEFRAMES
-          }, 400);
-        }
+              Object.values(
+                TIMEFRAMES
+              )
+          },
+          400
+        );
+      }
 
-        if (isWeekend()) {
-          return json({
-            ok: false,
-
-            error:
-              "MARKET_CLOSED",
-
-            reason:
-              "WEEKEND",
-
+      try {
+        const data =
+          await getMarket(
+            env,
             interval
-          });
-        }
-
-        try {
-          const data =
-            await getMarket(
-              env,
-              interval,
-              ctx
-            );
-
-          return json(
-            data
           );
-        } catch (error) {
-          if (
-            error?.type ===
-            "DATA_LIMIT"
-          ) {
-            return json({
-              ok: false,
 
-              error:
-                "DATA_LIMIT",
-
-              details:
-                error.message,
-
+        const tf =
+          Object.keys(
+            TIMEFRAMES
+          ).find(
+            k =>
+              TIMEFRAMES[k] ===
               interval
-            }, 429);
-          }
+          ) ||
+          "1min";
 
-          return json({
+        const freshness =
+          freshnessFor(
+            data.candles,
+            tf
+          );
+
+        return json({
+          ok: true,
+
+          engine:
+            ENGINE_VERSION,
+
+          symbol:
+            SYMBOL,
+
+          interval,
+
+          price:
+            data.candles.at(
+              -1
+            )?.close ||
+            null,
+
+          freshness,
+
+          candles:
+            data.candles
+        });
+      } catch (
+        error
+      ) {
+        const code =
+          error?.code ||
+          "DATA_ERROR";
+
+        const status =
+          code === 429
+            ? 429
+            : 502;
+
+        return json(
+          {
             ok: false,
 
             error:
-              "MARKET_DATA_ERROR",
+              code === 429
+                ? "DATA_LIMIT"
+                : "MARKET_DATA_ERROR",
+
+            details:
+              error?.message ||
+              String(error)
+          },
+          status
+        );
+      }
+    }
+
+    if (
+      url.pathname ===
+      "/api/analyze"
+    ) {
+      try {
+        return json(
+          await analyzeAll(
+            env
+          )
+        );
+      } catch (
+        error
+      ) {
+        return json(
+          {
+            ok: false,
+
+            engine:
+              ENGINE_VERSION,
+
+            error:
+              "ANALYSIS_FAILED",
 
             details:
               error?.message ||
               String(error),
 
-            interval
-          }, 502);
-        }
-      }
-
-      if (
-        url.pathname ===
-        "/api/analyze"
-      ) {
-        const result =
-          await analyzeAll(
-            env,
-            ctx
-          );
-
-        return json(
-          result
+            code:
+              error?.code ||
+              "UNKNOWN"
+          },
+          502
         );
       }
+    }
 
-      return json({
+    return json(
+      {
         ok: false,
 
         error:
           "NOT_FOUND",
 
-        available: [
-          "/health",
-
-          "/api/market?interval=1min",
-
-          "/api/market?interval=5min",
-
-          "/api/market?interval=15min",
-
-          "/api/market?interval=1h",
-
-          "/api/market?interval=4h",
-
-          "/api/analyze"
-        ]
-      }, 404);
-
-    } catch (error) {
-      return json({
-        ok: false,
-
-        error:
-          "INTERNAL_ERROR",
-
-        details:
-          error?.message ||
-          String(error)
-      }, 500);
-    }
+        engine:
+          ENGINE_VERSION
+      },
+      404
+    );
   }
 };
