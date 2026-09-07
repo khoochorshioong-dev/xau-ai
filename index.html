@@ -1,24 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0, viewport-fit=cover"
->
+<meta name="viewport"
+      content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 
 <meta name="theme-color" content="#08090c">
 
-<meta
-  name="apple-mobile-web-app-capable"
-  content="yes"
->
+<meta name="apple-mobile-web-app-capable" content="yes">
 
-<meta
-  name="apple-mobile-web-app-status-bar-style"
-  content="black-translucent"
->
+<meta name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent">
 
 <title>XAU AI — STRICT EXECUTION SYSTEM</title>
 
@@ -52,16 +46,14 @@ body{
 
 button{
   font:inherit;
+  cursor:pointer;
 }
 
 .app{
   width:100%;
   max-width:900px;
   margin:0 auto;
-  padding:
-    30px
-    18px
-    120px;
+  padding:30px 18px 120px;
 }
 
 .page{
@@ -73,10 +65,7 @@ button{
 }
 
 .header{
-  padding:
-    15px
-    0
-    35px;
+  padding:15px 0 35px;
 }
 
 .header h1{
@@ -88,10 +77,7 @@ button{
 }
 
 .header p{
-  margin:
-    16px
-    0
-    0;
+  margin:16px 0 0;
   color:#9aa0ad;
   font-size:15px;
   letter-spacing:5px;
@@ -103,19 +89,14 @@ button{
   border-radius:28px;
   padding:22px;
   margin-bottom:18px;
-  box-shadow:
-    0 15px 45px
-    rgba(0,0,0,.18);
+  box-shadow:0 15px 45px rgba(0,0,0,.18);
 }
 
 .section-label{
   color:#9aa0ad;
   font-size:13px;
   letter-spacing:4px;
-  margin:
-    0
-    0
-    15px;
+  margin:0 0 15px;
 }
 
 .price-row{
@@ -168,9 +149,7 @@ button{
   display:inline-flex;
   align-items:center;
   min-height:32px;
-  padding:
-    7px
-    12px;
+  padding:7px 12px;
   border-radius:999px;
   border:1px solid #303541;
   background:#151820;
@@ -181,16 +160,13 @@ button{
 
 .grid2{
   display:grid;
-  grid-template-columns:
-    1fr
-    1fr;
+  grid-template-columns:1fr 1fr;
   gap:10px;
 }
 
 .grid3{
   display:grid;
-  grid-template-columns:
-    repeat(3,1fr);
+  grid-template-columns:repeat(3,1fr);
   gap:10px;
 }
 
@@ -219,21 +195,21 @@ button{
   gap:10px;
   overflow-x:auto;
   padding-bottom:3px;
+  scrollbar-width:none;
+}
+
+.button-row::-webkit-scrollbar{
+  display:none;
 }
 
 .tf-btn{
-  flex:
-    0 0 auto;
-
-  min-width:82px;
+  flex:0 0 auto;
+  min-width:92px;
   height:58px;
-
   border-radius:19px;
   border:1px solid #292e38;
-
   background:#101217;
   color:#9ba1af;
-
   font-weight:800;
   font-size:18px;
 }
@@ -249,14 +225,11 @@ button{
   border:0;
   border-radius:22px;
   min-height:62px;
-
   background:#f4f5f7;
   color:#08090c;
-
   font-size:16px;
   font-weight:850;
   letter-spacing:.5px;
-
   margin-top:15px;
 }
 
@@ -265,21 +238,33 @@ button{
   border:1px solid #303541;
   border-radius:20px;
   min-height:54px;
-
   background:#151820;
   color:#f4f5f7;
-
   font-weight:800;
+}
+
+.chart-wrap{
+  position:relative;
+  width:100%;
+  height:440px;
+  border-radius:24px;
+  background:#080a0e;
+  border:1px solid #292e38;
+  overflow:hidden;
+}
+
+canvas{
+  display:block;
+  width:100%;
+  height:100%;
 }
 
 .chart-toolbar{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin:
-    18px
-    0
-    12px;
+  gap:10px;
+  margin:18px 0 12px;
 }
 
 .chart-toolbar-left{
@@ -288,32 +273,12 @@ button{
   flex-wrap:wrap;
 }
 
-.chart-wrap{
-  position:relative;
-  width:100%;
-  height:430px;
-
-  border-radius:24px;
-  background:#080a0e;
-  border:1px solid #292e38;
-
-  overflow:hidden;
-}
-
-#chartCanvas{
-  display:block;
-  width:100%;
-  height:100%;
-}
-
 .legend{
   display:flex;
-  gap:10px;
+  gap:11px;
   flex-wrap:wrap;
-
   color:#9ca2af;
   font-size:11px;
-
   margin-top:12px;
 }
 
@@ -332,9 +297,7 @@ button{
 
 .chart-info{
   display:grid;
-  grid-template-columns:
-    1fr
-    1fr;
+  grid-template-columns:repeat(2,1fr);
   gap:10px;
   margin-top:15px;
 }
@@ -370,6 +333,7 @@ button{
   display:flex;
   justify-content:space-between;
   align-items:center;
+  gap:10px;
   margin-bottom:13px;
 }
 
@@ -379,9 +343,7 @@ button{
 
 .execution-grid{
   display:grid;
-  grid-template-columns:
-    1fr
-    1fr;
+  grid-template-columns:1fr 1fr;
   gap:9px;
 }
 
@@ -407,9 +369,7 @@ button{
 
 .diagnostic{
   display:grid;
-  grid-template-columns:
-    1fr
-    1fr;
+  grid-template-columns:1fr 1fr;
   gap:9px;
 }
 
@@ -449,37 +409,26 @@ button{
   left:0;
   right:0;
   bottom:0;
-
   height:86px;
-
-  background:
-    rgba(8,9,12,.96);
-
+  background:rgba(8,9,12,.96);
   backdrop-filter:blur(18px);
-
   border-top:1px solid #242832;
-
   display:flex;
   justify-content:center;
-
   z-index:50;
 }
 
 .nav-inner{
   width:100%;
   max-width:900px;
-
   display:grid;
-  grid-template-columns:
-    repeat(4,1fr);
+  grid-template-columns:repeat(4,1fr);
 }
 
 .nav-btn{
   border:0;
   background:transparent;
-
   color:#7d8493;
-
   font-weight:700;
   font-size:12px;
 }
@@ -505,23 +454,6 @@ button{
   color:#737a88;
 }
 
-.error-box{
-  margin-top:12px;
-  padding:12px;
-
-  border-radius:14px;
-
-  background:#180d10;
-  border:1px solid #48242a;
-
-  color:#ff7b86;
-
-  font-size:11px;
-  line-height:1.5;
-
-  display:none;
-}
-
 @media(max-width:520px){
 
   .app{
@@ -539,47 +471,33 @@ button{
   }
 
   .chart-wrap{
-    height:390px;
+    height:400px;
   }
 
   .price{
     font-size:36px;
   }
 
-  .grid3{
-    grid-template-columns:
-      1fr
-      1fr;
-  }
-
 }
 
 </style>
+
 </head>
 
 <body>
 
 <div class="app">
 
-<!-- ========================================================= -->
+<!-- ====================================================== -->
 <!-- DASHBOARD -->
-<!-- ========================================================= -->
+<!-- ====================================================== -->
 
-<section
-  id="dashboardPage"
-  class="page active"
->
+<section id="dashboardPage" class="page active">
 
   <div class="header">
-
     <h1>XAU AI</h1>
-
-    <p>
-      STRICT EXECUTION SYSTEM
-    </p>
-
+    <p>STRICT EXECUTION SYSTEM</p>
   </div>
-
 
   <div class="card">
 
@@ -591,17 +509,12 @@ button{
 
       <div>
 
-        <div
-          id="dashPrice"
-          class="price"
-        >
+        <div id="dashPrice" class="price">
           —
         </div>
 
-        <div
-          id="dashDecision"
-          class="decision muted"
-        >
+        <div id="dashDecision"
+             class="decision muted">
           LOADING
         </div>
 
@@ -621,17 +534,14 @@ button{
 
     </div>
 
-
     <div style="margin-top:20px">
 
       <div class="section-label">
         SETUP SCORE
       </div>
 
-      <div
-        id="dashScore"
-        class="score"
-      >
+      <div id="dashScore"
+           class="score">
         —
       </div>
 
@@ -654,15 +564,12 @@ button{
           Trend
         </div>
 
-        <div
-          id="dashTrend"
-          class="metric-value"
-        >
+        <div id="dashTrend"
+             class="metric-value">
           —
         </div>
 
       </div>
-
 
       <div class="metric">
 
@@ -670,15 +577,12 @@ button{
           Structure
         </div>
 
-        <div
-          id="dashStructure"
-          class="metric-value"
-        >
+        <div id="dashStructure"
+             class="metric-value">
           —
         </div>
 
       </div>
-
 
       <div class="metric">
 
@@ -686,15 +590,12 @@ button{
           Momentum
         </div>
 
-        <div
-          id="dashMomentum"
-          class="metric-value"
-        >
+        <div id="dashMomentum"
+             class="metric-value">
           —
         </div>
 
       </div>
-
 
       <div class="metric">
 
@@ -702,10 +603,8 @@ button{
           Liquidity
         </div>
 
-        <div
-          id="dashLiquidity"
-          class="metric-value"
-        >
+        <div id="dashLiquidity"
+             class="metric-value">
           —
         </div>
 
@@ -793,23 +692,18 @@ button{
           STRICT EXECUTION
         </strong>
 
-        <span
-          id="planBadge"
-          class="badge"
-        >
+        <span id="planBadge"
+              class="badge">
           WAIT
         </span>
 
       </div>
 
-
       <div class="execution-grid">
 
         <div class="execution-item">
 
-          <span>
-            Entry
-          </span>
+          <span>Entry</span>
 
           <strong id="planEntry">
             —
@@ -817,12 +711,9 @@ button{
 
         </div>
 
-
         <div class="execution-item">
 
-          <span>
-            Stop Loss
-          </span>
+          <span>Stop Loss</span>
 
           <strong id="planSL">
             —
@@ -830,12 +721,9 @@ button{
 
         </div>
 
-
         <div class="execution-item">
 
-          <span>
-            Take Profit
-          </span>
+          <span>Take Profit</span>
 
           <strong id="planTP">
             —
@@ -843,12 +731,9 @@ button{
 
         </div>
 
-
         <div class="execution-item">
 
-          <span>
-            R:R
-          </span>
+          <span>R:R</span>
 
           <strong id="planRR">
             —
@@ -865,14 +750,11 @@ button{
 </section>
 
 
-<!-- ========================================================= -->
-<!-- CHART -->
-<!-- ========================================================= -->
+<!-- ====================================================== -->
+<!-- CHART V3 -->
+<!-- ====================================================== -->
 
-<section
-  id="chartPage"
-  class="page"
->
+<section id="chartPage" class="page">
 
   <div class="header">
 
@@ -891,41 +773,30 @@ button{
       TIMEFRAME
     </div>
 
-
     <div class="button-row">
 
-      <button
-        class="tf-btn active"
-        data-tf="1min"
-      >
+      <button class="tf-btn active"
+              data-tf="1min">
         M1
       </button>
 
-      <button
-        class="tf-btn"
-        data-tf="5min"
-      >
+      <button class="tf-btn"
+              data-tf="5min">
         M5
       </button>
 
-      <button
-        class="tf-btn"
-        data-tf="15min"
-      >
+      <button class="tf-btn"
+              data-tf="15min">
         M15
       </button>
 
-      <button
-        class="tf-btn"
-        data-tf="1h"
-      >
+      <button class="tf-btn"
+              data-tf="1h">
         H1
       </button>
 
-      <button
-        class="tf-btn"
-        data-tf="4h"
-      >
+      <button class="tf-btn"
+              data-tf="4h">
         H4
       </button>
 
@@ -936,10 +807,8 @@ button{
 
       <div class="price-row">
 
-        <div
-          id="chartPrice"
-          class="price"
-        >
+        <div id="chartPrice"
+             class="price">
           —
         </div>
 
@@ -964,17 +833,13 @@ button{
 
       <div class="chart-toolbar-left">
 
-        <span
-          id="chartTrendBadge"
-          class="badge"
-        >
+        <span id="chartTrendBadge"
+              class="badge">
           TREND —
         </span>
 
-        <span
-          id="chartGateBadge"
-          class="badge"
-        >
+        <span id="chartGateBadge"
+              class="badge">
           GATE —
         </span>
 
@@ -985,9 +850,7 @@ button{
 
     <div class="chart-wrap">
 
-      <canvas
-        id="chartCanvas"
-      ></canvas>
+      <canvas id="chartCanvas"></canvas>
 
     </div>
 
@@ -995,105 +858,61 @@ button{
     <div class="legend">
 
       <div class="legend-item">
-
-        <span
-          class="dot"
-          style="background:#ffc857"
-        ></span>
-
+        <span class="dot"
+              style="background:#ffc857"></span>
         EMA20
-
       </div>
 
-
       <div class="legend-item">
-
-        <span
-          class="dot"
-          style="background:#4da3ff"
-        ></span>
-
+        <span class="dot"
+              style="background:#4da3ff"></span>
         EMA50
-
       </div>
 
-
       <div class="legend-item">
-
-        <span
-          class="dot"
-          style="background:#d7dbe2"
-        ></span>
-
+        <span class="dot"
+              style="background:#d7dbe2"></span>
         EMA200
-
       </div>
 
-
       <div class="legend-item">
-
-        <span
-          class="dot"
-          style="background:#27d17f"
-        ></span>
-
+        <span class="dot"
+              style="background:#27d17f"></span>
         BOS
-
       </div>
 
-
       <div class="legend-item">
-
-        <span
-          class="dot"
-          style="background:#ff9f43"
-        ></span>
-
+        <span class="dot"
+              style="background:#ff9f43"></span>
         CHoCH
-
       </div>
 
-
       <div class="legend-item">
-
-        <span
-          class="dot"
-          style="background:#c77dff"
-        ></span>
-
+        <span class="dot"
+              style="background:#c77dff"></span>
         Liquidity
-
       </div>
 
     </div>
 
 
-    <div
-      id="chartError"
-      class="error-box"
-    ></div>
+    <button id="refreshChart"
+            class="primary-btn">
 
-
-    <button
-      id="refreshChart"
-      class="primary-btn"
-    >
       REFRESH CHART
+
     </button>
 
   </div>
 
 
-  <!-- ======================================================= -->
   <!-- EXECUTION LEVELS -->
-  <!-- ======================================================= -->
 
   <div class="card">
 
     <div class="section-label">
       EXECUTION LEVELS
     </div>
-
 
     <div class="chart-info">
 
@@ -1103,10 +922,8 @@ button{
           Entry
         </div>
 
-        <div
-          id="chartEntry"
-          class="level-price"
-        >
+        <div id="chartEntry"
+             class="level-price">
           —
         </div>
 
@@ -1119,10 +936,8 @@ button{
           Stop Loss
         </div>
 
-        <div
-          id="chartSL"
-          class="level-price red"
-        >
+        <div id="chartSL"
+             class="level-price red">
           —
         </div>
 
@@ -1135,10 +950,8 @@ button{
           Take Profit
         </div>
 
-        <div
-          id="chartTP"
-          class="level-price green"
-        >
+        <div id="chartTP"
+             class="level-price green">
           —
         </div>
 
@@ -1151,10 +964,8 @@ button{
           R:R
         </div>
 
-        <div
-          id="chartRR"
-          class="level-price"
-        >
+        <div id="chartRR"
+             class="level-price">
           —
         </div>
 
@@ -1163,29 +974,26 @@ button{
     </div>
 
 
-    <button
-      id="refreshAnalysis"
-      class="secondary-btn"
-      style="margin-top:12px"
-    >
+    <button id="refreshAnalysis"
+            class="secondary-btn"
+            style="margin-top:12px">
+
       REFRESH STRICT ANALYSIS
+
     </button>
 
+    <div class="small"
+         style="margin-top:10px">
 
-    <div
-      class="small"
-      style="margin-top:10px"
-    >
       Analysis refresh uses the protected
       multi-timeframe engine.
+
     </div>
 
   </div>
 
 
-  <!-- ======================================================= -->
   <!-- MTF -->
-  <!-- ======================================================= -->
 
   <div class="card">
 
@@ -1193,102 +1001,54 @@ button{
       MULTI-TIMEFRAME SNAPSHOT
     </div>
 
-
     <div class="grid3">
 
       <div class="metric">
-
-        <div class="metric-label">
-          H4
-        </div>
-
-        <div
-          id="chartH4"
-          class="metric-value"
-        >
+        <div class="metric-label">H4</div>
+        <div id="chartH4"
+             class="metric-value">
           —
         </div>
-
       </div>
 
-
       <div class="metric">
-
-        <div class="metric-label">
-          H1
-        </div>
-
-        <div
-          id="chartH1"
-          class="metric-value"
-        >
+        <div class="metric-label">H1</div>
+        <div id="chartH1"
+             class="metric-value">
           —
         </div>
-
       </div>
 
-
       <div class="metric">
-
-        <div class="metric-label">
-          M15
-        </div>
-
-        <div
-          id="chartM15"
-          class="metric-value"
-        >
+        <div class="metric-label">M15</div>
+        <div id="chartM15"
+             class="metric-value">
           —
         </div>
-
       </div>
 
-
       <div class="metric">
-
-        <div class="metric-label">
-          M5
-        </div>
-
-        <div
-          id="chartM5"
-          class="metric-value"
-        >
+        <div class="metric-label">M5</div>
+        <div id="chartM5"
+             class="metric-value">
           —
         </div>
-
       </div>
 
-
       <div class="metric">
-
-        <div class="metric-label">
-          M1
-        </div>
-
-        <div
-          id="chartM1"
-          class="metric-value"
-        >
+        <div class="metric-label">M1</div>
+        <div id="chartM1"
+             class="metric-value">
           —
         </div>
-
       </div>
 
-
       <div class="metric">
-
-        <div class="metric-label">
-          Score
-        </div>
-
-        <div
-          id="chartScore"
-          class="metric-value"
-        >
+        <div class="metric-label">Score</div>
+        <div id="chartScore"
+             class="metric-value">
           —
         </div>
-
       </div>
 
     </div>
@@ -1296,16 +1056,13 @@ button{
   </div>
 
 
-  <!-- ======================================================= -->
   <!-- STRICT STATUS -->
-  <!-- ======================================================= -->
 
   <div class="card">
 
     <div class="section-label">
       STRICT EXECUTION STATUS
     </div>
-
 
     <div class="execution">
 
@@ -1315,10 +1072,8 @@ button{
           WAIT
         </strong>
 
-        <span
-          id="chartScoreBadge"
-          class="badge"
-        >
+        <span id="chartScoreBadge"
+              class="badge">
           SCORE —
         </span>
 
@@ -1328,80 +1083,45 @@ button{
       <div class="diagnostic">
 
         <div class="diag">
-
-          <span>
-            M15 Structure
-          </span>
-
+          <span>M15 Structure</span>
           <strong id="chartStructure">
             —
           </strong>
-
         </div>
 
-
         <div class="diag">
-
-          <span>
-            M15 BOS / CHoCH
-          </span>
-
+          <span>M15 BOS / CHoCH</span>
           <strong id="chartBos">
             —
           </strong>
-
         </div>
 
-
         <div class="diag">
-
-          <span>
-            Liquidity
-          </span>
-
+          <span>Liquidity</span>
           <strong id="chartLiquidity">
             —
           </strong>
-
         </div>
 
-
         <div class="diag">
-
-          <span>
-            M5 Pullback
-          </span>
-
+          <span>M5 Pullback</span>
           <strong id="chartPullback">
             —
           </strong>
-
         </div>
 
-
         <div class="diag">
-
-          <span>
-            M1 Confirmation
-          </span>
-
+          <span>M1 Confirmation</span>
           <strong id="chartConfirm">
             —
           </strong>
-
         </div>
 
-
         <div class="diag">
-
-          <span>
-            Execution Gate
-          </span>
-
+          <span>Execution Gate</span>
           <strong id="chartGate">
             —
           </strong>
-
         </div>
 
       </div>
@@ -1417,22 +1137,19 @@ button{
     BUY/SELL execution remains controlled by the
     STRICT EXECUTION ENGINE.
 
-    No signal is created merely because a
-    technical pattern appears on the chart.
+    No signal is created merely because a technical
+    pattern appears on the chart.
 
   </div>
 
 </section>
 
 
-<!-- ========================================================= -->
+<!-- ====================================================== -->
 <!-- AI -->
-<!-- ========================================================= -->
+<!-- ====================================================== -->
 
-<section
-  id="aiPage"
-  class="page"
->
+<section id="aiPage" class="page">
 
   <div class="header">
 
@@ -1443,7 +1160,6 @@ button{
     </p>
 
   </div>
-
 
   <div class="card">
 
@@ -1463,14 +1179,11 @@ button{
 </section>
 
 
-<!-- ========================================================= -->
+<!-- ====================================================== -->
 <!-- JOURNAL -->
-<!-- ========================================================= -->
+<!-- ====================================================== -->
 
-<section
-  id="journalPage"
-  class="page"
->
+<section id="journalPage" class="page">
 
   <div class="header">
 
@@ -1481,7 +1194,6 @@ button{
     </p>
 
   </div>
-
 
   <div class="card">
 
@@ -1503,18 +1215,16 @@ button{
 </div>
 
 
-<!-- ========================================================= -->
+<!-- ====================================================== -->
 <!-- NAV -->
-<!-- ========================================================= -->
+<!-- ====================================================== -->
 
 <nav class="nav">
 
   <div class="nav-inner">
 
-    <button
-      class="nav-btn active"
-      data-page="dashboardPage"
-    >
+    <button class="nav-btn active"
+            data-page="dashboardPage">
 
       <span class="nav-icon">
         ⌂
@@ -1525,10 +1235,8 @@ button{
     </button>
 
 
-    <button
-      class="nav-btn"
-      data-page="chartPage"
-    >
+    <button class="nav-btn"
+            data-page="chartPage">
 
       <span class="nav-icon">
         ⌁
@@ -1539,10 +1247,8 @@ button{
     </button>
 
 
-    <button
-      class="nav-btn"
-      data-page="aiPage"
-    >
+    <button class="nav-btn"
+            data-page="aiPage">
 
       <span class="nav-icon">
         ✦
@@ -1553,10 +1259,8 @@ button{
     </button>
 
 
-    <button
-      class="nav-btn"
-      data-page="journalPage"
-    >
+    <button class="nav-btn"
+            data-page="journalPage">
 
       <span class="nav-icon">
         ▣
@@ -1573,41 +1277,31 @@ button{
 
 <script>
 
-/* ========================================================= */
+/* ====================================================== */
 /* CONFIG */
-/* ========================================================= */
+/* ====================================================== */
 
 const API =
   "https://xau-ai-api.khoochorshioong.workers.dev";
 
+let selectedTF = "1min";
+
+let marketData = {};
+
+let analysisData = null;
+
+let chartCandles = [];
+
+let dpr =
+  window.devicePixelRatio || 1;
 
 const $ =
   id => document.getElementById(id);
 
 
-let selectedTF =
-  "1min";
-
-
-let marketData =
-  {};
-
-
-let analysisData =
-  null;
-
-
-let chartCandles =
-  [];
-
-
-let dpr =
-  window.devicePixelRatio || 1;
-
-
-/* ========================================================= */
+/* ====================================================== */
 /* BASIC HELPERS */
-/* ========================================================= */
+/* ====================================================== */
 
 function safeNumber(value){
 
@@ -1634,96 +1328,7 @@ function fmt(value){
 }
 
 
-function cleanText(value){
-
-  if(
-    value === null ||
-    value === undefined
-  ){
-
-    return "—";
-
-  }
-
-
-  if(
-    typeof value === "object"
-  ){
-
-    if(
-      value.bias !== undefined
-    ){
-
-      return cleanText(
-        value.bias
-      );
-
-    }
-
-
-    if(
-      value.direction !== undefined
-    ){
-
-      return cleanText(
-        value.direction
-      );
-
-    }
-
-
-    if(
-      value.type !== undefined
-    ){
-
-      return cleanText(
-        value.type
-      );
-
-    }
-
-
-    if(
-      value.status !== undefined
-    ){
-
-      return cleanText(
-        value.status
-      );
-
-    }
-
-
-    if(
-      value.event !== undefined
-    ){
-
-      return cleanText(
-        value.event
-      );
-
-    }
-
-
-    return "—";
-
-  }
-
-
-  return String(value);
-
-}
-
-
-/* ========================================================= */
-/* ANALYSIS ACCESS */
-/* ========================================================= */
-
 function getTF(tf){
-
-  if(!analysisData)
-    return {};
-
 
   return (
     analysisData?.analysis?.[tf] ||
@@ -1739,31 +1344,12 @@ function direction(tf){
   const x =
     getTF(tf);
 
-
-  let value =
-    x?.score?.bias ??
-    x?.bias ??
-    x?.direction ??
-    x?.trend ??
-    "NEUTRAL";
-
-
-  if(
-    typeof value === "object"
-  ){
-
-    value =
-      value.bias ??
-      value.direction ??
-      value.trend ??
-      value.value ??
-      "NEUTRAL";
-
-  }
-
-
-  return cleanText(value)
-    .toUpperCase();
+  return String(
+    x?.score?.bias ||
+    x?.bias ||
+    x?.direction ||
+    "NEUTRAL"
+  ).toUpperCase();
 
 }
 
@@ -1776,7 +1362,6 @@ function colorDirection(
   if(!element)
     return;
 
-
   element.classList.remove(
     "green",
     "red",
@@ -1784,16 +1369,13 @@ function colorDirection(
     "muted"
   );
 
-
   const v =
-    cleanText(value)
+    String(value || "")
       .toUpperCase();
-
 
   if(
     v.includes("BULL") ||
-    v.includes("BUY") ||
-    v === "LONG"
+    v.includes("BUY")
   ){
 
     element.classList.add(
@@ -1803,8 +1385,7 @@ function colorDirection(
   }
   else if(
     v.includes("BEAR") ||
-    v.includes("SELL") ||
-    v === "SHORT"
+    v.includes("SELL")
   ){
 
     element.classList.add(
@@ -1833,55 +1414,206 @@ function colorDirection(
 }
 
 
-/* ========================================================= */
-/* PRICE */
-/* ========================================================= */
+/* ====================================================== */
+/* DATA EXTRACTION */
+/* ====================================================== */
 
-function extractPrice(data){
+function extractDecision(data){
 
-  const candidates = [
-
-    data?.price,
-
-    data?.close,
-
-    data?.latestPrice,
-
-    data?.latest?.close,
-
-    data?.values?.[0]?.close,
-
-    data?.values?.[
-      data?.values?.length - 1
-    ]?.close,
-
-    data?.candles?.[0]?.close
-
-  ];
-
-
-  for(
-    const candidate
-    of candidates
-  ){
-
-    const n =
-      safeNumber(candidate);
-
-    if(n !== null)
-      return n;
-
-  }
-
-
-  return null;
+  return String(
+    data?.decision ??
+    data?.signal ??
+    data?.analysis?.decision ??
+    "NO TRADE"
+  ).toUpperCase();
 
 }
 
 
-/* ========================================================= */
+function extractScore(data){
+
+  return safeNumber(
+    data?.setupScore ??
+    data?.score ??
+    data?.analysis?.setupScore
+  );
+
+}
+
+
+function extractStructure(tf){
+
+  const x =
+    getTF(tf);
+
+  const value =
+    x?.structure?.structure ??
+    x?.structure ??
+    "RANGE";
+
+  if(
+    value &&
+    typeof value === "object"
+  ){
+
+    return (
+      value.structure ??
+      value.type ??
+      "RANGE"
+    );
+
+  }
+
+  return value;
+
+}
+
+
+function extractBOS(tf){
+
+  const x =
+    getTF(tf);
+
+  const value =
+    x?.structure?.bos ??
+    x?.bos ??
+    x?.structure?.event ??
+    "NONE";
+
+  if(
+    value &&
+    typeof value === "object"
+  ){
+
+    return (
+      value.type ??
+      value.event ??
+      "NONE"
+    );
+
+  }
+
+  return value;
+
+}
+
+
+function extractLiquidity(tf){
+
+  const x =
+    getTF(tf);
+
+  const value =
+    x?.liquidity?.type ??
+    x?.liquidity ??
+    "NONE";
+
+  if(
+    value &&
+    typeof value === "object"
+  ){
+
+    return (
+      value.type ??
+      value.event ??
+      "NONE"
+    );
+
+  }
+
+  return value;
+
+}
+
+
+function extractPullback(){
+
+  const m5 =
+    getTF("5min");
+
+  return (
+    m5?.pullback ??
+    m5?.pullbackStatus ??
+    analysisData?.pullback ??
+    "NOT EXPOSED"
+  );
+
+}
+
+
+function extractConfirmation(){
+
+  const m1 =
+    getTF("1min");
+
+  return (
+    m1?.confirmation ??
+    m1?.entryConfirmation ??
+    analysisData?.entryConfirmation ??
+    "NOT EXPOSED"
+  );
+
+}
+
+
+/* ====================================================== */
+/* FIXED BOOLEAN FORMATTER */
+/* ====================================================== */
+
+function formatBooleanState(value){
+
+  if(value === true)
+    return "CONFIRMED";
+
+  if(value === false)
+    return "WAIT";
+
+  if(
+    value === null ||
+    value === undefined
+  ){
+
+    return "NOT EXPOSED";
+
+  }
+
+  if(
+    typeof value === "object"
+  ){
+
+    if(value === null)
+      return "NOT EXPOSED";
+
+    if(value.confirmed === true)
+      return "CONFIRMED";
+
+    if(value.confirmed === false)
+      return "WAIT";
+
+    if(
+      value.status !== undefined
+    ){
+
+      return String(
+        value.status
+      ).toUpperCase();
+
+    }
+
+    return "NOT EXPOSED";
+
+  }
+
+  return String(
+    value
+  ).toUpperCase();
+
+}
+
+
+/* ====================================================== */
 /* RISK PLAN */
-/* ========================================================= */
+/* ====================================================== */
 
 function extractRiskPlan(data){
 
@@ -1899,46 +1631,38 @@ function extractRiskPlan(data){
 
   ];
 
-
   for(
-    const p
-    of candidates
+    const plan of candidates
   ){
 
-    if(!p)
+    if(!plan)
       continue;
-
 
     const entry =
       safeNumber(
-        p.entry ??
-        p.entryPrice
+        plan.entry ??
+        plan.entryPrice
       );
-
 
     const sl =
       safeNumber(
-        p.sl ??
-        p.stopLoss ??
-        p.stop
+        plan.sl ??
+        plan.stopLoss ??
+        plan.stop
       );
-
 
     const tp =
       safeNumber(
-        p.tp ??
-        p.takeProfit ??
-        p.target
+        plan.tp ??
+        plan.takeProfit ??
+        plan.target
       );
-
 
     const rr =
       safeNumber(
-        p.rr ??
-        p.riskReward ??
-        p.riskRewardRatio
+        plan.rr ??
+        plan.riskReward
       );
-
 
     if(
       entry !== null ||
@@ -1957,7 +1681,6 @@ function extractRiskPlan(data){
 
   }
 
-
   return {
     entry:null,
     sl:null,
@@ -1968,261 +1691,9 @@ function extractRiskPlan(data){
 }
 
 
-/* ========================================================= */
-/* DECISION */
-/* ========================================================= */
-
-function extractDecision(data){
-
-  let value =
-    data?.decision ??
-    data?.signal ??
-    data?.analysis?.decision ??
-    "NO TRADE";
-
-
-  if(
-    typeof value === "object"
-  ){
-
-    value =
-      value.decision ??
-      value.signal ??
-      value.value ??
-      "NO TRADE";
-
-  }
-
-
-  return cleanText(value)
-    .toUpperCase();
-
-}
-
-
-/* ========================================================= */
-/* SCORE */
-/* ========================================================= */
-
-function extractScore(data){
-
-  const candidates = [
-
-    data?.setupScore,
-
-    data?.score,
-
-    data?.analysis?.setupScore,
-
-    data?.analysis?.score
-
-  ];
-
-
-  for(
-    const value
-    of candidates
-  ){
-
-    const n =
-      safeNumber(value);
-
-    if(n !== null)
-      return n;
-
-  }
-
-
-  return null;
-
-}
-
-
-/* ========================================================= */
-/* STRUCTURE */
-/* ========================================================= */
-
-function extractStructure(tf){
-
-  const x =
-    getTF(tf);
-
-
-  let value =
-    x?.structure?.structure ??
-    x?.structure?.type ??
-    x?.structure ??
-    "RANGE";
-
-
-  return cleanText(value)
-    .toUpperCase();
-
-}
-
-
-/* ========================================================= */
-/* BOS / CHOCH */
-/* ========================================================= */
-
-function extractBOS(tf){
-
-  const x =
-    getTF(tf);
-
-
-  let value =
-    x?.structure?.bos ??
-    x?.structure?.event ??
-    x?.bos ??
-    x?.event ??
-    "NONE";
-
-
-  return cleanText(value)
-    .toUpperCase();
-
-}
-
-
-/* ========================================================= */
-/* LIQUIDITY */
-/* ========================================================= */
-
-function extractLiquidity(tf){
-
-  const x =
-    getTF(tf);
-
-
-  let value =
-    x?.liquidity?.type ??
-    x?.liquidity?.direction ??
-    x?.liquidity ??
-    "NONE";
-
-
-  return cleanText(value)
-    .toUpperCase();
-
-}
-
-
-/* ========================================================= */
-/* PULLBACK */
-/* ========================================================= */
-
-function extractPullback(){
-
-  const m5 =
-    getTF("5min");
-
-
-  const value =
-    m5?.pullback ??
-    m5?.pullbackStatus ??
-    analysisData?.pullback ??
-    null;
-
-
-  return value;
-
-}
-
-
-/* ========================================================= */
-/* CONFIRMATION */
-/* ========================================================= */
-
-function extractConfirmation(){
-
-  const m1 =
-    getTF("1min");
-
-
-  const value =
-    m1?.confirmation ??
-    m1?.entryConfirmation ??
-    analysisData?.entryConfirmation ??
-    null;
-
-
-  return value;
-
-}
-
-
-/* ========================================================= */
-/* BOOLEAN STATE */
-/* ========================================================= */
-
-function formatBooleanState(value){
-
-  if(value === true)
-    return "CONFIRMED";
-
-
-  if(value === false)
-    return "WAIT";
-
-
-  if(
-    value === null ||
-    value === undefined
-  ){
-
-    return "NOT EXPOSED";
-
-  }
-
-
-  if(
-    typeof value === "object"
-  ){
-
-    if(
-      value.confirmed === true
-    ){
-
-      return "CONFIRMED";
-
-    }
-
-
-    if(
-      value.confirmed === false
-    ){
-
-      return "WAIT";
-
-    }
-
-
-    if(
-      value.status !== undefined
-    ){
-
-      return cleanText(
-        value.status
-      ).toUpperCase();
-
-    }
-
-
-    return "NOT EXPOSED";
-
-  }
-
-
-  return cleanText(value)
-    .toUpperCase();
-
-}
-
-
-/* ========================================================= */
+/* ====================================================== */
 /* API */
-/* ========================================================= */
+/* ====================================================== */
 
 async function fetchJSON(url){
 
@@ -2231,18 +1702,19 @@ async function fetchJSON(url){
       ? "&"
       : "?";
 
+  const finalURL =
+    url +
+    separator +
+    "ts=" +
+    Date.now();
 
   const response =
     await fetch(
-      url +
-      separator +
-      "ts=" +
-      Date.now(),
+      finalURL,
       {
         cache:"no-store"
       }
     );
-
 
   if(!response.ok){
 
@@ -2253,15 +1725,10 @@ async function fetchJSON(url){
 
   }
 
-
   return await response.json();
 
 }
 
-
-/* ========================================================= */
-/* MARKET API */
-/* ========================================================= */
 
 async function fetchMarket(tf){
 
@@ -2270,19 +1737,13 @@ async function fetchMarket(tf){
       `${API}/api/market?interval=${tf}`
     );
 
-
   marketData[tf] =
     data;
-
 
   return data;
 
 }
 
-
-/* ========================================================= */
-/* ANALYSIS API */
-/* ========================================================= */
 
 async function fetchAnalysis(){
 
@@ -2293,19 +1754,17 @@ async function fetchAnalysis(){
 }
 
 
-/* ========================================================= */
+/* ====================================================== */
 /* DASHBOARD */
-/* ========================================================= */
+/* ====================================================== */
 
 function renderDashboard(){
 
   if(!analysisData)
     return;
 
-
   const m1 =
     getTF("1min");
-
 
   const price =
     safeNumber(
@@ -2314,41 +1773,34 @@ function renderDashboard(){
       m1?.close
     );
 
-
   const decision =
     extractDecision(
       analysisData
     );
-
 
   const score =
     extractScore(
       analysisData
     );
 
-
   const plan =
     extractRiskPlan(
       analysisData
     );
-
 
   const trend =
     analysisData?.trend ??
     m1?.trend ??
     direction("1min");
 
-
   const structure =
     analysisData?.structure ??
     extractStructure("15min");
-
 
   const momentum =
     analysisData?.momentum ??
     m1?.momentum ??
     "NEUTRAL";
-
 
   const liquidity =
     analysisData?.liquidity ??
@@ -2364,7 +1816,6 @@ function renderDashboard(){
   $("dashDecision").textContent =
     decision;
 
-
   colorDirection(
     $("dashDecision"),
     decision
@@ -2378,51 +1829,54 @@ function renderDashboard(){
 
 
   $("dashTrend").textContent =
-    cleanText(trend)
+    String(trend)
       .toUpperCase();
 
 
   $("dashStructure").textContent =
-    cleanText(structure)
+    String(structure)
       .toUpperCase();
 
 
   $("dashMomentum").textContent =
-    cleanText(momentum)
+    String(momentum)
       .toUpperCase();
 
 
   $("dashLiquidity").textContent =
-    cleanText(liquidity)
+    String(liquidity)
       .toUpperCase();
 
 
   $("dH4").textContent =
     direction("4h");
 
-
   $("dH1").textContent =
     direction("1h");
 
-
   $("dM15").textContent =
     direction("15min");
-
 
   $("dM5").textContent =
     direction("5min");
 
 
   $("dStructure").textContent =
-    extractStructure("15min");
+    String(
+      extractStructure("15min")
+    ).toUpperCase();
 
 
   $("dBos").textContent =
-    extractBOS("15min");
+    String(
+      extractBOS("15min")
+    ).toUpperCase();
 
 
   $("dLiquidity").textContent =
-    extractLiquidity("15min");
+    String(
+      extractLiquidity("15min")
+    ).toUpperCase();
 
 
   $("dPullback").textContent =
@@ -2445,32 +1899,27 @@ function renderDashboard(){
 
 
   $("dGate").textContent =
-    cleanText(gate)
+    String(gate)
       .toUpperCase();
 
 
   $("planEntry").textContent =
     fmt(plan.entry);
 
-
   $("planSL").textContent =
     fmt(plan.sl);
-
 
   $("planTP").textContent =
     fmt(plan.tp);
 
-
   $("planRR").textContent =
     plan.rr === null
       ? "—"
-      : plan.rr.toFixed(2) +
-        "R";
+      : plan.rr.toFixed(2) + "R";
 
 
   $("planBadge").textContent =
     decision;
-
 
   colorDirection(
     $("planBadge"),
@@ -2496,9 +1945,9 @@ function renderDashboard(){
 }
 
 
-/* ========================================================= */
-/* NORMALIZE CANDLES */
-/* ========================================================= */
+/* ====================================================== */
+/* CANDLE NORMALIZATION */
+/* ====================================================== */
 
 function normalizeCandles(data){
 
@@ -2506,7 +1955,6 @@ function normalizeCandles(data){
     data?.values ??
     data?.candles ??
     [];
-
 
   return raw
     .map(c => {
@@ -2546,9 +1994,9 @@ function normalizeCandles(data){
 }
 
 
-/* ========================================================= */
+/* ====================================================== */
 /* EMA */
-/* ========================================================= */
+/* ====================================================== */
 
 function ema(
   values,
@@ -2560,7 +2008,6 @@ function ema(
       values.length
     ).fill(null);
 
-
   if(
     values.length <
     period
@@ -2570,9 +2017,7 @@ function ema(
 
   }
 
-
   let sum = 0;
-
 
   for(
     let i=0;
@@ -2580,25 +2025,22 @@ function ema(
     i++
   ){
 
-    sum +=
-      values[i];
+    sum += values[i];
 
   }
-
 
   let previous =
     sum / period;
 
-
   result[
-    period - 1
+    period-1
   ] =
     previous;
 
 
   const multiplier =
     2 /
-    (period + 1);
+    (period+1);
 
 
   for(
@@ -2615,21 +2057,19 @@ function ema(
       multiplier +
       previous;
 
-
     result[i] =
       previous;
 
   }
-
 
   return result;
 
 }
 
 
-/* ========================================================= */
-/* SWINGS */
-/* ========================================================= */
+/* ====================================================== */
+/* SWING DETECTION */
+/* ====================================================== */
 
 function detectSwings(
   candles
@@ -2637,7 +2077,6 @@ function detectSwings(
 
   const highs = [];
   const lows = [];
-
 
   for(
     let i=2;
@@ -2688,7 +2127,6 @@ function detectSwings(
 
   }
 
-
   return {
     highs,
     lows
@@ -2697,9 +2135,9 @@ function detectSwings(
 }
 
 
-/* ========================================================= */
-/* EVENTS */
-/* ========================================================= */
+/* ====================================================== */
+/* STRUCTURE EVENTS */
+/* ====================================================== */
 
 function detectEvents(
   candles
@@ -2710,13 +2148,10 @@ function detectEvents(
       candles
     );
 
-
   const events = [];
-
 
   let previousHigh =
     null;
-
 
   let previousLow =
     null;
@@ -2734,13 +2169,15 @@ function detectEvents(
 
     const swingHigh =
       swings.highs.find(
-        x => x.index === i
+        x =>
+          x.index === i
       );
 
 
     const swingLow =
       swings.lows.find(
-        x => x.index === i
+        x =>
+          x.index === i
       );
 
 
@@ -2762,23 +2199,16 @@ function detectEvents(
 
     if(
       previousHigh !== null &&
-      c.close >
-        previousHigh &&
+      c.close > previousHigh &&
       i > 5
     ){
 
       events.push({
-
         index:i,
-
         type:"BOS",
-
         direction:"BUY",
-
         price:c.close
-
       });
-
 
       previousHigh =
         null;
@@ -2788,23 +2218,16 @@ function detectEvents(
 
     if(
       previousLow !== null &&
-      c.close <
-        previousLow &&
+      c.close < previousLow &&
       i > 5
     ){
 
       events.push({
-
         index:i,
-
         type:"BOS",
-
         direction:"SELL",
-
         price:c.close
-
       });
-
 
       previousLow =
         null;
@@ -2822,15 +2245,13 @@ function detectEvents(
     i++
   ){
 
-    const previous =
+    const a =
       candles[i-1];
 
-
-    const current =
+    const b =
       candles[i];
 
-
-    const earlier =
+    const older =
       candles[
         Math.max(
           0,
@@ -2840,44 +2261,30 @@ function detectEvents(
 
 
     if(
-      current.close >
-        previous.high &&
-      current.close <
-        earlier.close
+      b.close > a.high &&
+      b.close < older.close
     ){
 
       events.push({
-
         index:i,
-
         type:"CHoCH",
-
         direction:"BUY",
-
-        price:current.close
-
+        price:b.close
       });
 
     }
 
 
     if(
-      current.close <
-        previous.low &&
-      current.close >
-        earlier.close
+      b.close < a.low &&
+      b.close > older.close
     ){
 
       events.push({
-
         index:i,
-
         type:"CHoCH",
-
         direction:"SELL",
-
-        price:current.close
-
+        price:b.close
       });
 
     }
@@ -2896,21 +2303,15 @@ function detectEvents(
     const c =
       candles[i];
 
-
     let priorHigh =
       -Infinity;
-
 
     let priorLow =
       Infinity;
 
 
     for(
-      let j =
-        Math.max(
-          0,
-          i-5
-        );
+      let j=Math.max(0,i-5);
       j<i;
       j++
     ){
@@ -2920,7 +2321,6 @@ function detectEvents(
           priorHigh,
           candles[j].high
         );
-
 
       priorLow =
         Math.min(
@@ -2932,44 +2332,30 @@ function detectEvents(
 
 
     if(
-      c.high >
-        priorHigh &&
-      c.close <
-        priorHigh
+      c.high > priorHigh &&
+      c.close < priorHigh
     ){
 
       events.push({
-
         index:i,
-
         type:"LIQUIDITY",
-
         direction:"SELL",
-
         price:c.high
-
       });
 
     }
 
 
     if(
-      c.low <
-        priorLow &&
-      c.close >
-        priorLow
+      c.low < priorLow &&
+      c.close > priorLow
     ){
 
       events.push({
-
         index:i,
-
         type:"LIQUIDITY",
-
         direction:"BUY",
-
         price:c.low
-
       });
 
     }
@@ -2985,30 +2371,89 @@ function detectEvents(
 }
 
 
-/* ========================================================= */
-/* CANVAS INITIALIZATION */
-/* ========================================================= */
+/* ====================================================== */
+/* EVENT FILTER */
+/* ====================================================== */
+
+function getImportantEvents(
+  structure
+){
+
+  const result = [];
+
+  const types = [
+    "BOS",
+    "CHoCH",
+    "LIQUIDITY"
+  ];
+
+
+  for(
+    const type of types
+  ){
+
+    const list =
+      structure.events
+        .filter(
+          e =>
+            e.type === type
+        )
+        .sort(
+          (a,b) =>
+            b.index -
+            a.index
+        );
+
+
+    /*
+      Only recent meaningful events.
+      This prevents the chart from becoming
+      unreadable.
+    */
+
+    const limit =
+      type === "LIQUIDITY"
+        ? 5
+        : 4;
+
+
+    const selected =
+      list.slice(
+        0,
+        limit
+      );
+
+
+    result.push(
+      ...selected
+    );
+
+  }
+
+
+  return result.sort(
+    (a,b) =>
+      a.index -
+      b.index
+  );
+
+}
+
+
+/* ====================================================== */
+/* CANVAS RESIZE */
+/* ====================================================== */
 
 function resizeCanvas(){
 
   const canvas =
     $("chartCanvas");
 
-
   if(!canvas)
     return;
 
-
   const rect =
     canvas.getBoundingClientRect();
-
-
-  /*
-   IMPORTANT:
-   Chart page must be visible.
-   If width/height is 0, don't destroy
-   the current canvas.
-  */
 
   if(
     rect.width <= 0 ||
@@ -3021,19 +2466,19 @@ function resizeCanvas(){
 
 
   dpr =
-    window.devicePixelRatio ||
-    1;
+    window.devicePixelRatio || 1;
 
 
   canvas.width =
-    Math.round(
-      rect.width * dpr
+    Math.floor(
+      rect.width *
+      dpr
     );
 
-
   canvas.height =
-    Math.round(
-      rect.height * dpr
+    Math.floor(
+      rect.height *
+      dpr
     );
 
 
@@ -3042,9 +2487,9 @@ function resizeCanvas(){
 }
 
 
-/* ========================================================= */
+/* ====================================================== */
 /* TEXT */
-/* ========================================================= */
+/* ====================================================== */
 
 function drawText(
   ctx,
@@ -3059,21 +2504,17 @@ function drawText(
   ctx.fillStyle =
     color;
 
-
   ctx.font =
     `${size}px -apple-system,BlinkMacSystemFont,Arial`;
-
 
   ctx.textAlign =
     align;
 
-
   ctx.textBaseline =
     "middle";
 
-
   ctx.fillText(
-    String(text),
+    text,
     x,
     y
   );
@@ -3081,65 +2522,44 @@ function drawText(
 }
 
 
-/* ========================================================= */
-/* DRAW CHART */
-/* ========================================================= */
+/* ====================================================== */
+/* MAIN CHART */
+/* ====================================================== */
 
 function drawChart(){
 
   const canvas =
     $("chartCanvas");
 
-
   if(!canvas)
     return;
 
 
   const ctx =
-    canvas.getContext("2d");
-
-
-  if(!ctx)
-    return;
-
-
-  const W =
-    canvas.width;
-
-
-  const H =
-    canvas.height;
-
-
-  if(
-    W <= 0 ||
-    H <= 0
-  ){
-
-    return;
-
-  }
+    canvas.getContext(
+      "2d"
+    );
 
 
   ctx.clearRect(
     0,
     0,
-    W,
-    H
+    canvas.width,
+    canvas.height
   );
 
 
   if(
-    !chartCandles.length
+    chartCandles.length === 0
   ){
 
     drawText(
       ctx,
       "NO MARKET DATA",
-      W/2,
-      H/2,
+      canvas.width/2,
+      canvas.height/2,
       14*dpr,
-      "#737a88",
+      "#727987",
       "center"
     );
 
@@ -3148,309 +2568,52 @@ function drawChart(){
   }
 
 
-  const visible =
-    chartCandles.slice(
-      -120
-    );
+  const W =
+    canvas.width;
+
+  const H =
+    canvas.height;
 
 
   const padding = {
 
-    left:
-      45*dpr,
+    left:48*dpr,
 
-    right:
-      58*dpr,
+    right:65*dpr,
 
-    top:
-      24*dpr,
+    top:28*dpr,
 
-    bottom:
-      28*dpr
+    bottom:30*dpr
 
   };
 
 
-  const highs =
-    visible.map(
-      c => c.high
-    );
+  /*
+    IMPORTANT:
+
+    Use ALL candles for EMA calculation.
+    Only the final 120 candles are displayed.
+
+    This fixes the previous EMA200 problem.
+  */
+
+  const full =
+    chartCandles;
 
 
-  const lows =
-    visible.map(
-      c => c.low
-    );
+  const visible =
+    full.slice(-120);
 
 
-  let maxPrice =
-    Math.max(
-      ...highs
-    );
-
-
-  let minPrice =
-    Math.min(
-      ...lows
-    );
-
-
-  let range =
-    maxPrice -
-    minPrice;
-
-
-  if(
-    !Number.isFinite(range) ||
-    range <= 0
-  ){
-
-    range = 1;
-
-  }
-
-
-  const extra =
-    range * 0.08;
-
-
-  maxPrice +=
-    extra;
-
-
-  minPrice -=
-    extra;
-
-
-  const plotW =
-    W -
-    padding.left -
-    padding.right;
-
-
-  const plotH =
-    H -
-    padding.top -
-    padding.bottom;
-
-
-  const step =
-    plotW /
+  const firstIndex =
+    full.length -
     visible.length;
 
 
-  function x(i){
-
-    return (
-      padding.left +
-      i * step +
-      step/2
-    );
-
-  }
-
-
-  function y(price){
-
-    return (
-      padding.top +
-      (
-        maxPrice -
-        price
-      ) /
-      (
-        maxPrice -
-        minPrice
-      ) *
-      plotH
-    );
-
-  }
-
-
-  /* GRID */
-
-  ctx.strokeStyle =
-    "#1b2029";
-
-
-  ctx.lineWidth =
-    Math.max(
-      1,
-      dpr
-    );
-
-
-  for(
-    let i=0;
-    i<6;
-    i++
-  ){
-
-    const gy =
-      padding.top +
-      (
-        plotH / 5
-      ) * i;
-
-
-    ctx.beginPath();
-
-
-    ctx.moveTo(
-      padding.left,
-      gy
-    );
-
-
-    ctx.lineTo(
-      W -
-        padding.right,
-      gy
-    );
-
-
-    ctx.stroke();
-
-
-    const p =
-      maxPrice -
-      (
-        maxPrice -
-        minPrice
-      ) *
-      i /
-      5;
-
-
-    drawText(
-      ctx,
-      p.toFixed(2),
-      W -
-        padding.right +
-        7*dpr,
-      gy,
-      9*dpr,
-      "#727987",
-      "left"
-    );
-
-  }
-
-
-  /* CANDLES */
-
-  const candleWidth =
-    Math.max(
-      2*dpr,
-      step * .60
-    );
-
-
-  visible.forEach(
-    (c,i) => {
-
-      const cx =
-        x(i);
-
-
-      const openY =
-        y(c.open);
-
-
-      const closeY =
-        y(c.close);
-
-
-      const highY =
-        y(c.high);
-
-
-      const lowY =
-        y(c.low);
-
-
-      const bullish =
-        c.close >= c.open;
-
-
-      const candleColor =
-        bullish
-          ? "#22d889"
-          : "#ff5261";
-
-
-      ctx.strokeStyle =
-        candleColor;
-
-
-      ctx.fillStyle =
-        candleColor;
-
-
-      ctx.lineWidth =
-        Math.max(
-          1,
-          dpr
-        );
-
-
-      /* WICK */
-
-      ctx.beginPath();
-
-
-      ctx.moveTo(
-        cx,
-        highY
-      );
-
-
-      ctx.lineTo(
-        cx,
-        lowY
-      );
-
-
-      ctx.stroke();
-
-
-      /* BODY */
-
-      const bodyTop =
-        Math.min(
-          openY,
-          closeY
-        );
-
-
-      const bodyHeight =
-        Math.max(
-          1*dpr,
-          Math.abs(
-            closeY -
-            openY
-          )
-        );
-
-
-      ctx.fillRect(
-        cx -
-          candleWidth/2,
-        bodyTop,
-        candleWidth,
-        bodyHeight
-      );
-
-    }
-  );
-
-
-  /* EMA */
-
   const closes =
-    visible.map(
-      c => c.close
+    full.map(
+      c =>
+        c.close
     );
 
 
@@ -3475,7 +2638,270 @@ function drawChart(){
     );
 
 
-  function drawLine(
+  const visibleHighs =
+    visible.map(
+      c =>
+        c.high
+    );
+
+
+  const visibleLows =
+    visible.map(
+      c =>
+        c.low
+    );
+
+
+  let maxPrice =
+    Math.max(
+      ...visibleHighs
+    );
+
+
+  let minPrice =
+    Math.min(
+      ...visibleLows
+    );
+
+
+  const rawRange =
+    maxPrice -
+    minPrice;
+
+
+  const range =
+    rawRange ||
+    1;
+
+
+  const extra =
+    range *
+    0.08;
+
+
+  maxPrice +=
+    extra;
+
+  minPrice -=
+    extra;
+
+
+  const plotW =
+    W -
+    padding.left -
+    padding.right;
+
+
+  const plotH =
+    H -
+    padding.top -
+    padding.bottom;
+
+
+  const xStep =
+    plotW /
+    visible.length;
+
+
+  function x(i){
+
+    return (
+      padding.left +
+      i*xStep +
+      xStep/2
+    );
+
+  }
+
+
+  function y(price){
+
+    return (
+      padding.top +
+      (
+        maxPrice -
+        price
+      ) /
+      (
+        maxPrice -
+        minPrice
+      ) *
+      plotH
+    );
+
+  }
+
+
+  /* ==================================================== */
+  /* GRID */
+  /* ==================================================== */
+
+  ctx.strokeStyle =
+    "#1b2029";
+
+  ctx.lineWidth =
+    1*dpr;
+
+
+  for(
+    let i=0;
+    i<6;
+    i++
+  ){
+
+    const gy =
+      padding.top +
+      (
+        plotH/5
+      )*i;
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+      padding.left,
+      gy
+    );
+
+    ctx.lineTo(
+      W-padding.right,
+      gy
+    );
+
+    ctx.stroke();
+
+
+    const level =
+      maxPrice -
+      (
+        maxPrice -
+        minPrice
+      ) *
+      i/5;
+
+
+    drawText(
+      ctx,
+      level.toFixed(2),
+      W -
+      padding.right +
+      7*dpr,
+      gy,
+      10*dpr,
+      "#727987",
+      "left"
+    );
+
+  }
+
+
+  /* ==================================================== */
+  /* CANDLES */
+  /* ==================================================== */
+
+  const candleWidth =
+    Math.max(
+      2*dpr,
+      xStep*0.58
+    );
+
+
+  visible.forEach(
+    (c,i) => {
+
+      const cx =
+        x(i);
+
+
+      const openY =
+        y(c.open);
+
+      const closeY =
+        y(c.close);
+
+      const highY =
+        y(c.high);
+
+      const lowY =
+        y(c.low);
+
+
+      const bullish =
+        c.close >= c.open;
+
+
+      const candleColor =
+        bullish
+          ? "#22d889"
+          : "#ff5261";
+
+
+      ctx.strokeStyle =
+        candleColor;
+
+      ctx.fillStyle =
+        candleColor;
+
+      ctx.lineWidth =
+        Math.max(
+          1,
+          dpr
+        );
+
+
+      /* Wick */
+
+      ctx.beginPath();
+
+      ctx.moveTo(
+        cx,
+        highY
+      );
+
+      ctx.lineTo(
+        cx,
+        lowY
+      );
+
+      ctx.stroke();
+
+
+      /* Body */
+
+      const bodyTop =
+        Math.min(
+          openY,
+          closeY
+        );
+
+
+      const bodyHeight =
+        Math.max(
+          1*dpr,
+          Math.abs(
+            closeY -
+            openY
+          )
+        );
+
+
+      ctx.fillRect(
+        cx -
+        candleWidth/2,
+        bodyTop,
+        candleWidth,
+        bodyHeight
+      );
+
+    }
+  );
+
+
+  /* ==================================================== */
+  /* EMA LINES */
+  /* ==================================================== */
+
+  function drawEMA(
     values,
     color
   ){
@@ -3483,23 +2909,32 @@ function drawChart(){
     ctx.strokeStyle =
       color;
 
-
     ctx.lineWidth =
       2*dpr;
 
-
     ctx.beginPath();
-
 
     let started =
       false;
 
 
-    values.forEach(
-      (value,i) => {
+    visible.forEach(
+      (c,i) => {
+
+        const fullIndex =
+          firstIndex +
+          i;
+
+
+        const value =
+          values[
+            fullIndex
+          ];
+
 
         if(
-          value === null
+          value === null ||
+          value === undefined
         ){
 
           return;
@@ -3509,7 +2944,6 @@ function drawChart(){
 
         const px =
           x(i);
-
 
         const py =
           y(value);
@@ -3521,7 +2955,6 @@ function drawChart(){
             px,
             py
           );
-
 
           started =
             true;
@@ -3540,47 +2973,36 @@ function drawChart(){
     );
 
 
-    if(started){
-
-      ctx.stroke();
-
-    }
+    ctx.stroke();
 
   }
 
 
-  drawLine(
+  drawEMA(
     e20,
     "#ffc857"
   );
 
 
-  drawLine(
+  drawEMA(
     e50,
     "#4da3ff"
   );
 
 
-  /*
-   EMA200:
-   We intentionally calculate over
-   the visible candles only.
-   If fewer than 200 candles are
-   available, it will not fabricate
-   an EMA200.
-  */
-
-  drawLine(
+  drawEMA(
     e200,
     "#d7dbe2"
   );
 
 
+  /* ==================================================== */
   /* CURRENT PRICE */
+  /* ==================================================== */
 
   const current =
     visible[
-      visible.length - 1
+      visible.length-1
     ].close;
 
 
@@ -3591,35 +3013,31 @@ function drawChart(){
   ctx.strokeStyle =
     "#717886";
 
-
   ctx.lineWidth =
     1*dpr;
 
-
-  ctx.setLineDash([
-    7*dpr,
-    5*dpr
-  ]);
+  ctx.setLineDash(
+    [
+      7*dpr,
+      5*dpr
+    ]
+  );
 
 
   ctx.beginPath();
-
 
   ctx.moveTo(
     padding.left,
     currentY
   );
 
-
   ctx.lineTo(
     W -
-      padding.right,
+    padding.right,
     currentY
   );
 
-
   ctx.stroke();
-
 
   ctx.setLineDash([]);
 
@@ -3628,29 +3046,40 @@ function drawChart(){
     ctx,
     current.toFixed(2),
     W -
-      padding.right +
-      5*dpr,
+    padding.right +
+    7*dpr,
     currentY,
-    10*dpr,
+    11*dpr,
     "#f4f5f7",
     "left"
   );
 
 
-  /* EVENTS */
+  /* ==================================================== */
+  /* STRUCTURE EVENTS */
+  /* ==================================================== */
 
   const structure =
     detectEvents(
-      chartCandles
+      full
     );
 
 
-  const firstIndex =
-    chartCandles.length -
-    visible.length;
+  const importantEvents =
+    getImportantEvents(
+      structure
+    );
 
 
-  structure.events.forEach(
+  /*
+    Prevent labels from sitting directly
+    on top of one another.
+  */
+
+  const labelPositions = [];
+
+
+  importantEvents.forEach(
     event => {
 
       if(
@@ -3681,7 +3110,6 @@ function drawChart(){
       const px =
         x(vi);
 
-
       const py =
         y(event.price);
 
@@ -3691,7 +3119,8 @@ function drawChart(){
 
 
       if(
-        event.type === "CHoCH"
+        event.type ===
+        "CHoCH"
       ){
 
         color =
@@ -3711,35 +3140,86 @@ function drawChart(){
       }
 
 
+      /*
+        Slight vertical adjustment
+        to avoid overlap.
+      */
+
+      let offset =
+        event.direction ===
+        "SELL"
+          ? -17*dpr
+          : 17*dpr;
+
+
+      for(
+        const p of labelPositions
+      ){
+
+        if(
+          Math.abs(
+            p.x -
+            px
+          ) <
+          26*dpr &&
+          Math.abs(
+            p.y -
+            (
+              py +
+              offset
+            )
+          ) <
+          18*dpr
+        ){
+
+          offset +=
+            event.direction ===
+            "SELL"
+              ? -15*dpr
+              : 15*dpr;
+
+        }
+
+      }
+
+
+      labelPositions.push({
+        x:px,
+        y:py+offset
+      });
+
+
+      /* Marker */
+
       ctx.fillStyle =
         color;
 
-
       ctx.beginPath();
-
 
       ctx.arc(
         px,
         py,
         4*dpr,
         0,
-        Math.PI * 2
+        Math.PI*2
       );
-
 
       ctx.fill();
 
 
-      const label =
+      let label =
+        event.type;
+
+
+      if(
         event.type ===
         "LIQUIDITY"
-          ? "LIQ"
-          : event.type;
+      ){
 
+        label =
+          "LIQ";
 
-      const above =
-        event.direction ===
-        "SELL";
+      }
 
 
       drawText(
@@ -3747,11 +3227,7 @@ function drawChart(){
         label,
         px,
         py +
-          (
-            above
-              ? -14*dpr
-              : 14*dpr
-          ),
+        offset,
         8*dpr,
         color,
         "center"
@@ -3761,25 +3237,22 @@ function drawChart(){
   );
 
 
+  /* ==================================================== */
   /* SWING MARKERS */
+  /* ==================================================== */
 
   structure.swings.highs
-    .slice(-12)
+    .filter(
+      s =>
+        s.index >=
+        firstIndex
+    )
+    .slice(-8)
     .forEach(
-      swing => {
-
-        if(
-          swing.index <
-          firstIndex
-        ){
-
-          return;
-
-        }
-
+      s => {
 
         const vi =
-          swing.index -
+          s.index -
           firstIndex;
 
 
@@ -3787,9 +3260,7 @@ function drawChart(){
           ctx,
           "H",
           x(vi),
-          y(
-            swing.price
-          ) -
+          y(s.price) -
           10*dpr,
           8*dpr,
           "#6e7481",
@@ -3801,22 +3272,17 @@ function drawChart(){
 
 
   structure.swings.lows
-    .slice(-12)
+    .filter(
+      s =>
+        s.index >=
+        firstIndex
+    )
+    .slice(-8)
     .forEach(
-      swing => {
-
-        if(
-          swing.index <
-          firstIndex
-        ){
-
-          return;
-
-        }
-
+      s => {
 
         const vi =
-          swing.index -
+          s.index -
           firstIndex;
 
 
@@ -3824,9 +3290,7 @@ function drawChart(){
           ctx,
           "L",
           x(vi),
-          y(
-            swing.price
-          ) +
+          y(s.price) +
           10*dpr,
           8*dpr,
           "#6e7481",
@@ -3837,11 +3301,14 @@ function drawChart(){
     );
 
 
+  /* ==================================================== */
   /* EXECUTION LEVELS */
+  /* ==================================================== */
 
   const plan =
     extractRiskPlan(
-      analysisData || {}
+      analysisData ||
+      {}
     );
 
 
@@ -3861,10 +3328,8 @@ function drawChart(){
 
 
     if(
-      price <
-        minPrice ||
-      price >
-        maxPrice
+      price < minPrice ||
+      price > maxPrice
     ){
 
       return;
@@ -3879,35 +3344,31 @@ function drawChart(){
     ctx.strokeStyle =
       color;
 
-
     ctx.lineWidth =
       1.5*dpr;
 
-
-    ctx.setLineDash([
-      10*dpr,
-      6*dpr
-    ]);
+    ctx.setLineDash(
+      [
+        10*dpr,
+        6*dpr
+      ]
+    );
 
 
     ctx.beginPath();
-
 
     ctx.moveTo(
       padding.left,
       py
     );
 
-
     ctx.lineTo(
       W -
-        padding.right,
+      padding.right,
       py
     );
 
-
     ctx.stroke();
-
 
     ctx.setLineDash([]);
 
@@ -3916,9 +3377,9 @@ function drawChart(){
       ctx,
       `${label} ${price.toFixed(2)}`,
       padding.left +
-        6*dpr,
+      7*dpr,
       py -
-        9*dpr,
+      9*dpr,
       9*dpr,
       color,
       "left"
@@ -3950,14 +3411,14 @@ function drawChart(){
 }
 
 
-/* ========================================================= */
+/* ====================================================== */
 /* CHART RENDER */
-/* ========================================================= */
+/* ====================================================== */
 
 function renderChart(){
 
   if(
-    !chartCandles.length
+    chartCandles.length === 0
   ){
 
     return;
@@ -3967,16 +3428,12 @@ function renderChart(){
 
   const latest =
     chartCandles[
-      chartCandles.length - 1
+      chartCandles.length-1
     ];
 
 
-  const price =
-    latest.close;
-
-
   $("chartPrice").textContent =
-    fmt(price);
+    fmt(latest.close);
 
 
   $("chartCandles").textContent =
@@ -4061,18 +3518,14 @@ function renderChart(){
     $("chartH4").textContent =
       direction("4h");
 
-
     $("chartH1").textContent =
       direction("1h");
-
 
     $("chartM15").textContent =
       direction("15min");
 
-
     $("chartM5").textContent =
       direction("5min");
-
 
     $("chartM1").textContent =
       direction("1min");
@@ -4085,21 +3538,27 @@ function renderChart(){
 
 
     $("chartStructure").textContent =
-      extractStructure(
-        "15min"
-      );
+      String(
+        extractStructure(
+          "15min"
+        )
+      ).toUpperCase();
 
 
     $("chartBos").textContent =
-      extractBOS(
-        "15min"
-      );
+      String(
+        extractBOS(
+          "15min"
+        )
+      ).toUpperCase();
 
 
     $("chartLiquidity").textContent =
-      extractLiquidity(
-        "15min"
-      );
+      String(
+        extractLiquidity(
+          "15min"
+        )
+      ).toUpperCase();
 
 
     $("chartPullback").textContent =
@@ -4121,36 +3580,32 @@ function renderChart(){
       "LOCKED";
 
 
-    const gateText =
-      cleanText(gate)
+    $("chartGate").textContent =
+      String(gate)
         .toUpperCase();
 
 
-    $("chartGate").textContent =
-      gateText;
-
-
     $("chartGateBadge").textContent =
-      gateText;
+      String(gate)
+        .toUpperCase();
+
+
+    colorDirection(
+      $("chartGateBadge"),
+      gate
+    );
 
   }
 
 
-  /*
-   CRITICAL FIX:
-   Chart page is now visible,
-   so calculate the real canvas
-   size immediately before drawing.
-  */
-
-  resizeCanvas();
+  drawChart();
 
 }
 
 
-/* ========================================================= */
+/* ====================================================== */
 /* LOAD CHART */
-/* ========================================================= */
+/* ====================================================== */
 
 async function loadChart(
   tf = selectedTF
@@ -4165,28 +3620,22 @@ async function loadChart(
       ".tf-btn"
     )
     .forEach(
-      button => {
+      btn => {
 
-        button.classList.toggle(
+        btn.classList.toggle(
           "active",
-          button.dataset.tf === tf
+          btn.dataset.tf === tf
         );
 
       }
     );
 
 
-  $("chartError")
-    .style.display =
-      "none";
+  $("chartFresh").textContent =
+    "LOADING";
 
 
   try{
-
-    $("chartFresh")
-      .textContent =
-      "LOADING";
-
 
     const data =
       await fetchMarket(
@@ -4200,19 +3649,7 @@ async function loadChart(
       );
 
 
-    if(
-      !chartCandles.length
-    ){
-
-      throw new Error(
-        "No candle data returned"
-      );
-
-    }
-
-
     renderChart();
-
 
   }
   catch(error){
@@ -4223,36 +3660,23 @@ async function loadChart(
     );
 
 
-    $("chartFresh")
-      .textContent =
+    $("chartFresh").textContent =
       "DATA ERROR";
-
-
-    $("chartError")
-      .textContent =
-      "Chart data error: " +
-      error.message;
-
-
-    $("chartError")
-      .style.display =
-      "block";
 
   }
 
 }
 
 
-/* ========================================================= */
+/* ====================================================== */
 /* LOAD ANALYSIS */
-/* ========================================================= */
+/* ====================================================== */
 
 async function loadAnalysis(){
 
   try{
 
-    $("refreshAnalysis")
-      .textContent =
+    $("refreshAnalysis").textContent =
       "ANALYZING...";
 
 
@@ -4267,13 +3691,7 @@ async function loadAnalysis(){
     renderDashboard();
 
 
-    if(
-      chartCandles.length
-    ){
-
-      renderChart();
-
-    }
+    renderChart();
 
   }
   catch(error){
@@ -4284,16 +3702,14 @@ async function loadAnalysis(){
     );
 
 
-    console.warn(
-      "Strict analysis unavailable:",
-      error.message
+    console.error(
+      error.stack
     );
 
   }
   finally{
 
-    $("refreshAnalysis")
-      .textContent =
+    $("refreshAnalysis").textContent =
       "REFRESH STRICT ANALYSIS";
 
   }
@@ -4301,23 +3717,23 @@ async function loadAnalysis(){
 }
 
 
-/* ========================================================= */
+/* ====================================================== */
 /* NAVIGATION */
-/* ========================================================= */
+/* ====================================================== */
 
 document
   .querySelectorAll(
     ".nav-btn"
   )
   .forEach(
-    button => {
+    btn => {
 
-      button.addEventListener(
+      btn.addEventListener(
         "click",
         async () => {
 
           const page =
-            button.dataset.page;
+            btn.dataset.page;
 
 
           document
@@ -4345,7 +3761,7 @@ document
 
                 b.classList.toggle(
                   "active",
-                  b === button
+                  b === btn
                 );
 
               }
@@ -4357,26 +3773,6 @@ document
             "chartPage"
           ){
 
-            /*
-             CRITICAL:
-             The Chart page was hidden
-             before this point.
-
-             Force browser to recalculate
-             layout BEFORE drawing.
-            */
-
-            await new Promise(
-              resolve =>
-                requestAnimationFrame(
-                  resolve
-                )
-            );
-
-
-            resizeCanvas();
-
-
             if(
               !chartCandles.length
             ){
@@ -4386,11 +3782,6 @@ document
               );
 
             }
-            else{
-
-              resizeCanvas();
-
-            }
 
 
             if(
@@ -4398,11 +3789,6 @@ document
             ){
 
               await loadAnalysis();
-
-            }
-            else{
-
-              renderChart();
 
             }
 
@@ -4431,23 +3817,23 @@ document
   );
 
 
-/* ========================================================= */
+/* ====================================================== */
 /* TIMEFRAME BUTTONS */
-/* ========================================================= */
+/* ====================================================== */
 
 document
   .querySelectorAll(
     ".tf-btn"
   )
   .forEach(
-    button => {
+    btn => {
 
-      button.addEventListener(
+      btn.addEventListener(
         "click",
         async () => {
 
           await loadChart(
-            button.dataset.tf
+            btn.dataset.tf
           );
 
         }
@@ -4457,9 +3843,9 @@ document
   );
 
 
-/* ========================================================= */
+/* ====================================================== */
 /* REFRESH CHART */
-/* ========================================================= */
+/* ====================================================== */
 
 $("refreshChart")
   .addEventListener(
@@ -4474,9 +3860,9 @@ $("refreshChart")
   );
 
 
-/* ========================================================= */
+/* ====================================================== */
 /* REFRESH ANALYSIS */
-/* ========================================================= */
+/* ====================================================== */
 
 $("refreshAnalysis")
   .addEventListener(
@@ -4489,77 +3875,36 @@ $("refreshAnalysis")
   );
 
 
-/* ========================================================= */
+/* ====================================================== */
 /* RESIZE */
-/* ========================================================= */
+/* ====================================================== */
 
 window.addEventListener(
   "resize",
   () => {
 
-    /*
-     Only redraw when Chart
-     is actually visible.
-    */
-
-    const chartPage =
-      $("chartPage");
+    clearTimeout(
+      window.__chartResizeTimer
+    );
 
 
-    if(
-      chartPage &&
-      chartPage.classList.contains(
-        "active"
-      )
-    ){
-
-      requestAnimationFrame(
+    window.__chartResizeTimer =
+      setTimeout(
         () => {
 
           resizeCanvas();
 
-        }
+        },
+        100
       );
 
-    }
-
   }
 );
 
 
-/* ========================================================= */
-/* ORIENTATION */
-/* ========================================================= */
-
-window.addEventListener(
-  "orientationchange",
-  () => {
-
-    setTimeout(
-      () => {
-
-        if(
-          $("chartPage")
-            .classList.contains(
-              "active"
-            )
-        ){
-
-          resizeCanvas();
-
-        }
-
-      },
-      300
-    );
-
-  }
-);
-
-
-/* ========================================================= */
+/* ====================================================== */
 /* START */
-/* ========================================================= */
+/* ====================================================== */
 
 (async function(){
 
@@ -4577,29 +3922,19 @@ window.addEventListener(
   }
 
 
-  /*
-   Don't draw Chart while it is
-   display:none.
+  await loadChart(
+    selectedTF
+  );
 
-   Only load data here.
-   Real canvas sizing happens
-   when user opens Chart.
-  */
 
-  try{
+  setTimeout(
+    () => {
 
-    await loadChart(
-      selectedTF
-    );
+      resizeCanvas();
 
-  }
-  catch(error){
-
-    console.error(
-      error
-    );
-
-  }
+    },
+    300
+  );
 
 })();
 
