@@ -1,12 +1,23 @@
-const ALLOWED_INTERVALS = new Set([
-  "1min",
-  "5min",
-  "15min",
-  "1h",
-  "4h"
-]);
+const ENGINE_VERSION = "V3.2";
+const CACHE_TTL = 15;
 
-const TFS = [
+const FRESHNESS_LIMITS = {
+  "1min": 10 * 60 * 1000,
+  "5min": 30 * 60 * 1000,
+  "15min": 90 * 60 * 1000,
+  "1h": 4 * 60 * 60 * 1000,
+  "4h": 16 * 60 * 60 * 1000
+};
+
+const SESSION_UTC = {
+  ASIA: { start: 0, end: 7 },
+  LONDON: { start: 7, end: 13 },
+  LONDON_NEW_YORK_OVERLAP: { start: 13, end: 16 },
+  NEW_YORK: { start: 16, end: 21 },
+  OFF_SESSION: { start: 21, end: 24 }
+};
+
+const TIMEFRAMES = [
   "1min",
   "5min",
   "15min",
@@ -14,2064 +25,2273 @@ const TFS = [
   "4h"
 ];
 
-const CACHE_TTL = 15;
-
-const FRESHNESS_LIMITS = {
-  "1min": 10 * 60,
-  "5min": 30 * 60,
-  "15min": 90 * 60,
-  "1h": 4 * 60 * 60,
-  "4h": 16 * 60 * 60
-};
-
-function cors(){
-  return {
-    "Access-Control-Allow-Origin":"*",
-    "Access-Control-Allow-Methods":"GET, OPTIONS",
-    "Access-Control-Allow-Headers":"Content-Type",
-    "Content-Type":"application/json; charset=utf-8",
-    "Cache-Control":"no-store"
-  };
-}
-
-function json(data,status=200){
+function json(data, status = 200, extraHeaders = {}) {
   return new Response(
-    JSON.stringify(data,null,2),
+    JSON.stringify(data, null, 2),
     {
       status,
-      headers:cors()
-    }
-  );
-}
-
-function n(v){
-  return Number(v);
-}
-
-function ema(a,p){
-  if(a.length<p)return null;
-
-  const k=2/(p+1);
-
-  let e=a.slice(0,p)
-    .reduce((x,y)=>x+y,0)/p;
-
-  for(let i=p;i<a.length;i++){
-    e=a[i]*k+e*(1-k);
-  }
-
-  return e;
-}
-
-function rsi(a,p=14){
-  if(a.length<=p)return null;
-
-  let g=0;
-  let l=0;
-
-  for(let i=1;i<=p;i++){
-    const d=a[i]-a[i-1];
-
-    if(d>=0){
-      g+=d;
-    }else{
-      l-=d;
-    }
-  }
-
-  let ag=g/p;
-  let al=l/p;
-
-  for(let i=p+1;i<a.length;i++){
-    const d=a[i]-a[i-1];
-
-    ag=((ag*(p-1))+Math.max(d,0))/p;
-    al=((al*(p-1))+Math.max(-d,0))/p;
-  }
-
-  if(al===0)return 100;
-
-  return 100-(100/(1+ag/al));
-}
-
-function atr(c,p=14){
-  if(c.length<=p)return null;
-
-  const tr=[];
-
-  for(let i=0;i<c.length;i++){
-
-    if(i===0){
-
-      tr.push(
-        c[i].high-c[i].low
-      );
-
-    }else{
-
-      const pc=c[i-1].close;
-
-      tr.push(
-        Math.max(
-          c[i].high-c[i].low,
-          Math.abs(c[i].high-pc),
-          Math.abs(c[i].low-pc)
-        )
-      );
-    }
-  }
-
-  let x=tr.slice(0,p)
-    .reduce((a,b)=>a+b,0)/p;
-
-  for(let i=p;i<tr.length;i++){
-    x=((x*(p-1))+tr[i])/p;
-  }
-
-  return x;
-}
-
-function macd(a){
-
-  if(a.length<35){
-
-    return {
-      macd:null,
-      signal:null,
-      histogram:null
-    };
-  }
-
-  const ef=12;
-  const es=26;
-  const sg=9;
-
-  const kf=2/(ef+1);
-  const ks=2/(es+1);
-  const kg=2/(sg+1);
-
-  let f=a.slice(0,ef)
-    .reduce((x,y)=>x+y,0)/ef;
-
-  let s=a.slice(0,es)
-    .reduce((x,y)=>x+y,0)/es;
-
-  const m=[];
-
-  for(let i=ef;i<es;i++){
-    f=a[i]*kf+f*(1-kf);
-  }
-
-  for(let i=es;i<a.length;i++){
-
-    f=a[i]*kf+f*(1-kf);
-
-    s=a[i]*ks+s*(1-ks);
-
-    m.push(f-s);
-  }
-
-  if(m.length<sg){
-
-    return {
-      macd:null,
-      signal:null,
-      histogram:null
-    };
-  }
-
-  let sig=m.slice(0,sg)
-    .reduce((x,y)=>x+y,0)/sg;
-
-  for(let i=sg;i<m.length;i++){
-    sig=m[i]*kg+sig*(1-kg);
-  }
-
-  const last=m[m.length-1];
-
-  return {
-    macd:last,
-    signal:sig,
-    histogram:last-sig
-  };
-}
-
-function structure(c){
-
-  const highs=[];
-  const lows=[];
-
-  for(let i=2;i<c.length-2;i++){
-
-    let hi=true;
-    let lo=true;
-
-    for(let j=i-2;j<=i+2;j++){
-
-      if(j===i)continue;
-
-      if(c[j].high>=c[i].high){
-        hi=false;
-      }
-
-      if(c[j].low<=c[i].low){
-        lo=false;
+      headers: {
+        "content-type": "application/json; charset=utf-8",
+        "access-control-allow-origin": "*",
+        "access-control-allow-methods": "GET,OPTIONS",
+        "access-control-allow-headers": "*",
+        "cache-control": "no-store",
+        ...extraHeaders
       }
     }
-
-    if(hi){
-      highs.push(c[i].high);
-    }
-
-    if(lo){
-      lows.push(c[i].low);
-    }
-  }
-
-  const h=highs.slice(-2);
-  const l=lows.slice(-2);
-
-  let s="RANGE";
-
-  if(h.length===2&&l.length===2){
-
-    if(
-      h[1]>h[0] &&
-      l[1]>l[0]
-    ){
-      s="BULLISH";
-    }
-
-    if(
-      h[1]<h[0] &&
-      l[1]<l[0]
-    ){
-      s="BEARISH";
-    }
-  }
-
-  const price=c[c.length-1].close;
-
-  let bos="NONE";
-
-  if(
-    h.length &&
-    price>h[h.length-1]
-  ){
-    bos="BULLISH_BOS";
-  }
-
-  if(
-    l.length &&
-    price<l[l.length-1]
-  ){
-    bos="BEARISH_BOS";
-  }
-
-  return {
-    structure:s,
-    bos,
-    swingHigh:
-      h.length
-        ?h[h.length-1]
-        :null,
-    swingLow:
-      l.length
-        ?l[l.length-1]
-        :null
-  };
-}
-
-function sweep(c){
-
-  if(c.length<22){
-
-    return {
-      type:"NONE",
-      level:null
-    };
-  }
-
-  const last=c[c.length-1];
-
-  const old=c.slice(-21,-1);
-
-  const high=Math.max(
-    ...old.map(x=>x.high)
   );
+}
 
-  const low=Math.min(
-    ...old.map(x=>x.low)
-  );
+function getTradingSession() {
+  const hour = new Date().getUTCHours();
 
-  if(
-    last.high>high &&
-    last.close<high
-  ){
-
+  if (hour >= 0 && hour < 7) {
     return {
-      type:"BUY_SIDE_SWEEP",
-      level:high
+      name: "ASIA",
+      quality: "LOW"
     };
   }
 
-  if(
-    last.low<low &&
-    last.close>low
-  ){
-
+  if (hour >= 7 && hour < 13) {
     return {
-      type:"SELL_SIDE_SWEEP",
-      level:low
+      name: "LONDON",
+      quality: "GOOD"
+    };
+  }
+
+  if (hour >= 13 && hour < 16) {
+    return {
+      name: "LONDON / NEW YORK OVERLAP",
+      quality: "BEST"
+    };
+  }
+
+  if (hour >= 16 && hour < 21) {
+    return {
+      name: "NEW YORK",
+      quality: "GOOD"
     };
   }
 
   return {
-    type:"NONE",
-    level:null
+    name: "OFF SESSION",
+    quality: "LOW"
   };
 }
 
-function analyze(c){
+function isWeekend() {
+  const day = new Date().getUTCDay();
 
-  const close=c.map(x=>x.close);
-
-  const price=
-    close[close.length-1];
-
-  const e20=
-    ema(close,20);
-
-  const e50=
-    ema(close,50);
-
-  const e200=
-    ema(close,200);
-
-  const r=
-    rsi(close);
-
-  const a=
-    atr(c);
-
-  const m=
-    macd(close);
-
-  const st=
-    structure(c);
-
-  const sw=
-    sweep(c);
-
-  let trend="NEUTRAL";
-
-  if(
-    e20!==null &&
-    e50!==null &&
-    e200!==null
-  ){
-
-    if(
-      price>e20 &&
-      e20>e50 &&
-      e50>e200
-    ){
-
-      trend="BULLISH";
-
-    }else if(
-      price<e20 &&
-      e20<e50 &&
-      e50<e200
-    ){
-
-      trend="BEARISH";
-    }
-  }
-
-  return {
-    price,
-
-    ema20:e20,
-
-    ema50:e50,
-
-    ema200:e200,
-
-    rsi14:r,
-
-    atr14:a,
-
-    macd:m,
-
-    trend,
-
-    structure:st,
-
-    liquiditySweep:sw
-  };
+  return day === 0 || day === 6;
 }
 
-function score(x){
+function num(value) {
+  const n = Number(value);
 
-  let bull=0;
-
-  let bear=0;
-
-  if(
-    x.trend==="BULLISH"
-  ){
-    bull+=25;
-  }
-
-  if(
-    x.trend==="BEARISH"
-  ){
-    bear+=25;
-  }
-
-  if(
-    x.structure.structure==="BULLISH"
-  ){
-    bull+=20;
-  }
-
-  if(
-    x.structure.structure==="BEARISH"
-  ){
-    bear+=20;
-  }
-
-  if(
-    x.structure.bos==="BULLISH_BOS"
-  ){
-    bull+=15;
-  }
-
-  if(
-    x.structure.bos==="BEARISH_BOS"
-  ){
-    bear+=15;
-  }
-
-  if(x.rsi14!==null){
-
-    if(
-      x.rsi14>=52 &&
-      x.rsi14<=70
-    ){
-      bull+=10;
-    }
-
-    if(
-      x.rsi14<=48 &&
-      x.rsi14>=30
-    ){
-      bear+=10;
-    }
-  }
-
-  if(
-    x.macd.histogram!==null
-  ){
-
-    if(
-      x.macd.histogram>0
-    ){
-      bull+=10;
-    }
-
-    if(
-      x.macd.histogram<0
-    ){
-      bear+=10;
-    }
-  }
-
-  if(
-    x.liquiditySweep.type===
-    "SELL_SIDE_SWEEP"
-  ){
-    bull+=15;
-  }
-
-  if(
-    x.liquiditySweep.type===
-    "BUY_SIDE_SWEEP"
-  ){
-    bear+=15;
-  }
-
-  let bias="NEUTRAL";
-
-  if(
-    bull>bear+10
-  ){
-    bias="BULLISH";
-  }
-
-  if(
-    bear>bull+10
-  ){
-    bias="BEARISH";
-  }
-
-  return {
-
-    bull,
-
-    bear,
-
-    score:
-      Math.min(
-        100,
-        Math.max(
-          bull,
-          bear
-        )
-      ),
-
-    bias
-  };
+  return Number.isFinite(n)
+    ? n
+    : null;
 }
 
-function parseDateTime(value){
-
-  if(!value){
+function round(value, digits = 2) {
+  if (!Number.isFinite(value)) {
     return null;
   }
 
-  const d=
-    new Date(value);
+  const multiplier = 10 ** digits;
 
-  if(
-    Number.isNaN(
-      d.getTime()
+  return Math.round(
+    value * multiplier
+  ) / multiplier;
+}
+
+function clamp(value, min, max) {
+  return Math.max(
+    min,
+    Math.min(max, value)
+  );
+}
+
+function average(values) {
+  const filtered = values.filter(
+    Number.isFinite
+  );
+
+  if (!filtered.length) {
+    return null;
+  }
+
+  return filtered.reduce(
+    (sum, value) => sum + value,
+    0
+  ) / filtered.length;
+}
+
+function sma(values, period) {
+  if (values.length < period) {
+    return null;
+  }
+
+  return average(
+    values.slice(-period)
+  );
+}
+
+function ema(values, period) {
+  if (values.length < period) {
+    return null;
+  }
+
+  const multiplier =
+    2 / (period + 1);
+
+  let current =
+    average(
+      values.slice(0, period)
+    );
+
+  for (
+    let i = period;
+    i < values.length;
+    i++
+  ) {
+    current =
+      values[i] * multiplier +
+      current * (1 - multiplier);
+  }
+
+  return current;
+}
+
+function rsi(values, period = 14) {
+  if (values.length <= period) {
+    return null;
+  }
+
+  let gain = 0;
+  let loss = 0;
+
+  for (
+    let i = 1;
+    i <= period;
+    i++
+  ) {
+    const difference =
+      values[i] -
+      values[i - 1];
+
+    if (difference >= 0) {
+      gain += difference;
+    } else {
+      loss += Math.abs(
+        difference
+      );
+    }
+  }
+
+  let averageGain =
+    gain / period;
+
+  let averageLoss =
+    loss / period;
+
+  for (
+    let i = period + 1;
+    i < values.length;
+    i++
+  ) {
+    const difference =
+      values[i] -
+      values[i - 1];
+
+    const currentGain =
+      Math.max(difference, 0);
+
+    const currentLoss =
+      Math.max(-difference, 0);
+
+    averageGain =
+      (
+        averageGain *
+        (period - 1) +
+        currentGain
+      ) / period;
+
+    averageLoss =
+      (
+        averageLoss *
+        (period - 1) +
+        currentLoss
+      ) / period;
+  }
+
+  if (averageLoss === 0) {
+    return 100;
+  }
+
+  const relativeStrength =
+    averageGain /
+    averageLoss;
+
+  return 100 -
+    (
+      100 /
+      (1 + relativeStrength)
+    );
+}
+
+function trueRanges(candles) {
+  const ranges = [];
+
+  for (
+    let i = 0;
+    i < candles.length;
+    i++
+  ) {
+    const candle =
+      candles[i];
+
+    if (i === 0) {
+      ranges.push(
+        candle.high -
+        candle.low
+      );
+
+      continue;
+    }
+
+    const previousClose =
+      candles[i - 1].close;
+
+    ranges.push(
+      Math.max(
+        candle.high -
+          candle.low,
+
+        Math.abs(
+          candle.high -
+          previousClose
+        ),
+
+        Math.abs(
+          candle.low -
+          previousClose
+        )
+      )
+    );
+  }
+
+  return ranges;
+}
+
+function atr(candles, period = 14) {
+  const ranges =
+    trueRanges(candles);
+
+  return ema(
+    ranges,
+    period
+  );
+}
+
+function macd(values) {
+  const ema12 =
+    ema(values, 12);
+
+  const ema26 =
+    ema(values, 26);
+
+  if (
+    ema12 == null ||
+    ema26 == null
+  ) {
+    return {
+      macd: null,
+      signal: null,
+      histogram: null
+    };
+  }
+
+  const macdLine = [];
+
+  let currentEma12 = null;
+  let currentEma26 = null;
+
+  const multiplier12 =
+    2 / 13;
+
+  const multiplier26 =
+    2 / 27;
+
+  for (
+    let i = 0;
+    i < values.length;
+    i++
+  ) {
+    if (i === 11) {
+      currentEma12 =
+        average(
+          values.slice(0, 12)
+        );
+    } else if (i > 11) {
+      currentEma12 =
+        values[i] *
+          multiplier12 +
+        currentEma12 *
+          (1 - multiplier12);
+    }
+
+    if (i === 25) {
+      currentEma26 =
+        average(
+          values.slice(0, 26)
+        );
+    } else if (i > 25) {
+      currentEma26 =
+        values[i] *
+          multiplier26 +
+        currentEma26 *
+          (1 - multiplier26);
+    }
+
+    if (
+      i >= 25 &&
+      currentEma12 != null &&
+      currentEma26 != null
+    ) {
+      macdLine.push(
+        currentEma12 -
+        currentEma26
+      );
+    }
+  }
+
+  const signal =
+    ema(macdLine, 9);
+
+  const current =
+    macdLine[
+      macdLine.length - 1
+    ] ?? null;
+
+  return {
+    macd: current,
+    signal,
+    histogram:
+      current != null &&
+      signal != null
+        ? current - signal
+        : null
+  };
+}
+
+function normalizeCandles(raw) {
+  const values =
+    Array.isArray(raw?.values)
+      ? raw.values
+      : [];
+
+  return values
+    .map(item => ({
+      datetime:
+        item.datetime,
+
+      open:
+        num(item.open),
+
+      high:
+        num(item.high),
+
+      low:
+        num(item.low),
+
+      close:
+        num(item.close),
+
+      volume:
+        num(item.volume)
+    }))
+    .filter(item =>
+      item.open != null &&
+      item.high != null &&
+      item.low != null &&
+      item.close != null
     )
-  ){
-    return null;
-  }
-
-  return d;
+    .reverse();
 }
 
-function isFresh(
-  candles,
-  interval
-){
-
-  if(!candles.length){
-
+function detectStructure(candles) {
+  if (candles.length < 20) {
     return {
-      fresh:false,
-      ageSeconds:null
+      structure: "RANGE",
+      bos: "NONE",
+      swingHigh: null,
+      swingLow: null
     };
   }
 
-  const latest=
+  const recent =
+    candles.slice(-20);
+
+  const previous =
+    candles.slice(-40, -20);
+
+  const recentHigh =
+    Math.max(
+      ...recent.map(
+        candle => candle.high
+      )
+    );
+
+  const recentLow =
+    Math.min(
+      ...recent.map(
+        candle => candle.low
+      )
+    );
+
+  const previousHigh =
+    previous.length
+      ? Math.max(
+          ...previous.map(
+            candle =>
+              candle.high
+          )
+        )
+      : recentHigh;
+
+  const previousLow =
+    previous.length
+      ? Math.min(
+          ...previous.map(
+            candle =>
+              candle.low
+          )
+        )
+      : recentLow;
+
+  const last =
     candles[
-      candles.length-1
+      candles.length - 1
     ];
 
-  const d=
-    parseDateTime(
-      latest.datetime
-    );
+  let structure =
+    "RANGE";
 
-  if(!d){
+  let bos =
+    "NONE";
 
-    return {
-      fresh:false,
-      ageSeconds:null
-    };
+  if (
+    recentHigh > previousHigh &&
+    recentLow > previousLow
+  ) {
+    structure = "HH_HL";
+  } else if (
+    recentHigh < previousHigh &&
+    recentLow < previousLow
+  ) {
+    structure = "LH_LL";
   }
 
-  const ageSeconds=
+  if (
+    last.close >
+    previousHigh
+  ) {
+    bos = "BULLISH";
+  } else if (
+    last.close <
+    previousLow
+  ) {
+    bos = "BEARISH";
+  }
+
+  return {
+    structure,
+    bos,
+    swingHigh: recentHigh,
+    swingLow: recentLow
+  };
+}
+
+function liquiditySweep(candles) {
+  if (candles.length < 10) {
+    return "NONE";
+  }
+
+  const last =
+    candles[
+      candles.length - 1
+    ];
+
+  const previous =
+    candles.slice(-10, -1);
+
+  const previousHigh =
     Math.max(
-      0,
+      ...previous.map(
+        candle => candle.high
+      )
+    );
+
+  const previousLow =
+    Math.min(
+      ...previous.map(
+        candle => candle.low
+      )
+    );
+
+  if (
+    last.high >
+      previousHigh &&
+    last.close <
+      previousHigh
+  ) {
+    return "BEARISH_SWEEP";
+  }
+
+  if (
+    last.low <
+      previousLow &&
+    last.close >
+      previousLow
+  ) {
+    return "BULLISH_SWEEP";
+  }
+
+  return "NONE";
+}
+
+function analyzeTimeframe(candles, timeframe) {
+  const closes =
+    candles.map(
+      candle => candle.close
+    );
+
+  const last =
+    candles[
+      candles.length - 1
+    ];
+
+  const ema20 =
+    ema(closes, 20);
+
+  const ema50 =
+    ema(closes, 50);
+
+  const ema200 =
+    ema(closes, 200);
+
+  const r =
+    rsi(closes, 14);
+
+  const a =
+    atr(candles, 14);
+
+  const m =
+    macd(closes);
+
+  const structure =
+    detectStructure(candles);
+
+  const liquidity =
+    liquiditySweep(candles);
+
+  let bullish = 0;
+  let bearish = 0;
+
+  if (
+    ema20 != null &&
+    last.close > ema20
+  ) {
+    bullish++;
+  } else if (
+    ema20 != null
+  ) {
+    bearish++;
+  }
+
+  if (
+    ema50 != null &&
+    last.close > ema50
+  ) {
+    bullish++;
+  } else if (
+    ema50 != null
+  ) {
+    bearish++;
+  }
+
+  if (
+    ema200 != null &&
+    last.close > ema200
+  ) {
+    bullish++;
+  } else if (
+    ema200 != null
+  ) {
+    bearish++;
+  }
+
+  if (r != null) {
+    if (
+      r >= 52 &&
+      r < 75
+    ) {
+      bullish++;
+    } else if (
+      r <= 48 &&
+      r > 25
+    ) {
+      bearish++;
+    }
+  }
+
+  if (m.histogram != null) {
+    if (
+      m.histogram > 0
+    ) {
+      bullish++;
+    } else if (
+      m.histogram < 0
+    ) {
+      bearish++;
+    }
+  }
+
+  if (
+    structure.structure ===
+    "HH_HL"
+  ) {
+    bullish += 2;
+  }
+
+  if (
+    structure.structure ===
+    "LH_LL"
+  ) {
+    bearish += 2;
+  }
+
+  if (
+    structure.bos ===
+    "BULLISH"
+  ) {
+    bullish += 2;
+  }
+
+  if (
+    structure.bos ===
+    "BEARISH"
+  ) {
+    bearish += 2;
+  }
+
+  let bias =
+    "NEUTRAL";
+
+  if (
+    bullish >
+    bearish + 1
+  ) {
+    bias =
+      "BULLISH";
+  } else if (
+    bearish >
+    bullish + 1
+  ) {
+    bias =
+      "BEARISH";
+  }
+
+  const strength =
+    bullish + bearish;
+
+  let score = 50;
+
+  if (strength > 0) {
+    score +=
       (
-        Date.now()-
-        d.getTime()
-      )/1000
+        (bullish - bearish) /
+        strength
+      ) * 30;
+  }
+
+  if (
+    liquidity ===
+    "BULLISH_SWEEP"
+  ) {
+    score += 7;
+  }
+
+  if (
+    liquidity ===
+    "BEARISH_SWEEP"
+  ) {
+    score -= 7;
+  }
+
+  if (
+    m.histogram != null
+  ) {
+    const macdDirection =
+      m.histogram > 0
+        ? 1
+        : -1;
+
+    if (
+      (
+        bias ===
+        "BULLISH" &&
+        macdDirection > 0
+      ) ||
+      (
+        bias ===
+        "BEARISH" &&
+        macdDirection < 0
+      )
+    ) {
+      score += 5;
+    }
+  }
+
+  score =
+    Math.round(
+      clamp(
+        score,
+        0,
+        100
+      )
     );
 
   return {
+    timeframe,
 
-    fresh:
-      ageSeconds<=
-      FRESHNESS_LIMITS[
-        interval
-      ],
+    bias,
 
-    ageSeconds
+    setupScore:
+      score,
+
+    trend:
+      bias,
+
+    structure,
+
+    momentum: {
+      rsi:
+        round(r, 2),
+
+      macd:
+        round(
+          m.macd,
+          4
+        ),
+
+      signal:
+        round(
+          m.signal,
+          4
+        ),
+
+      histogram:
+        round(
+          m.histogram,
+          4
+        )
+    },
+
+    liquidity,
+
+    atr:
+      round(
+        a,
+        3
+      ),
+
+    price:
+      round(
+        last.close,
+        2
+      ),
+
+    ema20:
+      round(
+        ema20,
+        2
+      ),
+
+    ema50:
+      round(
+        ema50,
+        2
+      ),
+
+    ema200:
+      round(
+        ema200,
+        2
+      ),
+
+    candleTime:
+      last.datetime
   };
 }
 
-function isWeekend(){
-
-  const day=
-    new Date().getUTCDay();
-
-  return (
-    day===0 ||
-    day===6
-  );
-}
-
-async function fetchTwelveData(
-  env,
-  interval
-){
-
-  const u=
-    new URL(
-      "https://api.twelvedata.com/time_series"
-    );
-
-  u.searchParams.set(
-    "symbol",
-    "XAU/USD"
-  );
-
-  u.searchParams.set(
-    "interval",
-    interval
-  );
-
-  u.searchParams.set(
-    "outputsize",
-    "250"
-  );
-
-  u.searchParams.set(
-    "timezone",
-    "UTC"
-  );
-
-  u.searchParams.set(
-    "apikey",
-    env.TWELVE_DATA_API_KEY
-  );
-
-  const r=
-    await fetch(u);
-
-  let d;
-
-  try{
-
-    d=
-      await r.json();
-
-  }catch{
-
-    throw new Error(
-      "Invalid response from Twelve Data"
-    );
-  }
-
-  if(
-    r.status===429 ||
-    d?.code===429
-  ){
-
-    const error=
-      new Error(
-        "Twelve Data rate limit exceeded"
-      );
-
-    error.code=429;
-
-    error.provider=d;
-
-    throw error;
-  }
-
-  if(
-    !r.ok ||
-    d?.status==="error"
-  ){
-
-    const error=
-      new Error(
-        d?.message ||
-        "Twelve Data request failed"
-      );
-
-    error.code=
-      d?.code ||
-      r.status;
-
-    error.provider=d;
-
-    throw error;
-  }
-
-  const values=
-    (d.values||[])
-      .map(v=>({
-
-        datetime:
-          v.datetime,
-
-        open:
-          n(v.open),
-
-        high:
-          n(v.high),
-
-        low:
-          n(v.low),
-
-        close:
-          n(v.close),
-
-        volume:
-          v.volume==null
-            ?null
-            :n(v.volume)
-
-      }))
-      .reverse();
-
-  if(
-    values.length<50
-  ){
-
-    throw new Error(
-      `Insufficient candles for ${interval}`
-    );
-  }
-
-  return values;
-}
-
-async function market(
-  env,
-  interval
-){
-
-  const cache=
-    caches.default;
-
-  const cacheKey=
-    new Request(
-      `https://xau-ai-cache.local/market/${interval}`
-    );
-
-  const cached=
-    await cache.match(
-      cacheKey
-    );
-
-  if(cached){
-
-    const values=
-      await cached.json();
-
+function freshnessInfo(
+  candles,
+  timeframe
+) {
+  if (!candles.length) {
     return {
-
-      values,
-
-      cached:true
-
+      fresh: false,
+      ageMs: null,
+      ageMinutes: null,
+      reason:
+        "NO_DATA"
     };
   }
 
-  const values=
-    await fetchTwelveData(
-      env,
-      interval
+  const last =
+    candles[
+      candles.length - 1
+    ];
+
+  const timestamp =
+    Date.parse(
+      last.datetime
     );
 
-  const response=
-    new Response(
-      JSON.stringify(values),
-      {
-        headers:{
-          "Content-Type":
-            "application/json",
+  if (
+    !Number.isFinite(
+      timestamp
+    )
+  ) {
+    return {
+      fresh: false,
+      ageMs: null,
+      ageMinutes: null,
+      reason:
+        "INVALID_TIMESTAMP"
+    };
+  }
 
-          "Cache-Control":
-            `public, max-age=${CACHE_TTL}`
-        }
-      }
-    );
+  const ageMs =
+    Date.now() -
+    timestamp;
 
-  await cache.put(
-    cacheKey,
-    response.clone()
-  );
+  const limit =
+    FRESHNESS_LIMITS[
+      timeframe
+    ];
 
   return {
+    fresh:
+      ageMs >= 0 &&
+      ageMs <= limit,
 
-    values,
+    ageMs,
 
-    cached:false
+    ageMinutes:
+      Math.round(
+        Math.max(
+          0,
+          ageMs
+        ) / 60000
+      ),
 
+    reason:
+      ageMs < 0
+        ? "FUTURE_TIMESTAMP"
+        : ageMs > limit
+          ? "STALE_DATA"
+          : "FRESH"
   };
 }
 
-function round(
-  v,
-  d=2
-){
+function volatilityCondition(
+  analysis
+) {
+  const atrValue =
+    analysis[
+      "15min"
+    ]?.atr;
 
-  return (
-    v==null ||
-    Number.isNaN(v)
-  )
-    ?null
-    :Number(
-      v.toFixed(d)
-    );
+  const price =
+    analysis[
+      "15min"
+    ]?.price;
+
+  if (
+    atrValue == null ||
+    price == null ||
+    price === 0
+  ) {
+    return {
+      state:
+        "UNKNOWN",
+
+      atrPercent:
+        null,
+
+      warning:
+        false
+    };
+  }
+
+  const atrPercent =
+    (
+      atrValue /
+      price
+    ) * 100;
+
+  if (
+    atrPercent >=
+    0.25
+  ) {
+    return {
+      state:
+        "HIGH",
+
+      atrPercent:
+        round(
+          atrPercent,
+          3
+        ),
+
+      warning:
+        true
+    };
+  }
+
+  if (
+    atrPercent <=
+    0.08
+  ) {
+    return {
+      state:
+        "LOW",
+
+      atrPercent:
+        round(
+          atrPercent,
+          3
+        ),
+
+      warning:
+        false
+    };
+  }
+
+  return {
+    state:
+      "NORMAL",
+
+    atrPercent:
+      round(
+        atrPercent,
+        3
+      ),
+
+    warning:
+      false
+  };
+}
+
+function marketCondition(
+  analysis
+) {
+  const biases =
+    TIMEFRAMES
+      .map(
+        timeframe =>
+          analysis[
+            timeframe
+          ]?.bias
+      )
+      .filter(Boolean);
+
+  const bullish =
+    biases.filter(
+      value =>
+        value ===
+        "BULLISH"
+    ).length;
+
+  const bearish =
+    biases.filter(
+      value =>
+        value ===
+        "BEARISH"
+    ).length;
+
+  if (
+    bullish >= 4
+  ) {
+    return "STRONG_BULLISH";
+  }
+
+  if (
+    bearish >= 4
+  ) {
+    return "STRONG_BEARISH";
+  }
+
+  if (
+    bullish >= 3
+  ) {
+    return "BULLISH";
+  }
+
+  if (
+    bearish >= 3
+  ) {
+    return "BEARISH";
+  }
+
+  return "MIXED";
+}
+
+function multiTimeframeBias(
+  analysis
+) {
+  const h4 =
+    analysis[
+      "4h"
+    ]?.bias;
+
+  const h1 =
+    analysis[
+      "1h"
+    ]?.bias;
+
+  const m15 =
+    analysis[
+      "15min"
+    ]?.bias;
+
+  const m5 =
+    analysis[
+      "5min"
+    ]?.bias;
+
+  const m1 =
+    analysis[
+      "1min"
+    ]?.bias;
+
+  const higherBull =
+    [
+      h4,
+      h1,
+      m15
+    ].filter(
+      value =>
+        value ===
+        "BULLISH"
+    ).length;
+
+  const higherBear =
+    [
+      h4,
+      h1,
+      m15
+    ].filter(
+      value =>
+        value ===
+        "BEARISH"
+    ).length;
+
+  if (
+    higherBull >= 2 &&
+    m5 ===
+      "BULLISH" &&
+    m1 !==
+      "BEARISH"
+  ) {
+    return "BULLISH";
+  }
+
+  if (
+    higherBear >= 2 &&
+    m5 ===
+      "BEARISH" &&
+    m1 !==
+      "BULLISH"
+  ) {
+    return "BEARISH";
+  }
+
+  if (
+    higherBull >
+    higherBear
+  ) {
+    return "BULLISH";
+  }
+
+  if (
+    higherBear >
+    higherBull
+  ) {
+    return "BEARISH";
+  }
+
+  return "NEUTRAL";
+}
+
+function calculateSetupScore(
+  analysis
+) {
+  const weights = {
+    "4h": 0.30,
+    "1h": 0.25,
+    "15min": 0.20,
+    "5min": 0.15,
+    "1min": 0.10
+  };
+
+  let score = 0;
+  let total = 0;
+
+  for (
+    const timeframe of
+    TIMEFRAMES
+  ) {
+    const value =
+      analysis[
+        timeframe
+      ]?.setupScore;
+
+    if (
+      Number.isFinite(
+        value
+      )
+    ) {
+      score +=
+        value *
+        weights[
+          timeframe
+        ];
+
+      total +=
+        weights[
+          timeframe
+        ];
+    }
+  }
+
+  if (!total) {
+    return 0;
+  }
+
+  return Math.round(
+    score / total
+  );
 }
 
 function riskPlan(
   direction,
   price,
   atrValue
-){
+) {
+  if (
+    ![
+      "BUY",
+      "SELL"
+    ].includes(
+      direction
+    )
+  ) {
+    return null;
+  }
 
-  const risk={
+  if (
+    !Number.isFinite(
+      price
+    ) ||
+    !Number.isFinite(
+      atrValue
+    )
+  ) {
+    return null;
+  }
 
-    entry:null,
+  const stopDistance =
+    Math.max(
+      atrValue * 1.5,
+      price * 0.001
+    );
 
-    stopLoss:null,
+  const rewardDistance =
+    stopDistance * 2;
 
-    takeProfit1:null,
+  const entry =
+    price;
 
-    takeProfit2:null,
+  let stopLoss;
+  let takeProfit;
 
-    rrToTP1:null,
+  if (
+    direction ===
+    "BUY"
+  ) {
+    stopLoss =
+      price -
+      stopDistance;
 
-    rrToTP2:null
+    takeProfit =
+      price +
+      rewardDistance;
+  } else {
+    stopLoss =
+      price +
+      stopDistance;
 
+    takeProfit =
+      price -
+      rewardDistance;
+  }
+
+  return {
+    entry:
+      round(
+        entry,
+        2
+      ),
+
+    stopLoss:
+      round(
+        stopLoss,
+        2
+      ),
+
+    takeProfit:
+      round(
+        takeProfit,
+        2
+      ),
+
+    rr:
+      "1:2"
   };
-
-  /*
-   * WATCH and NO TRADE
-   * must never receive
-   * an executable risk plan.
-   */
-
-  if(
-    direction!=="BUY" &&
-    direction!=="SELL"
-  ){
-
-    return risk;
-  }
-
-  risk.entry=
-    round(price);
-
-  if(
-    atrValue===null ||
-    !Number.isFinite(atrValue) ||
-    atrValue<=0
-  ){
-
-    return risk;
-  }
-
-  const sl=
-    atrValue*1.5;
-
-  const tp1=
-    atrValue*2.25;
-
-  const tp2=
-    atrValue*3;
-
-  if(
-    direction==="BUY"
-  ){
-
-    risk.stopLoss=
-      round(
-        price-sl
-      );
-
-    risk.takeProfit1=
-      round(
-        price+tp1
-      );
-
-    risk.takeProfit2=
-      round(
-        price+tp2
-      );
-
-  }else{
-
-    risk.stopLoss=
-      round(
-        price+sl
-      );
-
-    risk.takeProfit1=
-      round(
-        price-tp1
-      );
-
-    risk.takeProfit2=
-      round(
-        price-tp2
-      );
-  }
-
-  risk.rrToTP1=
-    1.5;
-
-  risk.rrToTP2=
-    2;
-
-  return risk;
 }
 
-function executionState(
-  direction
-){
-
-  if(direction==="BUY"){
-
+function executionState(decision) {
+  if (decision === "BUY") {
     return {
-      type:"TRADE",
-      executable:true,
-      label:"BUY",
-      description:
-        "Strict BUY signal. All required conditions passed."
+      state: "TRADE",
+      executable: true
     };
   }
 
-  if(direction==="SELL"){
-
+  if (decision === "SELL") {
     return {
-      type:"TRADE",
-      executable:true,
-      label:"SELL",
-      description:
-        "Strict SELL signal. All required conditions passed."
+      state: "TRADE",
+      executable: true
     };
   }
 
-  if(
-    direction===
+  if (
+    decision ===
     "WATCH — BUY SETUP"
-  ){
-
+  ) {
     return {
-      type:"WATCH",
-      executable:false,
-      label:"WATCH — BUY SETUP",
-      description:
-        "Bullish setup is developing, but BUY conditions are not fully confirmed."
+      state: "WATCH",
+      executable: false
     };
   }
 
-  if(
-    direction===
+  if (
+    decision ===
     "WATCH — SELL SETUP"
-  ){
-
+  ) {
     return {
-      type:"WATCH",
-      executable:false,
-      label:"WATCH — SELL SETUP",
-      description:
-        "Bearish setup is developing, but SELL conditions are not fully confirmed."
+      state: "WATCH",
+      executable: false
     };
   }
 
   return {
-    type:"NO_TRADE",
-    executable:false,
-    label:"NO TRADE",
-    description:
-      "Market conditions do not provide a valid executable setup."
+    state: "NO_TRADE",
+    executable: false
+  };
+}
+
+function executionGate({
+  decision,
+  setupScore,
+  session,
+  volatility,
+  dataFresh,
+  unavailable
+}) {
+  const reasons = [];
+
+  if (!dataFresh) {
+    reasons.push(
+      "DATA_NOT_FRESH"
+    );
+  }
+
+  if (
+    unavailable.length
+  ) {
+    reasons.push(
+      "TIMEFRAME_UNAVAILABLE"
+    );
+  }
+
+  if (
+    session.quality ===
+    "LOW"
+  ) {
+    reasons.push(
+      "LOW_SESSION_QUALITY"
+    );
+  }
+
+  if (
+    volatility.warning
+  ) {
+    reasons.push(
+      "HIGH_VOLATILITY_WARNING"
+    );
+  }
+
+  if (
+    decision === "BUY" ||
+    decision === "SELL"
+  ) {
+    if (
+      setupScore < 70
+    ) {
+      reasons.push(
+        "SCORE_BELOW_70"
+      );
+    }
+  } else {
+    reasons.push(
+      "NO_EXECUTABLE_SIGNAL"
+    );
+  }
+
+  return {
+    passed:
+      dataFresh &&
+      unavailable.length === 0 &&
+      (
+        decision === "BUY" ||
+        decision === "SELL"
+      ) &&
+      setupScore >= 70,
+
+    reasons
+  };
+}
+
+function chooseDecision(
+  analysis
+) {
+  const scores = {};
+
+  for (
+    const timeframe of
+    TIMEFRAMES
+  ) {
+    scores[timeframe] =
+      analysis[
+        timeframe
+      ];
+  }
+
+  const bull =
+    [
+      "4h",
+      "1h",
+      "15min"
+    ].filter(
+      timeframe =>
+        scores[
+          timeframe
+        ]?.bias ===
+        "BULLISH"
+    ).length;
+
+  const bear =
+    [
+      "4h",
+      "1h",
+      "15min"
+    ].filter(
+      timeframe =>
+        scores[
+          timeframe
+        ]?.bias ===
+        "BEARISH"
+    ).length;
+
+  const setupScore =
+    calculateSetupScore(
+      analysis
+    );
+
+  const buyAlignment =
+    bull >= 2 &&
+    scores[
+      "5min"
+    ]?.bias ===
+      "BULLISH" &&
+    scores[
+      "1min"
+    ]?.bias !==
+      "BEARISH";
+
+  const sellAlignment =
+    bear >= 2 &&
+    scores[
+      "5min"
+    ]?.bias ===
+      "BEARISH" &&
+    scores[
+      "1min"
+    ]?.bias !==
+      "BULLISH";
+
+  if (
+    buyAlignment &&
+    setupScore >= 70
+  ) {
+    return "BUY";
+  }
+
+  if (
+    sellAlignment &&
+    setupScore >= 70
+  ) {
+    return "SELL";
+  }
+
+  if (
+    buyAlignment &&
+    setupScore >= 50
+  ) {
+    return "WATCH — BUY SETUP";
+  }
+
+  if (
+    sellAlignment &&
+    setupScore >= 50
+  ) {
+    return "WATCH — SELL SETUP";
+  }
+
+  return "NO TRADE";
+}
+
+async function fetchTwelveData(
+  env,
+  interval
+) {
+  const apiKey =
+    env.TWELVE_DATA_API_KEY;
+
+  if (!apiKey) {
+    throw new Error(
+      "TWELVE_DATA_API_KEY is not configured"
+    );
+  }
+
+  const url =
+    new URL(
+      "https://api.twelvedata.com/time_series"
+    );
+
+  url.searchParams.set(
+    "symbol",
+    "XAU/USD"
+  );
+
+  url.searchParams.set(
+    "interval",
+    interval
+  );
+
+  url.searchParams.set(
+    "outputsize",
+    "250"
+  );
+
+  url.searchParams.set(
+    "timezone",
+    "UTC"
+  );
+
+  url.searchParams.set(
+    "apikey",
+    apiKey
+  );
+
+  const response =
+    await fetch(
+      url.toString(),
+      {
+        method: "GET",
+
+        headers: {
+          "accept":
+            "application/json"
+        }
+      }
+    );
+
+  const text =
+    await response.text();
+
+  let data;
+
+  try {
+    data =
+      JSON.parse(text);
+  } catch {
+    throw new Error(
+      `INVALID_PROVIDER_RESPONSE:${response.status}`
+    );
+  }
+
+  if (
+    response.status === 429 ||
+    data?.code === 429
+  ) {
+    const error =
+      new Error(
+        "DATA_LIMIT"
+      );
+
+    error.status =
+      429;
+
+    error.details =
+      data?.message ||
+      "Twelve Data API credit limit reached";
+
+    throw error;
+  }
+
+  if (
+    !response.ok ||
+    data?.status ===
+      "error"
+  ) {
+    const error =
+      new Error(
+        data?.message ||
+        `Provider HTTP ${response.status}`
+      );
+
+    error.status =
+      response.status;
+
+    error.details =
+      data;
+
+    throw error;
+  }
+
+  return normalizeCandles(
+    data
+  );
+}
+
+async function getMarket(
+  env,
+  interval,
+  ctx
+) {
+  const cache =
+    caches.default;
+
+  const cacheUrl =
+    `https://xau-ai-cache.local/api/market?interval=${encodeURIComponent(interval)}`;
+
+  const request =
+    new Request(
+      cacheUrl,
+      {
+        method: "GET"
+      }
+    );
+
+  const cached =
+    await cache.match(
+      request
+    );
+
+  if (cached) {
+    const data =
+      await cached.json();
+
+    return {
+      ...data,
+      cached: true
+    };
+  }
+
+  let candles;
+
+  try {
+    candles =
+      await fetchTwelveData(
+        env,
+        interval
+      );
+  } catch (error) {
+    if (
+      error?.status ===
+        429 ||
+      error?.message ===
+        "DATA_LIMIT"
+    ) {
+      throw {
+        type:
+          "DATA_LIMIT",
+
+        status:
+          429,
+
+        message:
+          error.details ||
+          "Twelve Data credit limit reached"
+      };
+    }
+
+    throw error;
+  }
+
+  const freshness =
+    freshnessInfo(
+      candles,
+      interval
+    );
+
+  const payload = {
+    ok: true,
+
+    symbol:
+      "XAU/USD",
+
+    interval,
+
+    candles,
+
+    freshness,
+
+    fetchedAt:
+      new Date().toISOString(),
+
+    cached:
+      false
+  };
+
+  const response =
+    new Response(
+      JSON.stringify(
+        payload
+      ),
+      {
+        headers: {
+          "content-type":
+            "application/json",
+
+          "cache-control":
+            `public, max-age=${CACHE_TTL}`
+        }
+      }
+    );
+
+  ctx.waitUntil(
+    cache.put(
+      request,
+      response.clone()
+    )
+  );
+
+  return payload;
+}
+
+async function analyzeAll(
+  env,
+  ctx
+) {
+  if (isWeekend()) {
+    return {
+      ok: true,
+
+      engine:
+        ENGINE_VERSION,
+
+      symbol:
+        "XAU/USD",
+
+      decision:
+        "NO TRADE",
+
+      setupScore:
+        0,
+
+      price:
+        null,
+
+      analysis:
+        {},
+
+      dataStatus:
+        "WEEKEND",
+
+      unavailable:
+        [],
+
+      safety: {
+        weekend:
+          true,
+
+        session:
+          getTradingSession(),
+
+        volatility: {
+          state:
+            "UNKNOWN",
+
+          atrPercent:
+            null,
+
+          warning:
+            false
+        },
+
+        marketCondition:
+          "CLOSED",
+
+        newsRisk:
+          "NOT CHECKED",
+
+        spread:
+          "NOT CHECKED",
+
+        slippage:
+          "NOT CHECKED"
+      },
+
+      riskPlan:
+        null,
+
+      execution:
+        executionState(
+          "NO TRADE"
+        ),
+
+      executionGate: {
+        passed:
+          false,
+
+        reasons: [
+          "WEEKEND"
+        ]
+      },
+
+      generatedAt:
+        new Date().toISOString()
+    };
+  }
+
+  const results =
+    await Promise.allSettled(
+      TIMEFRAMES.map(
+        timeframe =>
+          getMarket(
+            env,
+            timeframe,
+            ctx
+          )
+      )
+    );
+
+  const analysis = {};
+  const unavailable = {};
+  const freshness = {};
+
+  results.forEach(
+    (result, index) => {
+      const timeframe =
+        TIMEFRAMES[index];
+
+      if (
+        result.status ===
+        "fulfilled"
+      ) {
+        const market =
+          result.value;
+
+        if (
+          !market.candles ||
+          !market.candles.length
+        ) {
+          unavailable[
+            timeframe
+          ] = "NO_DATA";
+
+          return;
+        }
+
+        const fresh =
+          freshnessInfo(
+            market.candles,
+            timeframe
+          );
+
+        freshness[
+          timeframe
+        ] = fresh;
+
+        if (
+          !fresh.fresh
+        ) {
+          unavailable[
+            timeframe
+          ] =
+            fresh.reason;
+
+          return;
+        }
+
+        analysis[
+          timeframe
+        ] =
+          analyzeTimeframe(
+            market.candles,
+            timeframe
+          );
+      } else {
+        unavailable[
+          timeframe
+        ] =
+          result.reason?.message ||
+          "FETCH_FAILED";
+      }
+    }
+  );
+
+  const unavailableList =
+    Object.keys(
+      unavailable
+    );
+
+  const session =
+    getTradingSession();
+
+  if (
+    unavailableList.length >
+    0
+  ) {
+    return {
+      ok: true,
+
+      engine:
+        ENGINE_VERSION,
+
+      symbol:
+        "XAU/USD",
+
+      decision:
+        "NO TRADE",
+
+      setupScore:
+        0,
+
+      price:
+        analysis[
+          "1min"
+        ]?.price ??
+        analysis[
+          "5min"
+        ]?.price ??
+        analysis[
+          "15min"
+        ]?.price ??
+        null,
+
+      analysis,
+
+      freshness,
+
+      dataStatus:
+        "NOT FRESH",
+
+      unavailable:
+        unavailableList,
+
+      unavailableDetails:
+        unavailable,
+
+      safety: {
+        weekend:
+          false,
+
+        session,
+
+        volatility:
+          volatilityCondition(
+            analysis
+          ),
+
+        marketCondition:
+          marketCondition(
+            analysis
+          ),
+
+        newsRisk:
+          "NOT CHECKED",
+
+        spread:
+          "NOT CHECKED",
+
+        slippage:
+          "NOT CHECKED"
+      },
+
+      riskPlan:
+        null,
+
+      execution:
+        executionState(
+          "NO TRADE"
+        ),
+
+      executionGate: {
+        passed:
+          false,
+
+        reasons: [
+          "TIMEFRAME_DATA_NOT_READY"
+        ]
+      },
+
+      generatedAt:
+        new Date().toISOString()
+    };
+  }
+
+  const setupScore =
+    calculateSetupScore(
+      analysis
+    );
+
+  const decision =
+    chooseDecision(
+      analysis
+    );
+
+  const price =
+    analysis[
+      "1min"
+    ]?.price ??
+    analysis[
+      "5min"
+    ]?.price ??
+    analysis[
+      "15min"
+    ]?.price ??
+    null;
+
+  const atrValue =
+    analysis[
+      "15min"
+    ]?.atr ??
+    analysis[
+      "5min"
+    ]?.atr ??
+    analysis[
+      "1min"
+    ]?.atr ??
+    null;
+
+  const volatility =
+    volatilityCondition(
+      analysis
+    );
+
+  const condition =
+    marketCondition(
+      analysis
+    );
+
+  const mtfBias =
+    multiTimeframeBias(
+      analysis
+    );
+
+  const risk =
+    riskPlan(
+      decision,
+      price,
+      atrValue
+    );
+
+  const execution =
+    executionState(
+      decision
+    );
+
+  const gate =
+    executionGate({
+      decision,
+
+      setupScore,
+
+      session,
+
+      volatility,
+
+      dataFresh:
+        true,
+
+      unavailable:
+        unavailableList
+    });
+
+  return {
+    ok: true,
+
+    engine:
+      ENGINE_VERSION,
+
+    symbol:
+      "XAU/USD",
+
+    decision,
+
+    setupScore,
+
+    price,
+
+    multiTimeframeBias:
+      mtfBias,
+
+    analysis,
+
+    freshness,
+
+    dataStatus:
+      "FRESH",
+
+    unavailable:
+      unavailableList,
+
+    safety: {
+      weekend:
+        false,
+
+      session,
+
+      volatility,
+
+      marketCondition:
+        condition,
+
+      newsRisk:
+        "NOT CHECKED",
+
+      spread:
+        "NOT CHECKED",
+
+      slippage:
+        "NOT CHECKED"
+    },
+
+    riskPlan:
+      risk,
+
+    execution,
+
+    executionGate:
+      gate,
+
+    generatedAt:
+      new Date().toISOString()
   };
 }
 
 export default {
-
-  async fetch(
-    request,
-    env
-  ){
-
-    if(
-      request.method==="OPTIONS"
-    ){
-
-      return new Response(
-        null,
-        {
-          status:204,
-          headers:cors()
+  async fetch(request, env, ctx) {
+    if (request.method === "OPTIONS") {
+      return new Response(null, {
+        status: 204,
+        headers: {
+          "access-control-allow-origin": "*",
+          "access-control-allow-methods": "GET,OPTIONS",
+          "access-control-allow-headers": "*",
+          "access-control-max-age": "86400"
         }
-      );
-    }
-
-    if(
-      request.method!=="GET"
-    ){
-
-      return json(
-        {
-          ok:false,
-          error:
-            "GET requests only"
-        },
-        405
-      );
-    }
-
-    const url=
-      new URL(
-        request.url
-      );
-
-    if(
-      url.pathname==="/" ||
-      url.pathname==="/health"
-    ){
-
-      return json({
-
-        ok:true,
-
-        service:
-          "XAU AI API",
-
-        status:
-          "online",
-
-        symbol:
-          "XAU/USD",
-
-        engine:
-          "Technical Engine V3.0",
-
-        cacheTtlSeconds:
-          CACHE_TTL
-
       });
     }
 
-    if(
-      !env.TWELVE_DATA_API_KEY
-    ){
+    const url =
+      new URL(request.url);
 
-      return json(
-        {
-          ok:false,
-          error:
-            "TWELVE_DATA_API_KEY is not configured"
-        },
-        500
-      );
-    }
-
-    if(
-      url.pathname===
-      "/api/market"
-    ){
-
-      const interval=
-        url.searchParams.get(
-          "interval"
-        ) ||
-        "5min";
-
-      if(
-        !ALLOWED_INTERVALS.has(
-          interval
-        )
-      ){
-
-        return json(
-          {
-            ok:false,
-
-            error:
-              "Unsupported interval",
-
-            allowed:[
-              ...ALLOWED_INTERVALS
-            ]
-          },
-          400
-        );
-      }
-
-      try{
-
-        const result=
-          await market(
-            env,
-            interval
-          );
-
-        const freshness=
-          isFresh(
-            result.values,
-            interval
-          );
-
+    try {
+      if (
+        url.pathname ===
+        "/health"
+      ) {
         return json({
+          ok: true,
 
-          ok:true,
+          service:
+            "XAU AI API",
+
+          status:
+            "online",
 
           symbol:
             "XAU/USD",
 
-          interval,
+          engine:
+            ENGINE_VERSION,
 
-          cached:
-            result.cached,
-
-          candleCount:
-            result.values.length,
-
-          latestDatetime:
-            result.values[
-              result.values.length-1
-            ]?.datetime ||
-            null,
-
-          freshness,
-
-          values:
-            result.values
-
+          cacheTtlSeconds:
+            CACHE_TTL
         });
+      }
 
-      }catch(e){
+      if (
+        url.pathname ===
+        "/api/market"
+      ) {
+        const interval =
+          url.searchParams.get(
+            "interval"
+          ) || "1min";
 
-        if(
-          e.code===429
-        ){
+        if (
+          !TIMEFRAMES.includes(
+            interval
+          )
+        ) {
+          return json({
+            ok: false,
+
+            error:
+              "INVALID_INTERVAL",
+
+            allowed:
+              TIMEFRAMES
+          }, 400);
+        }
+
+        if (isWeekend()) {
+          return json({
+            ok: false,
+
+            error:
+              "MARKET_CLOSED",
+
+            reason:
+              "WEEKEND",
+
+            interval
+          });
+        }
+
+        try {
+          const data =
+            await getMarket(
+              env,
+              interval,
+              ctx
+            );
 
           return json(
-            {
-              ok:false,
+            data
+          );
+        } catch (error) {
+          if (
+            error?.type ===
+            "DATA_LIMIT"
+          ) {
+            return json({
+              ok: false,
 
               error:
                 "DATA_LIMIT",
 
-              provider:
-                "Twelve Data",
-
-              message:
-                "Twelve Data API credit limit reached. Wait for the next quota window.",
-
               details:
-                e.provider ||
-                null
-            },
-            429
-          );
-        }
+                error.message,
 
-        return json(
-          {
-            ok:false,
+              interval
+            }, 429);
+          }
+
+          return json({
+            ok: false,
 
             error:
-              "Market data request failed",
+              "MARKET_DATA_ERROR",
 
             details:
-              String(
-                e.message ||
-                e
-              )
-          },
-          502
+              error?.message ||
+              String(error),
+
+            interval
+          }, 502);
+        }
+      }
+
+      if (
+        url.pathname ===
+        "/api/analyze"
+      ) {
+        const result =
+          await analyzeAll(
+            env,
+            ctx
+          );
+
+        return json(
+          result
         );
       }
+
+      return json({
+        ok: false,
+
+        error:
+          "NOT_FOUND",
+
+        available: [
+          "/health",
+
+          "/api/market?interval=1min",
+
+          "/api/market?interval=5min",
+
+          "/api/market?interval=15min",
+
+          "/api/market?interval=1h",
+
+          "/api/market?interval=4h",
+
+          "/api/analyze"
+        ]
+      }, 404);
+
+    } catch (error) {
+      return json({
+        ok: false,
+
+        error:
+          "INTERNAL_ERROR",
+
+        details:
+          error?.message ||
+          String(error)
+      }, 500);
     }
-
-    if(
-      url.pathname===
-      "/api/analyze"
-    ){
-
-      const generatedAt=
-        new Date().toISOString();
-
-      /*
-       * =================================================
-       * WEEKEND SAFETY FILTER
-       * =================================================
-       *
-       * Never generate BUY / SELL / WATCH
-       * during Saturday or Sunday.
-       */
-
-      if(
-        isWeekend()
-      ){
-
-        return json({
-
-          ok:true,
-
-          symbol:
-            "XAU/USD",
-
-          engine:
-            "Technical Engine V3.0",
-
-          generatedAt,
-
-          decision:{
-
-            direction:
-              "NO TRADE",
-
-            setupScore:
-              0,
-
-            rule:
-              "Weekend market filter"
-
-          },
-
-          execution:{
-            type:
-              "NO_TRADE",
-
-            executable:
-              false,
-
-            label:
-              "NO TRADE",
-
-            description:
-              "Market is closed for the weekend."
-          },
-
-          riskPlan:{
-
-            entry:null,
-
-            stopLoss:null,
-
-            takeProfit1:null,
-
-            takeProfit2:null,
-
-            rrToTP1:null,
-
-            rrToTP2:null
-
-          },
-
-          safety:{
-
-            weekend:
-              true,
-
-            newsRisk:
-              "NOT CHECKED",
-
-            spread:
-              "NOT CHECKED",
-
-            slippage:
-              "NOT CHECKED",
-
-            dataFreshness:
-              "NOT CHECKED",
-
-            note:
-              "XAU/USD weekend filter active. No trading signal generated."
-
-          }
-
-        });
-      }
-
-      try{
-
-        /*
-         * ===============================================
-         * LOAD ALL REQUIRED TIMEFRAMES
-         * ===============================================
-         */
-
-        const rawResults=
-          await Promise.allSettled(
-
-            TFS.map(
-              tf=>
-                market(
-                  env,
-                  tf
-                )
-            )
-
-          );
-
-        const data={};
-
-        const freshness={};
-
-        const unavailable=[];
-
-        for(
-          let i=0;
-          i<TFS.length;
-          i++
-        ){
-
-          const tf=
-            TFS[i];
-
-          const result=
-            rawResults[i];
-
-          if(
-            result.status!=="fulfilled"
-          ){
-
-            unavailable.push({
-
-              timeframe:
-                tf,
-
-              reason:
-                String(
-                  result.reason?.message ||
-                  result.reason ||
-                  "Unknown error"
-                ),
-
-              code:
-                result.reason?.code ||
-                null
-
-            });
-
-            continue;
-          }
-
-          data[tf]=
-            result.value.values;
-
-          freshness[tf]=
-            isFresh(
-              data[tf],
-              tf
-            );
-        }
-
-        /*
-         * ===============================================
-         * DATA AVAILABILITY GATE
-         * ===============================================
-         *
-         * If any required timeframe fails,
-         * never manufacture a signal.
-         */
-
-        if(
-          unavailable.length
-        ){
-
-          return json({
-
-            ok:true,
-
-            symbol:
-              "XAU/USD",
-
-            engine:
-              "Technical Engine V3.0",
-
-            generatedAt,
-
-            decision:{
-
-              direction:
-                "NO TRADE",
-
-              setupScore:
-                0,
-
-              rule:
-                "Required timeframe data unavailable"
-
-            },
-
-            execution:{
-
-              type:
-                "NO_TRADE",
-
-              executable:
-                false,
-
-              label:
-                "NO TRADE",
-
-              description:
-                "Required market data is unavailable."
-
-            },
-
-            riskPlan:{
-
-              entry:null,
-
-              stopLoss:null,
-
-              takeProfit1:null,
-
-              takeProfit2:null,
-
-              rrToTP1:null,
-
-              rrToTP2:null
-
-            },
-
-            unavailable,
-
-            freshness,
-
-            safety:{
-
-              weekend:
-                false,
-
-              newsRisk:
-                "NOT CHECKED",
-
-              spread:
-                "NOT CHECKED",
-
-              slippage:
-                "NOT CHECKED",
-
-              dataFreshness:
-                "FAILED",
-
-              note:
-                "NO TRADE because required market data could not be loaded."
-
-            }
-
-          });
-        }
-
-        /*
-         * ===============================================
-         * FRESHNESS GATE
-         * ===============================================
-         *
-         * Old market data = NO TRADE.
-         */
-
-        const stale=
-          TFS.filter(
-            tf=>
-              !freshness[tf].fresh
-          );
-
-        if(
-          stale.length
-        ){
-
-          return json({
-
-            ok:true,
-
-            symbol:
-              "XAU/USD",
-
-            engine:
-              "Technical Engine V3.0",
-
-            generatedAt,
-
-            decision:{
-
-              direction:
-                "NO TRADE",
-
-              setupScore:
-                0,
-
-              rule:
-                "Stale market data detected"
-
-            },
-
-            execution:{
-
-              type:
-                "NO_TRADE",
-
-              executable:
-                false,
-
-              label:
-                "NO TRADE",
-
-              description:
-                "One or more timeframe datasets are stale."
-
-            },
-
-            riskPlan:{
-
-              entry:null,
-
-              stopLoss:null,
-
-              takeProfit1:null,
-
-              takeProfit2:null,
-
-              rrToTP1:null,
-
-              rrToTP2:null
-
-            },
-
-            freshness,
-
-            staleTimeframes:
-              stale,
-
-            safety:{
-
-              weekend:
-                false,
-
-              newsRisk:
-                "NOT CHECKED",
-
-              spread:
-                "NOT CHECKED",
-
-              slippage:
-                "NOT CHECKED",
-
-              dataFreshness:
-                "STALE",
-
-              note:
-                "NO TRADE because one or more timeframe datasets are stale."
-
-            }
-
-          });
-        }
-
-        /*
-         * ===============================================
-         * TECHNICAL ANALYSIS
-         * ===============================================
-         */
-
-        const analysis={};
-
-        const scores={};
-
-        for(
-          const tf of TFS
-        ){
-
-          analysis[tf]=
-            analyze(
-              data[tf]
-            );
-
-          scores[tf]=
-            score(
-              analysis[tf]
-            );
-        }
-
-        /*
-         * ===============================================
-         * HIGHER TIMEFRAME ALIGNMENT
-         * ===============================================
-         *
-         * H4 + H1 + M15 determine the
-         * higher timeframe direction.
-         */
-
-        const bull=
-          [
-            "4h",
-            "1h",
-            "15min"
-          ]
-          .filter(
-            tf=>
-              scores[tf].bias===
-              "BULLISH"
-          )
-          .length;
-
-        const bear=
-          [
-            "4h",
-            "1h",
-            "15min"
-          ]
-          .filter(
-            tf=>
-              scores[tf].bias===
-              "BEARISH"
-          )
-          .length;
-
-        /*
-         * ===============================================
-         * SETUP SCORE
-         * ===============================================
-         */
-
-        const setupScore=
-          Math.round(
-
-            TFS.reduce(
-
-              (sum,tf)=>
-                sum+
-                scores[tf].score,
-
-              0
-
-            ) /
-            TFS.length
-
-          );
-
-        /*
-         * ===============================================
-         * V3.0 STRICT EXECUTION ENGINE
-         * ===============================================
-         *
-         * BUY / SELL:
-         *   Real executable signal.
-         *
-         * WATCH:
-         *   Developing setup only.
-         *
-         * NO TRADE:
-         *   No valid setup.
-         */
-
-        let direction=
-          "NO TRADE";
-
-        /*
-         * STRICT BUY ALIGNMENT
-         */
-
-        const buyAlignment=
-
-          bull>=2 &&
-
-          scores["5min"].bias===
-            "BULLISH" &&
-
-          scores["1min"].bias!==
-            "BEARISH";
-
-        /*
-         * STRICT SELL ALIGNMENT
-         */
-
-        const sellAlignment=
-
-          bear>=2 &&
-
-          scores["5min"].bias===
-            "BEARISH" &&
-
-          scores["1min"].bias!==
-            "BULLISH";
-
-        /*
-         * ===============================================
-         * STRICT BUY
-         * ===============================================
-         *
-         * Existing V2 conditions preserved.
-         * Score must be >=70.
-         */
-
-        if(
-
-          buyAlignment &&
-
-          setupScore>=70
-
-        ){
-
-          direction=
-            "BUY";
-
-        }
-
-        /*
-         * ===============================================
-         * STRICT SELL
-         * ===============================================
-         *
-         * Existing V2 conditions preserved.
-         * Score must be >=70.
-         */
-
-        else if(
-
-          sellAlignment &&
-
-          setupScore>=70
-
-        ){
-
-          direction=
-            "SELL";
-
-        }
-
-        /*
-         * ===============================================
-         * WATCH — BUY SETUP
-         * ===============================================
-         *
-         * Score 50-69.
-         *
-         * Bullish alignment is developing,
-         * but strict BUY confirmation
-         * has NOT been achieved.
-         *
-         * NOT executable.
-         */
-
-        else if(
-
-          setupScore>=50 &&
-
-          setupScore<70 &&
-
-          bull>=2 &&
-
-          scores["5min"].bias===
-            "BULLISH" &&
-
-          scores["1min"].bias!==
-            "BEARISH"
-
-        ){
-
-          direction=
-            "WATCH — BUY SETUP";
-
-        }
-
-        /*
-         * ===============================================
-         * WATCH — SELL SETUP
-         * ===============================================
-         *
-         * Score 50-69.
-         *
-         * Bearish alignment is developing,
-         * but strict SELL confirmation
-         * has NOT been achieved.
-         *
-         * NOT executable.
-         */
-
-        else if(
-
-          setupScore>=50 &&
-
-          setupScore<70 &&
-
-          bear>=2 &&
-
-          scores["5min"].bias===
-            "BEARISH" &&
-
-          scores["1min"].bias!==
-            "BULLISH"
-
-        ){
-
-          direction=
-            "WATCH — SELL SETUP";
-
-        }
-
-        /*
-         * ===============================================
-         * EVERYTHING ELSE
-         * ===============================================
-         *
-         * Remains NO TRADE.
-         */
-
-        const execution=
-          executionState(
-            direction
-          );
-
-        /*
-         * ===============================================
-         * RISK PLAN
-         * ===============================================
-         *
-         * Only BUY / SELL receive
-         * executable Entry / SL / TP.
-         */
-
-        const price=
-          analysis["1min"].price;
-
-        const atrValue=
-          analysis["5min"].atr14;
-
-        const risk=
-          riskPlan(
-            direction,
-            price,
-            atrValue
-          );
-
-        /*
-         * ===============================================
-         * FINAL RESPONSE
-         * ===============================================
-         */
-
-        return json({
-
-          ok:true,
-
-          symbol:
-            "XAU/USD",
-
-          engine:
-            "Technical Engine V3.0",
-
-          generatedAt,
-
-          decision:{
-
-            direction,
-
-            setupScore,
-
-            rule:
-              "Strict BUY/SELL requires alignment and setup score >=70"
-
-          },
-
-          execution,
-
-          riskPlan:
-            risk,
-
-          marketStatus:{
-
-            weekend:
-              false,
-
-            allTimeframesFresh:
-              true
-
-          },
-
-          freshness,
-
-          alignment:{
-
-            higherTimeframeBullish:
-              bull,
-
-            higherTimeframeBearish:
-              bear,
-
-            buyAlignment,
-
-            sellAlignment
-
-          },
-
-          timeframes:
-
-            Object.fromEntries(
-
-              TFS.map(
-                tf=>[
-
-                  tf,
-
-                  {
-
-                    price:
-                      round(
-                        analysis[tf].price,
-                        2
-                      ),
-
-                    trend:
-                      analysis[tf].trend,
-
-                    structure:
-                      analysis[tf].structure,
-
-                    liquiditySweep:
-                      analysis[tf]
-                        .liquiditySweep,
-
-                    indicators:{
-
-                      ema20:
-                        round(
-                          analysis[tf].ema20,
-                          4
-                        ),
-
-                      ema50:
-                        round(
-                          analysis[tf].ema50,
-                          4
-                        ),
-
-                      ema200:
-                        round(
-                          analysis[tf].ema200,
-                          4
-                        ),
-
-                      rsi14:
-                        round(
-                          analysis[tf].rsi14
-                        ),
-
-                      atr14:
-                        round(
-                          analysis[tf].atr14,
-                          4
-                        ),
-
-                      macd:{
-
-                        macd:
-                          round(
-                            analysis[tf]
-                              .macd.macd,
-                            4
-                          ),
-
-                        signal:
-                          round(
-                            analysis[tf]
-                              .macd.signal,
-                            4
-                          ),
-
-                        histogram:
-                          round(
-                            analysis[tf]
-                              .macd.histogram,
-                            4
-                          )
-
-                      }
-
-                    },
-
-                    score:
-                      scores[tf]
-
-                  }
-
-                ]
-
-              )
-
-            ),
-
-          safety:{
-
-            weekend:
-              false,
-
-            newsRisk:
-              "NOT CHECKED",
-
-            spread:
-              "NOT CHECKED",
-
-            slippage:
-              "NOT CHECKED",
-
-            dataFreshness:
-              "PASSED",
-
-            note:
-              "Rules-based prototype. WATCH states are informational only. No guaranteed win rate."
-
-          }
-
-        });
-
-      }catch(e){
-
-        return json({
-
-          ok:false,
-
-          error:
-            "Analysis failed",
-
-          details:
-            String(
-              e.message ||
-              e
-            )
-
-        },502);
-      }
-    }
-
-    return json({
-
-      ok:false,
-
-      error:
-        "Endpoint not found",
-
-      available:[
-
-        "/health",
-
-        "/api/market?interval=1min",
-
-        "/api/market?interval=5min",
-
-        "/api/market?interval=15min",
-
-        "/api/market?interval=1h",
-
-        "/api/market?interval=4h",
-
-        "/api/analyze"
-
-      ]
-
-    },404);
   }
 };
