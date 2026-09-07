@@ -1,41 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport"
       content="width=device-width,initial-scale=1,viewport-fit=cover">
-
+<meta name="theme-color" content="#07080b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>XAU AI — Strict Execution System</title>
 
-<link rel="manifest" href="manifest.json">
-
-<meta name="theme-color" content="#08090c">
-
-<meta name="apple-mobile-web-app-capable" content="yes">
-
-<meta name="apple-mobile-web-app-status-bar-style"
-      content="black-translucent">
-
-<meta name="apple-mobile-web-app-title" content="XAU AI">
-
-<link rel="apple-touch-icon" href="icon-192.png">
-
 <style>
-
 :root{
-  --bg:#08090c;
-  --card:#111318;
-  --card2:#0d0f13;
-  --muted:#8d93a1;
-  --text:#f4f6f8;
-  --green:#29d17d;
-  --red:#ff5b68;
-  --yellow:#f5c84c;
-  --orange:#ff9f43;
-  --line:#242832;
-  --white:#fff;
+  --bg:#07080b;
+  --panel:#101217;
+  --panel2:#0d0f14;
+  --line:#252a34;
+  --text:#f4f5f7;
+  --muted:#9298a7;
+  --green:#22d889;
+  --red:#ff5d68;
+  --yellow:#f5ca4f;
+  --blue:#5da9ff;
+  --shadow:0 14px 35px rgba(0,0,0,.35);
 }
 
 *{
@@ -45,10 +31,11 @@
 
 html,body{
   margin:0;
+  padding:0;
   background:var(--bg);
   color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,
-  "SF Pro Display","SF Pro Text",Arial,sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",
+               "SF Pro Text",Arial,sans-serif;
 }
 
 body{
@@ -63,9 +50,9 @@ button{
 .app{
   width:100%;
   max-width:900px;
-  margin:auto;
+  margin:0 auto;
   padding:
-    max(22px,env(safe-area-inset-top))
+    calc(env(safe-area-inset-top) + 24px)
     18px
     120px;
 }
@@ -76,439 +63,352 @@ button{
   display:flex;
   justify-content:space-between;
   align-items:flex-start;
-  margin-bottom:32px;
+  margin-bottom:28px;
 }
 
-.brand{
-  font-size:34px;
-  font-weight:800;
-  letter-spacing:-1.5px;
-}
-
-.subtitle{
-  margin-top:7px;
-  font-size:13px;
-  letter-spacing:4px;
-  color:var(--muted);
-}
-
-.settings{
-  width:52px;
-  height:52px;
-  border:1px solid var(--line);
-  background:var(--card);
-  border-radius:18px;
-  color:var(--muted);
-  font-size:22px;
-}
-
-/* MARKET */
-
-.symbol{
-  font-size:17px;
-  color:var(--muted);
-  margin-bottom:8px;
-}
-
-.price{
-  font-size:56px;
+.logo{
+  font-size:48px;
   font-weight:800;
   letter-spacing:-2px;
   line-height:1;
 }
 
-.live{
+.subtitle{
   margin-top:12px;
   color:var(--muted);
-  font-size:15px;
+  font-size:14px;
+  letter-spacing:5px;
 }
 
-/* CARD */
+.symbol{
+  margin-top:30px;
+  color:#a4a9b5;
+  font-size:18px;
+}
 
-.card{
-  background:var(--card);
+.settings{
+  width:64px;
+  height:64px;
   border:1px solid var(--line);
-  border-radius:28px;
-  padding:26px;
-  margin-top:22px;
-  box-shadow:0 12px 40px rgba(0,0,0,.18);
+  border-radius:20px;
+  background:#0d0f14;
+  color:#ddd;
+  font-size:30px;
 }
+
+/* COMMON */
 
 .section-title{
+  margin:34px 4px 14px;
+  color:#9ba1b0;
+  font-size:13px;
+  letter-spacing:4px;
+  text-transform:uppercase;
+}
+
+.card{
+  background:linear-gradient(180deg,#111319,#0e1015);
+  border:1px solid var(--line);
+  border-radius:24px;
+  box-shadow:var(--shadow);
+}
+
+.muted{
   color:var(--muted);
-  font-size:14px;
-  letter-spacing:3px;
-  margin:30px 4px 16px;
+}
+
+.green{
+  color:var(--green)!important;
+}
+
+.red{
+  color:var(--red)!important;
+}
+
+.yellow{
+  color:var(--yellow)!important;
 }
 
 /* DECISION */
 
 .decision-card{
+  padding:34px 24px;
   text-align:center;
-  padding-top:38px;
-  padding-bottom:34px;
 }
 
 .decision-label{
-  color:var(--muted);
-  font-size:14px;
-  letter-spacing:3px;
+  color:#8d93a1;
+  font-size:13px;
+  letter-spacing:5px;
 }
 
 .decision{
-  font-size:42px;
+  margin:28px 0 12px;
+  font-size:44px;
+  line-height:1.02;
   font-weight:850;
   letter-spacing:-1.5px;
-  margin-top:25px;
-  line-height:1.08;
 }
-
-.decision.buy{color:var(--green)}
-.decision.sell{color:var(--red)}
-.decision.wait{color:var(--yellow)}
-.decision.watch-buy{color:var(--yellow)}
-.decision.watch-sell{color:var(--orange)}
-.decision.no-trade{color:var(--muted)}
 
 .score{
-  margin-top:14px;
-  font-size:22px;
-}
-
-.score span{
-  font-weight:800;
-}
-
-/* STATUS */
-
-.status-banner{
-  margin-top:24px;
-  padding:16px 18px;
-  border-radius:17px;
-  font-weight:700;
-  font-size:15px;
-  border:1px solid var(--line);
-}
-
-.status-banner.buy{
-  background:rgba(41,209,125,.08);
-  color:var(--green);
-}
-
-.status-banner.sell{
-  background:rgba(255,91,104,.08);
-  color:var(--red);
-}
-
-.status-banner.wait{
-  background:rgba(245,200,76,.08);
-  color:var(--yellow);
-}
-
-.status-banner.no-trade{
-  background:rgba(141,147,161,.07);
-  color:var(--muted);
-}
-
-/* ANALYSIS */
-
-.analysis-list{
-  margin-top:28px;
-  text-align:left;
-}
-
-.analysis-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  min-height:59px;
-  border-bottom:1px solid var(--line);
-  font-size:16px;
-}
-
-.analysis-row:last-child{
-  border-bottom:none;
-}
-
-.analysis-value{
-  display:flex;
-  align-items:center;
-  gap:9px;
-  font-weight:600;
-  color:var(--muted);
-  text-align:right;
-}
-
-.dot{
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  display:inline-block;
-  flex:none;
-}
-
-.dot.green{background:var(--green)}
-.dot.red{background:var(--red)}
-.dot.yellow{background:var(--yellow)}
-.dot.orange{background:var(--orange)}
-.dot.gray{background:#8d93a1}
-
-.value-green{color:var(--green)!important}
-.value-red{color:var(--red)!important}
-.value-yellow{color:var(--yellow)!important}
-.value-orange{color:var(--orange)!important}
-.value-gray{color:var(--muted)!important}
-
-/* DIAGNOSTICS */
-
-.diagnostic-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-
-.diag{
-  background:var(--card2);
-  border:1px solid var(--line);
-  border-radius:19px;
-  padding:16px;
-  min-height:88px;
-}
-
-.diag-label{
-  color:var(--muted);
-  font-size:11px;
-  letter-spacing:1.5px;
-}
-
-.diag-value{
-  margin-top:10px;
-  font-size:15px;
-  font-weight:800;
-  line-height:1.35;
-}
-
-.diag.pass{
-  border-color:rgba(41,209,125,.25);
-}
-
-.diag.pass .diag-value{
-  color:var(--green);
-}
-
-.diag.fail{
-  border-color:rgba(255,91,104,.25);
-}
-
-.diag.fail .diag-value{
-  color:var(--red);
-}
-
-.diag.wait{
-  border-color:rgba(245,200,76,.25);
-}
-
-.diag.wait .diag-value{
-  color:var(--yellow);
-}
-
-.diag.neutral .diag-value{
-  color:var(--muted);
-}
-
-/* GATE */
-
-.gate-box{
-  margin-top:14px;
-  padding:18px;
-  border-radius:20px;
-  background:var(--card2);
-  border:1px solid var(--line);
-}
-
-.gate-title{
-  font-size:12px;
-  color:var(--muted);
-  letter-spacing:2px;
-}
-
-.gate-state{
-  margin-top:9px;
-  font-size:23px;
-  font-weight:850;
-}
-
-.gate-state.locked{
-  color:var(--yellow);
-}
-
-.gate-state.open{
-  color:var(--green);
+  font-size:21px;
+  margin-bottom:22px;
 }
 
 .reason{
-  margin-top:12px;
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.55;
+  padding:16px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:#15171d;
+  color:var(--yellow);
+  font-weight:700;
 }
 
-/* EXECUTION */
+.metrics{
+  margin-top:30px;
+}
 
-.execution-grid{
+.metric-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:18px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.metric-row:last-child{
+  border-bottom:0;
+}
+
+.metric-name{
+  font-size:16px;
+}
+
+.metric-value{
+  color:#a0a6b4;
+  font-weight:700;
+}
+
+/* DIAGNOSTICS */
+
+.grid{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:14px;
 }
 
-.metric{
+.tile{
   min-height:112px;
-  background:var(--card2);
+  padding:20px;
   border:1px solid var(--line);
-  border-radius:22px;
+  border-radius:20px;
+  background:#0d0f14;
+}
+
+.tile-title{
+  color:#8f95a4;
+  font-size:12px;
+  letter-spacing:2px;
+}
+
+.tile-value{
+  margin-top:18px;
+  font-size:18px;
+  font-weight:800;
+}
+
+/* EXECUTION */
+
+.execution-card{
+  margin-top:16px;
+  padding:24px;
+}
+
+.execution-title{
+  color:#8f95a4;
+  letter-spacing:3px;
+  font-size:12px;
+}
+
+.execution-state{
+  margin-top:14px;
+  font-size:25px;
+  font-weight:850;
+}
+
+.reasons{
+  margin-top:18px;
+  color:#9da3b0;
+  line-height:1.6;
+  font-size:14px;
+}
+
+/* PLAN */
+
+.plan{
   padding:18px;
 }
 
-.metric-label{
-  color:var(--muted);
-  font-size:13px;
-  letter-spacing:1px;
+.plan-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
 }
 
-.metric-value{
+.plan-item{
+  padding:20px;
+  min-height:105px;
+  border:1px solid var(--line);
+  border-radius:20px;
+}
+
+.plan-label{
+  color:#9298a7;
+  font-size:12px;
+  letter-spacing:2px;
+}
+
+.plan-value{
   margin-top:16px;
   font-size:23px;
   font-weight:800;
 }
 
-.metric-value.muted{
-  color:var(--muted);
-}
-
 /* BUTTON */
 
-.analyze-btn{
+.primary{
   width:100%;
-  margin-top:18px;
-  border:none;
-  border-radius:25px;
-  background:var(--white);
-  color:#08090c;
-  min-height:70px;
-  font-size:18px;
+  margin-top:20px;
+  padding:19px;
+  border:0;
+  border-radius:20px;
+  background:#f5f5f6;
+  color:#08090b;
   font-weight:850;
+  font-size:17px;
 }
 
-.analyze-btn:active{
-  transform:scale(.985);
-}
-
-.analyze-btn:disabled{
+.primary:disabled{
   opacity:.55;
 }
 
 .updated{
   text-align:center;
-  color:var(--muted);
   margin-top:16px;
-  font-size:14px;
+  color:#9298a7;
 }
 
-.note{
+/* CHART */
+
+.chart-card{
+  padding:18px;
+}
+
+.chart-toolbar{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding-bottom:12px;
+}
+
+.tf-btn{
+  flex:0 0 auto;
+  padding:10px 15px;
+  border-radius:13px;
+  border:1px solid var(--line);
+  background:#0d0f14;
+  color:#969cab;
+  font-weight:800;
+}
+
+.tf-btn.active{
+  background:#f2f3f4;
+  color:#08090b;
+}
+
+.chart-meta{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:8px 0 16px;
+}
+
+.chart-price{
+  font-size:27px;
+  font-weight:850;
+}
+
+.chart-status{
   color:var(--muted);
-  font-size:14px;
-  line-height:1.6;
-  margin-top:22px;
+  font-size:12px;
+}
+
+canvas{
+  width:100%;
+  height:390px;
+  display:block;
+  background:#0b0d12;
+  border:1px solid var(--line);
+  border-radius:18px;
+}
+
+.legend{
+  display:flex;
+  gap:15px;
+  flex-wrap:wrap;
+  margin-top:14px;
+  color:#9da3b0;
+  font-size:12px;
+}
+
+.legend span{
+  display:flex;
+  align-items:center;
+  gap:5px;
 }
 
 /* TIMEFRAMES */
 
 .tf-grid{
   display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
+  grid-template-columns:repeat(5,1fr);
+  gap:10px;
 }
 
-.tf{
-  background:var(--card);
+.tf-box{
+  padding:15px 8px;
+  text-align:center;
   border:1px solid var(--line);
-  border-radius:22px;
-  padding:20px;
-  min-height:115px;
+  border-radius:16px;
+  background:#0d0f14;
 }
 
 .tf-name{
-  color:var(--muted);
-  font-size:13px;
-  margin-bottom:16px;
+  color:#9298a7;
+  font-size:11px;
 }
 
 .tf-bias{
-  font-size:22px;
+  margin-top:9px;
   font-weight:800;
+  font-size:13px;
 }
 
-/* DATA */
-
-.data-status{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:17px 0 4px;
-}
-
-.data-status-label{
-  color:var(--muted);
-}
-
-.data-fresh{
-  color:var(--green);
-  font-weight:800;
-}
-
-.data-stale{
-  color:var(--red);
-  font-weight:800;
-}
-
-/* ERROR */
-
-.error-box{
-  display:none;
-  margin-top:20px;
-  padding:18px;
-  border-radius:18px;
-  border:1px solid rgba(255,91,104,.3);
-  background:rgba(255,91,104,.07);
-  color:var(--red);
-  line-height:1.5;
-}
-
-/* LOADING */
-
-.loading{
-  display:none;
-  margin-top:18px;
-  text-align:center;
-  color:var(--muted);
-}
-
-/* NAV */
+/* BOTTOM NAV */
 
 .bottom-nav{
   position:fixed;
-  z-index:20;
+  z-index:50;
   left:0;
   right:0;
   bottom:0;
-  background:rgba(10,11,15,.94);
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-  border-top:1px solid var(--line);
   padding:
-    12px
-    8px
-    max(12px,env(safe-area-inset-bottom));
+    10px
+    10px
+    calc(env(safe-area-inset-bottom) + 10px);
+  background:rgba(7,8,11,.94);
+  backdrop-filter:blur(20px);
+  border-top:1px solid #20242c;
 }
 
 .nav-inner{
@@ -518,71 +418,86 @@ button{
   grid-template-columns:repeat(4,1fr);
 }
 
-.nav-item{
-  border:none;
-  background:transparent;
-  color:var(--muted);
-  padding:7px 2px;
-  font-size:12px;
-  font-weight:600;
+.nav-btn{
+  border:0;
+  background:none;
+  color:#818796;
+  padding:10px 4px;
 }
 
 .nav-icon{
-  font-size:18px;
-  margin-bottom:5px;
+  display:block;
+  font-size:20px;
+  margin-bottom:6px;
 }
 
-.nav-item.active{
-  color:var(--text);
+.nav-label{
+  font-size:12px;
+  font-weight:700;
 }
 
-/* MOBILE */
+.nav-btn.active{
+  color:#f2f3f5;
+}
 
-@media(max-width:420px){
+/* STATUS */
 
-  .card{
-    padding:21px;
-    border-radius:24px;
+.status-dot{
+  display:inline-block;
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#8c93a1;
+  margin-right:7px;
+}
+
+.status-dot.green{
+  background:var(--green);
+}
+
+.status-dot.red{
+  background:var(--red);
+}
+
+.status-dot.yellow{
+  background:var(--yellow);
+}
+
+/* HIDDEN SECTIONS */
+
+.view{
+  display:none;
+}
+
+.view.active{
+  display:block;
+}
+
+@media(max-width:600px){
+  .logo{
+    font-size:43px;
   }
 
   .decision{
-    font-size:35px;
+    font-size:39px;
   }
 
-  .price{
-    font-size:50px;
+  .grid{
+    gap:10px;
   }
 
-  .metric{
-    min-height:105px;
+  .tile{
     padding:16px;
   }
 
-  .metric-value{
-    font-size:21px;
+  .tf-grid{
+    grid-template-columns:repeat(5,1fr);
   }
 
-  .diag{
-    padding:14px;
-  }
-
-  .diag-value{
-    font-size:14px;
+  canvas{
+    height:340px;
   }
 }
-
-@media(min-width:700px){
-
-  .app{
-    padding-left:30px;
-    padding-right:30px;
-  }
-
-  .price{
-    font-size:68px;
-  }
-}
-
 </style>
 </head>
 
@@ -590,1195 +505,872 @@ button{
 
 <div class="app">
 
-<header class="header">
+  <!-- ================= DASHBOARD ================= -->
 
-  <div>
-    <div class="brand">XAU AI</div>
-    <div class="subtitle">STRICT EXECUTION SYSTEM</div>
-  </div>
+  <section id="dashboardView" class="view active">
 
-  <button class="settings" type="button">⚙</button>
+    <div class="header">
+      <div>
+        <div class="logo">XAU AI</div>
+        <div class="subtitle">STRICT EXECUTION SYSTEM</div>
+        <div class="symbol">XAUUSD · Gold / US Dollar</div>
+      </div>
 
-</header>
+      <button class="settings" onclick="showSettings()">⚙️</button>
+    </div>
 
-<div class="symbol">
-  XAUUSD · Gold / US Dollar
-</div>
+    <div id="livePrice" class="chart-price muted">—</div>
 
-<div id="price" class="price">—</div>
+    <div class="section-title">Live analysis</div>
 
-<div class="live">
-  Live analysis
-</div>
+    <div class="card decision-card">
 
+      <div class="decision-label">MARKET DECISION</div>
 
-<!-- =================================================
-     MARKET DECISION
-================================================= -->
+      <div id="decision" class="decision muted">LOADING</div>
 
-<div class="card decision-card">
+      <div class="score">
+        SETUP SCORE <strong id="score">—</strong>/100
+      </div>
 
-  <div class="decision-label">
-    MARKET DECISION
-  </div>
+      <div id="reason" class="reason">
+        Loading market analysis…
+      </div>
 
-  <div id="decision" class="decision no-trade">
-    NO TRADE
-  </div>
+      <div class="metrics">
 
-  <div class="score">
-    SETUP SCORE
-    <span id="score">—</span>/100
-  </div>
+        <div class="metric-row">
+          <div class="metric-name">TREND</div>
+          <div id="trend" class="metric-value">—</div>
+        </div>
 
-  <div id="statusBanner"
-       class="status-banner no-trade">
-    STAY OUT · Waiting for valid setup
-  </div>
+        <div class="metric-row">
+          <div class="metric-name">STRUCTURE</div>
+          <div id="structure" class="metric-value">—</div>
+        </div>
 
-  <div class="analysis-list">
+        <div class="metric-row">
+          <div class="metric-name">MOMENTUM</div>
+          <div id="momentum" class="metric-value">—</div>
+        </div>
 
-    <div class="analysis-row">
-      <div>TREND</div>
-      <div id="trend" class="analysis-value">
-        <span class="dot gray"></span>
-        NEUTRAL
+        <div class="metric-row">
+          <div class="metric-name">LIQUIDITY</div>
+          <div id="liquidity" class="metric-value">—</div>
+        </div>
+
+        <div class="metric-row">
+          <div class="metric-name">NEWS RISK</div>
+          <div id="newsRisk" class="metric-value">NOT CHECKED</div>
+        </div>
+
       </div>
     </div>
 
-    <div class="analysis-row">
-      <div>STRUCTURE</div>
-      <div id="structure" class="analysis-value">
-        <span class="dot gray"></span>
-        RANGE
+    <div class="section-title">Strict diagnostics</div>
+
+    <div class="card" style="padding:18px">
+
+      <div class="grid">
+
+        <div class="tile">
+          <div class="tile-title">H4 DIRECTION</div>
+          <div id="dH4" class="tile-value">—</div>
+        </div>
+
+        <div class="tile">
+          <div class="tile-title">H1 DIRECTION</div>
+          <div id="dH1" class="tile-value">—</div>
+        </div>
+
+        <div class="tile">
+          <div class="tile-title">M15 DIRECTION</div>
+          <div id="dM15" class="tile-value">—</div>
+        </div>
+
+        <div class="tile">
+          <div class="tile-title">M5 DIRECTION</div>
+          <div id="dM5" class="tile-value">—</div>
+        </div>
+
+        <div class="tile">
+          <div class="tile-title">M15 STRUCTURE</div>
+          <div id="dStructure" class="tile-value">—</div>
+        </div>
+
+        <div class="tile">
+          <div class="tile-title">M15 BOS / CHOCH</div>
+          <div id="dBos" class="tile-value">—</div>
+        </div>
+
+        <div class="tile">
+          <div class="tile-title">M15 LIQUIDITY</div>
+          <div id="dLiquidity" class="tile-value">—</div>
+        </div>
+
+        <div class="tile">
+          <div class="tile-title">M5 PULLBACK</div>
+          <div id="dPullback" class="tile-value">NOT EXPOSED</div>
+        </div>
+
+        <div class="tile">
+          <div class="tile-title">M1 CONFIRMATION</div>
+          <div id="dConfirmation" class="tile-value">—</div>
+        </div>
+
+        <div class="tile">
+          <div class="tile-title">DATA FRESHNESS</div>
+          <div id="dFresh" class="tile-value">—</div>
+        </div>
+
+      </div>
+
+      <div class="execution-card">
+
+        <div class="execution-title">EXECUTION GATE</div>
+
+        <div id="gateState" class="execution-state yellow">
+          🔒 GATE LOCKED
+        </div>
+
+        <div class="reasons">
+          <strong>WHY WAIT</strong>
+          <div id="gateReasons">Loading…</div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="section-title">Execution plan</div>
+
+    <div class="card plan">
+
+      <div class="plan-grid">
+
+        <div class="plan-item">
+          <div class="plan-label">ENTRY</div>
+          <div id="entry" class="plan-value">—</div>
+        </div>
+
+        <div class="plan-item">
+          <div class="plan-label">STOP LOSS</div>
+          <div id="sl" class="plan-value">—</div>
+        </div>
+
+        <div class="plan-item">
+          <div class="plan-label">TP 1</div>
+          <div id="tp1" class="plan-value">—</div>
+        </div>
+
+        <div class="plan-item">
+          <div class="plan-label">TP 2</div>
+          <div id="tp2" class="plan-value">—</div>
+        </div>
+
+        <div class="plan-item">
+          <div class="plan-label">RISK / REWARD</div>
+          <div id="rr" class="plan-value">—</div>
+        </div>
+
+        <div class="plan-item">
+          <div class="plan-label">STATUS</div>
+          <div id="planStatus" class="plan-value yellow">
+            WAIT
+          </div>
+        </div>
+
+      </div>
+
+      <button id="analyzeBtn"
+              class="primary"
+              onclick="analyzeXAU()">
+        ANALYZE XAUUSD
+      </button>
+
+      <div id="updated"
+           class="updated">
+        Waiting for analysis…
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ================= CHART ================= -->
+
+  <section id="chartView" class="view">
+
+    <div class="header">
+      <div>
+        <div class="logo">CHART</div>
+        <div class="subtitle">LIVE XAUUSD MARKET DATA</div>
       </div>
     </div>
 
-    <div class="analysis-row">
-      <div>MOMENTUM</div>
-      <div id="momentum" class="analysis-value">
-        <span class="dot gray"></span>
-        —
+    <div class="section-title">Timeframe</div>
+
+    <div class="card chart-card">
+
+      <div class="chart-toolbar">
+
+        <button class="tf-btn active"
+                data-tf="1min"
+                onclick="changeChartTF('1min',this)">
+          M1
+        </button>
+
+        <button class="tf-btn"
+                data-tf="5min"
+                onclick="changeChartTF('5min',this)">
+          M5
+        </button>
+
+        <button class="tf-btn"
+                data-tf="15min"
+                onclick="changeChartTF('15min',this)">
+          M15
+        </button>
+
+        <button class="tf-btn"
+                data-tf="1h"
+                onclick="changeChartTF('1h',this)">
+          H1
+        </button>
+
+        <button class="tf-btn"
+                data-tf="4h"
+                onclick="changeChartTF('4h',this)">
+          H4
+        </button>
+
+      </div>
+
+      <div class="chart-meta">
+        <div id="chartPrice" class="chart-price">—</div>
+        <div id="chartStatus" class="chart-status">
+          Loading…
+        </div>
+      </div>
+
+      <canvas id="priceCanvas"></canvas>
+
+      <div class="legend">
+        <span>● Price</span>
+        <span>━ EMA20</span>
+        <span>━ EMA50</span>
+        <span>━ EMA200</span>
+      </div>
+
+      <button class="primary"
+              onclick="loadChart(currentChartTF)">
+        REFRESH CHART
+      </button>
+
+    </div>
+
+    <div class="section-title">Multi-timeframe snapshot</div>
+
+    <div class="card" style="padding:16px">
+
+      <div class="tf-grid">
+
+        <div class="tf-box">
+          <div class="tf-name">M1</div>
+          <div id="chartM1" class="tf-bias">—</div>
+        </div>
+
+        <div class="tf-box">
+          <div class="tf-name">M5</div>
+          <div id="chartM5" class="tf-bias">—</div>
+        </div>
+
+        <div class="tf-box">
+          <div class="tf-name">M15</div>
+          <div id="chartM15" class="tf-bias">—</div>
+        </div>
+
+        <div class="tf-box">
+          <div class="tf-name">H1</div>
+          <div id="chartH1" class="tf-bias">—</div>
+        </div>
+
+        <div class="tf-box">
+          <div class="tf-name">H4</div>
+          <div id="chartH4" class="tf-bias">—</div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ================= AI ================= -->
+
+  <section id="aiView" class="view">
+
+    <div class="header">
+      <div>
+        <div class="logo">AI</div>
+        <div class="subtitle">STRICT MARKET ANALYSIS</div>
       </div>
     </div>
 
-    <div class="analysis-row">
-      <div>LIQUIDITY</div>
-      <div id="liquidity" class="analysis-value">
-        <span class="dot gray"></span>
-        NONE
+    <div class="card" style="padding:24px">
+
+      <div class="section-title" style="margin-top:0">
+        AI Analysis
+      </div>
+
+      <p class="muted" style="line-height:1.7">
+        AI explanation module will use the verified Strict Execution
+        Engine output. It will not override the execution gate.
+      </p>
+
+      <div class="reason">
+        Current architecture:
+        Rules Engine → Risk Filter → Execution Gate → AI Explanation
+      </div>
+
+      <button class="primary"
+              onclick="showComingSoon('AI explanation')">
+        ANALYZE MARKET WITH AI
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- ================= JOURNAL ================= -->
+
+  <section id="journalView" class="view">
+
+    <div class="header">
+      <div>
+        <div class="logo">JOURNAL</div>
+        <div class="subtitle">TRADE HISTORY</div>
       </div>
     </div>
 
-    <div class="analysis-row">
-      <div>NEWS RISK</div>
-      <div id="news" class="analysis-value">
-        <span class="dot gray"></span>
-        NOT CHECKED
+    <div class="card" style="padding:24px">
+
+      <div class="section-title" style="margin-top:0">
+        Trade Journal
       </div>
+
+      <p class="muted" style="line-height:1.7">
+        Trade logging module is ready for the next development phase.
+      </p>
+
+      <button class="primary"
+              onclick="showComingSoon('Trade Journal')">
+        NEW TRADE ENTRY
+      </button>
+
     </div>
 
-  </div>
+  </section>
 
 </div>
 
 
-<!-- =================================================
-     STRICT DIAGNOSTICS
-================================================= -->
-
-<div class="section-title">
-  STRICT DIAGNOSTICS
-</div>
-
-<div class="card">
-
-  <div class="diagnostic-grid">
-
-    <div id="diagH4" class="diag neutral">
-      <div class="diag-label">H4 DIRECTION</div>
-      <div id="diagH4Value" class="diag-value">—</div>
-    </div>
-
-    <div id="diagH1" class="diag neutral">
-      <div class="diag-label">H1 DIRECTION</div>
-      <div id="diagH1Value" class="diag-value">—</div>
-    </div>
-
-    <div id="diagM15" class="diag neutral">
-      <div class="diag-label">M15 DIRECTION</div>
-      <div id="diagM15Value" class="diag-value">—</div>
-    </div>
-
-    <div id="diagM5" class="diag neutral">
-      <div class="diag-label">M5 DIRECTION</div>
-      <div id="diagM5Value" class="diag-value">—</div>
-    </div>
-
-    <div id="diagStructure" class="diag neutral">
-      <div class="diag-label">M15 STRUCTURE</div>
-      <div id="diagStructureValue" class="diag-value">—</div>
-    </div>
-
-    <div id="diagBOS" class="diag neutral">
-      <div class="diag-label">M15 BOS / CHOCH</div>
-      <div id="diagBOSValue" class="diag-value">—</div>
-    </div>
-
-    <div id="diagLiquidity" class="diag neutral">
-      <div class="diag-label">M15 LIQUIDITY</div>
-      <div id="diagLiquidityValue" class="diag-value">—</div>
-    </div>
-
-    <div id="diagM5Pullback" class="diag neutral">
-      <div class="diag-label">M5 PULLBACK</div>
-      <div id="diagM5PullbackValue" class="diag-value">
-        NOT EXPOSED
-      </div>
-    </div>
-
-    <div id="diagM1Confirm" class="diag neutral">
-      <div class="diag-label">M1 CONFIRMATION</div>
-      <div id="diagM1ConfirmValue" class="diag-value">
-        NOT EXPOSED
-      </div>
-    </div>
-
-    <div id="diagFresh" class="diag neutral">
-      <div class="diag-label">DATA FRESHNESS</div>
-      <div id="diagFreshValue" class="diag-value">—</div>
-    </div>
-
-  </div>
-
-  <div class="gate-box">
-
-    <div class="gate-title">
-      EXECUTION GATE
-    </div>
-
-    <div id="gateState"
-         class="gate-state locked">
-      🔒 LOCKED
-    </div>
-
-    <div id="gateReason"
-         class="reason">
-      Waiting for analysis.
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- =================================================
-     EXECUTION PLAN
-================================================= -->
-
-<div class="section-title">
-  EXECUTION PLAN
-</div>
-
-<div class="card">
-
-  <div class="execution-grid">
-
-    <div class="metric">
-      <div class="metric-label">ENTRY</div>
-      <div id="entry"
-           class="metric-value muted">—</div>
-    </div>
-
-    <div class="metric">
-      <div class="metric-label">STOP LOSS</div>
-      <div id="sl"
-           class="metric-value muted">—</div>
-    </div>
-
-    <div class="metric">
-      <div class="metric-label">TP 1</div>
-      <div id="tp1"
-           class="metric-value muted">—</div>
-    </div>
-
-    <div class="metric">
-      <div class="metric-label">TP 2</div>
-      <div id="tp2"
-           class="metric-value muted">—</div>
-    </div>
-
-    <div class="metric">
-      <div class="metric-label">RISK / REWARD</div>
-      <div id="rr"
-           class="metric-value muted">—</div>
-    </div>
-
-    <div class="metric">
-      <div class="metric-label">STATUS</div>
-      <div id="status"
-           class="metric-value muted">NO TRADE</div>
-    </div>
-
-  </div>
-
-  <button id="analyzeBtn"
-          class="analyze-btn"
-          type="button">
-    ANALYZE XAUUSD
-  </button>
-
-  <div id="loading"
-       class="loading">
-    Analyzing live market data…
-  </div>
-
-  <div id="updated"
-       class="updated">
-    Ready
-  </div>
-
-  <div class="note">
-    Rules-based prototype. Signals are for analysis only
-    and do not execute trades. No guaranteed win rate.
-  </div>
-
-  <div id="error"
-       class="error-box">
-  </div>
-
-</div>
-
-
-<!-- =================================================
-     TIMEFRAMES
-================================================= -->
-
-<div class="section-title">
-  TIMEFRAMES
-</div>
-
-<div class="card">
-
-  <div class="tf-grid">
-
-    <div class="tf">
-      <div class="tf-name">M1</div>
-      <div id="tf1"
-           class="tf-bias value-gray">—</div>
-    </div>
-
-    <div class="tf">
-      <div class="tf-name">M5</div>
-      <div id="tf5"
-           class="tf-bias value-gray">—</div>
-    </div>
-
-    <div class="tf">
-      <div class="tf-name">M15</div>
-      <div id="tf15"
-           class="tf-bias value-gray">—</div>
-    </div>
-
-    <div class="tf">
-      <div class="tf-name">H1</div>
-      <div id="tf60"
-           class="tf-bias value-gray">—</div>
-    </div>
-
-    <div class="tf">
-      <div class="tf-name">H4</div>
-      <div id="tf240"
-           class="tf-bias value-gray">—</div>
-    </div>
-
-    <div class="tf">
-      <div class="tf-name">DATA</div>
-      <div id="dataStatus"
-           class="tf-bias value-gray">—</div>
-    </div>
-
-  </div>
-
-  <div class="data-status">
-
-    <div class="data-status-label">
-      Market data
-    </div>
-
-    <div id="freshnessText"
-         class="data-fresh">
-      —
-    </div>
-
-  </div>
-
-</div>
-
-</div>
-
-
-<!-- =================================================
-     NAV
-================================================= -->
+<!-- ================= BOTTOM NAV ================= -->
 
 <nav class="bottom-nav">
 
-<div class="nav-inner">
+  <div class="nav-inner">
 
-  <button class="nav-item active"
-          type="button">
+    <button class="nav-btn active"
+            onclick="switchView('dashboardView',this)">
+      <span class="nav-icon">⌂</span>
+      <span class="nav-label">Dashboard</span>
+    </button>
 
-    <div class="nav-icon">⌂</div>
-    Dashboard
+    <button class="nav-btn"
+            onclick="switchView('chartView',this)">
+      <span class="nav-icon">⌁</span>
+      <span class="nav-label">Chart</span>
+    </button>
 
-  </button>
+    <button class="nav-btn"
+            onclick="switchView('aiView',this)">
+      <span class="nav-icon">✦</span>
+      <span class="nav-label">AI</span>
+    </button>
 
-  <button class="nav-item"
-          type="button"
-          id="chartNav">
+    <button class="nav-btn"
+            onclick="switchView('journalView',this)">
+      <span class="nav-icon">▣</span>
+      <span class="nav-label">Journal</span>
+    </button>
 
-    <div class="nav-icon">⌁</div>
-    Chart
-
-  </button>
-
-  <button class="nav-item"
-          type="button"
-          id="aiNav">
-
-    <div class="nav-icon">✦</div>
-    AI
-
-  </button>
-
-  <button class="nav-item"
-          type="button"
-          id="journalNav">
-
-    <div class="nav-icon">▣</div>
-    Journal
-
-  </button>
-
-</div>
+  </div>
 
 </nav>
 
 
 <script>
 
-/* =====================================================
-   XAU AI — DASHBOARD V2
-   STRICT DIAGNOSTICS
-===================================================== */
-
-const API_URL =
+const API =
   "https://xau-ai-api.khoochorshioong.workers.dev";
 
-const $ = id =>
-  document.getElementById(id);
+const TIMEFRAMES = [
+  "1min",
+  "5min",
+  "15min",
+  "1h",
+  "4h"
+];
+
+let latestAnalysis = null;
+let currentChartTF = "1min";
+let chartData = [];
 
 
-/* =====================================================
+/* =========================================================
    HELPERS
-===================================================== */
+========================================================= */
 
-function safe(value){
+function el(id){
+  return document.getElementById(id);
+}
 
-  if(
+function text(id,value){
+  const node=el(id);
+  if(node) node.textContent =
     value === null ||
     value === undefined ||
     value === ""
-  ){
-    return "—";
-  }
+      ? "—"
+      : value;
+}
 
-  return String(value);
+function safeObject(value){
+  return value && typeof value === "object"
+    ? value
+    : null;
+}
+
+function upper(value){
+  return value == null
+    ? "—"
+    : String(value).toUpperCase();
+}
+
+function biasClass(value){
+  const v=String(value||"").toUpperCase();
+
+  if(v.includes("BULL")||v==="BUY")
+    return "green";
+
+  if(v.includes("BEAR")||v==="SELL")
+    return "red";
+
+  if(v.includes("WAIT")||
+     v.includes("LOCK")||
+     v.includes("MIXED"))
+    return "yellow";
+
+  return "";
+}
+
+function setColored(id,value){
+  const node=el(id);
+  if(!node)return;
+
+  node.className =
+    node.className
+      .replace(/\bgreen\b|\bred\b|\byellow\b/g,"")
+      .trim();
+
+  node.textContent =
+    value == null || value === ""
+      ? "—"
+      : value;
+
+  const c=biasClass(value);
+  if(c)node.classList.add(c);
 }
 
 
-function tfBias(tf){
+/* =========================================================
+   VIEW NAVIGATION
+========================================================= */
 
-  return tf?.score?.bias ||
-         tf?.bias ||
-         "NEUTRAL";
+function switchView(viewId,button){
+
+  document
+    .querySelectorAll(".view")
+    .forEach(v=>v.classList.remove("active"));
+
+  const target=el(viewId);
+
+  if(target)
+    target.classList.add("active");
+
+  document
+    .querySelectorAll(".nav-btn")
+    .forEach(b=>b.classList.remove("active"));
+
+  if(button)
+    button.classList.add("active");
+
+  if(viewId==="chartView"){
+    loadChart(currentChartTF);
+  }
 }
 
 
-function dotClass(value){
+/* =========================================================
+   ANALYSIS
+========================================================= */
 
-  if(value === "BULLISH") return "green";
-  if(value === "BEARISH") return "red";
-  if(value === "WATCH") return "yellow";
+async function analyzeXAU(){
 
-  return "gray";
+  const button=el("analyzeBtn");
+
+  if(button){
+    button.disabled=true;
+    button.textContent="ANALYZING XAUUSD…";
+  }
+
+  try{
+
+    const response=await fetch(
+      API+"/api/analyze?ts="+Date.now(),
+      {
+        method:"GET",
+        cache:"no-store"
+      }
+    );
+
+    const data=await response.json();
+
+    latestAnalysis=data;
+
+    renderAnalysis(data);
+
+  }catch(error){
+
+    console.error(error);
+
+    text(
+      "reason",
+      "Unable to load market analysis."
+    );
+
+    text(
+      "gateReasons",
+      "API connection failed."
+    );
+
+  }finally{
+
+    if(button){
+      button.disabled=false;
+      button.textContent="ANALYZE XAUUSD";
+    }
+
+  }
 }
 
 
-function valueClass(value){
+/* =========================================================
+   ANALYSIS RENDERER
+========================================================= */
 
-  if(value === "BULLISH") return "value-green";
-  if(value === "BEARISH") return "value-red";
-  if(value === "WATCH") return "value-yellow";
+function renderAnalysis(data){
 
-  return "value-gray";
-}
-
-
-/* =====================================================
-   ANALYSIS VALUE
-===================================================== */
-
-function setAnalysisValue(
-  element,
-  value
-){
-
-  element.className =
-    "analysis-value";
-
-  element.innerHTML =
-    `<span class="dot ${dotClass(value)}"></span>${safe(value)}`;
-
-  element.classList.add(
-    valueClass(value)
-  );
-}
-
-
-/* =====================================================
-   STRUCTURE
-===================================================== */
-
-function getStructure(tf){
-
-  const s =
-    tf?.structure;
-
-  if(!s) return "RANGE";
-
-  if(typeof s === "string"){
-    return s;
-  }
-
-  return s.structure ||
-         s.state ||
-         "RANGE";
-}
-
-
-function getBOS(tf){
-
-  const s =
-    tf?.structure;
-
-  if(!s) return "NONE";
-
-  if(typeof s === "string"){
-    return "NONE";
-  }
-
-  return s.bos ||
-         s.choch ||
-         "NONE";
-}
-
-
-/* =====================================================
-   MOMENTUM
-===================================================== */
-
-function momentum(tf){
-
-  const m =
-    tf?.momentum ||
-    tf?.indicators;
-
-  if(!m) return "NEUTRAL";
-
-  const rsi =
-    m.rsi ??
-    m.rsi14;
-
-  const macd =
-    m.histogram ??
-    m?.macd?.histogram;
-
-  if(
-    macd > 0 &&
-    rsi >= 50
-  ){
-    return "BULLISH";
-  }
-
-  if(
-    macd < 0 &&
-    rsi <= 50
-  ){
-    return "BEARISH";
-  }
-
-  return "NEUTRAL";
-}
-
-
-/* =====================================================
-   LIQUIDITY
-===================================================== */
-
-function getLiquidity(tf){
-
-  if(!tf) return "NONE";
-
-  if(
-    typeof tf.liquidity === "string" &&
-    tf.liquidity !== "NONE"
-  ){
-    return tf.liquidity;
-  }
-
-  const sweep =
-    tf.liquiditySweep;
-
-  if(
-    sweep?.type
-  ){
-    return sweep.type;
-  }
-
-  return "NONE";
-}
-
-
-/* =====================================================
-   FRESHNESS
-===================================================== */
-
-function allFresh(
-  freshness
-){
-
-  if(!freshness) return false;
-
-  const values =
-    Object.values(freshness);
-
-  if(!values.length) return false;
-
-  return values.every(
-    x => x?.fresh === true
-  );
-}
-
-
-/* =====================================================
-   DIAGNOSTIC BOX
-===================================================== */
-
-function setDiag(
-  boxId,
-  valueId,
-  value,
-  state="neutral"
-){
-
-  const box =
-    $(boxId);
-
-  const element =
-    $(valueId);
-
-  box.className =
-    `diag ${state}`;
-
-  element.textContent =
-    safe(value);
-}
-
-
-/* =====================================================
-   DIRECTION ALIGNMENT
-===================================================== */
-
-function higherAlignment(
-  h4,
-  h1,
-  m15
-){
-
-  const a = tfBias(h4);
-  const b = tfBias(h1);
-  const c = tfBias(m15);
-
-  if(
-    a === "BULLISH" &&
-    b === "BULLISH" &&
-    c === "BULLISH"
-  ){
-    return "BUY";
-  }
-
-  if(
-    a === "BEARISH" &&
-    b === "BEARISH" &&
-    c === "BEARISH"
-  ){
-    return "SELL";
-  }
-
-  return null;
-}
-
-
-/* =====================================================
-   DECISION STYLE
-===================================================== */
-
-function decisionStyle(
-  direction
-){
-
-  if(direction === "BUY"){
-
-    return {
-      cls:"buy",
-      banner:"buy",
-      text:"EXECUTE · Strict BUY conditions confirmed"
-    };
-
-  }
-
-  if(direction === "SELL"){
-
-    return {
-      cls:"sell",
-      banner:"sell",
-      text:"EXECUTE · Strict SELL conditions confirmed"
-    };
-
-  }
-
-  if(
-    direction === "WAIT — MARKET CONFLICT"
-  ){
-
-    return {
-      cls:"wait",
-      banner:"wait",
-      text:"WAIT · Higher-timeframe market conflict"
-    };
-
-  }
-
-  if(
-    direction === "WATCH — BUY SETUP"
-  ){
-
-    return {
-      cls:"wait",
-      banner:"wait",
-      text:"WAIT · Bullish setup developing"
-    };
-
-  }
-
-  if(
-    direction === "WATCH — SELL SETUP"
-  ){
-
-    return {
-      cls:"wait",
-      banner:"wait",
-      text:"WAIT · Bearish setup developing"
-    };
-
-  }
-
-  return {
-    cls:"no-trade",
-    banner:"no-trade",
-    text:"STAY OUT · No valid executable setup"
-  };
-}
-
-
-/* =====================================================
-   RISK
-===================================================== */
-
-function renderRisk(
-  decision,
-  risk
-){
-
-  const executable =
-    decision === "BUY" ||
-    decision === "SELL";
-
-  if(
-    !executable ||
-    !risk
-  ){
-
-    ["entry","sl","tp1","tp2","rr"]
-      .forEach(id => {
-
-        $(id).textContent = "—";
-        $(id).className =
-          "metric-value muted";
-
-      });
-
+  if(!data){
     return;
   }
 
-  $("entry").textContent =
-    safe(risk.entry);
+  /*
+    IMPORTANT:
+    Final Engine 1.1 uses:
+      analysis["1min"]
+      analysis["5min"]
+      analysis["15min"]
+      analysis["1h"]
+      analysis["4h"]
 
-  $("sl").textContent =
-    safe(risk.stopLoss);
+    We do NOT assume a "timeframes" object.
+  */
 
-  $("tp1").textContent =
-    safe(risk.takeProfit1);
-
-  $("tp2").textContent =
-    safe(risk.takeProfit2);
-
-  $("rr").textContent =
-    risk.rrToTP1 !== null &&
-    risk.rrToTP1 !== undefined
-
-      ? `${risk.rrToTP1}R / ${risk.rrToTP2}R`
-
-      : "—";
-
-  ["entry","sl","tp1","tp2","rr"]
-    .forEach(id => {
-
-      $(id).className =
-        "metric-value";
-
-    });
-}
-
-
-/* =====================================================
-   TIMEFRAME CARDS
-===================================================== */
-
-function renderTF(
-  id,
-  tf
-){
-
-  const element =
-    $(id);
-
-  if(!tf){
-
-    element.textContent = "—";
-    element.className =
-      "tf-bias value-gray";
-
-    return;
-  }
-
-  const bias =
-    tfBias(tf);
-
-  element.textContent =
-    bias;
-
-  element.className =
-    `tf-bias ${valueClass(bias)}`;
-}
-
-
-/* =====================================================
-   MAIN RENDER
-===================================================== */
-
-function render(data){
-
-  const decision =
-    data?.decision?.direction ||
-    data?.decision ||
-    "NO TRADE";
-
-  const score =
-    data?.decision?.setupScore ??
-    data?.setupScore;
-
-  const timeframes =
-    data?.timeframes || {};
+  const analysis =
+    safeObject(data.analysis) || {};
 
   const m1 =
-    timeframes["1min"];
+    safeObject(analysis["1min"]);
 
   const m5 =
-    timeframes["5min"];
+    safeObject(analysis["5min"]);
 
   const m15 =
-    timeframes["15min"];
+    safeObject(analysis["15min"]);
 
   const h1 =
-    timeframes["1h"];
+    safeObject(analysis["1h"]);
 
   const h4 =
-    timeframes["4h"];
-
-  const style =
-    decisionStyle(decision);
-
-
-  /* PRICE */
-
-  $("price").textContent =
-    safe(m1?.price);
+    safeObject(analysis["4h"]);
 
 
   /* DECISION */
 
-  $("decision").textContent =
-    decision;
+  let decision =
+    data.decision;
 
-  $("decision").className =
-    `decision ${style.cls}`;
-
-  $("score").textContent =
-    safe(score);
-
-  $("statusBanner").textContent =
-    style.text;
-
-  $("statusBanner").className =
-    `status-banner ${style.banner}`;
-
-
-  /* STATUS */
-
-  let statusClass =
-    "muted";
-
-  if(decision === "BUY")
-    statusClass = "value-green";
-
-  if(decision === "SELL")
-    statusClass = "value-red";
+  /*
+    Some engine versions return a string.
+    Others return:
+      decision.direction
+  */
 
   if(
-    decision.includes("WAIT") ||
-    decision.includes("WATCH")
+    decision &&
+    typeof decision === "object"
   ){
-    statusClass = "value-yellow";
+    decision =
+      decision.direction ||
+      decision.label ||
+      "NO TRADE";
   }
 
-  $("status").textContent =
-    decision;
+  decision =
+    decision ||
+    data.execution?.label ||
+    "NO TRADE";
 
-  $("status").className =
-    `metric-value ${statusClass}`;
+  setColored(
+    "decision",
+    upper(decision)
+  );
 
-
-  /* RISK */
-
-  renderRisk(
-    decision,
-    data?.riskPlan
+  text(
+    "score",
+    Number.isFinite(Number(data.setupScore))
+      ? Number(data.setupScore)
+      : "—"
   );
 
 
-  /* TIMEFRAMES */
+  /* REASON */
 
-  renderTF("tf1",m1);
-  renderTF("tf5",m5);
-  renderTF("tf15",m15);
-  renderTF("tf60",h1);
-  renderTF("tf240",h4);
+  let reason="Strict execution gate active.";
 
-
-  /* TOP ANALYSIS */
-
-  const trend =
-    h1?.trend ||
-    h4?.trend ||
-    "NEUTRAL";
-
-  setAnalysisValue(
-    $("trend"),
-    trend
-  );
-
-
-  const h1Structure =
-    getStructure(h1);
-
-  const h4Structure =
-    getStructure(h4);
-
-  const structure =
-    h1Structure !== "RANGE"
-      ? h1Structure
-      : h4Structure;
-
-  setAnalysisValue(
-    $("structure"),
-    structure
-  );
-
-
-  setAnalysisValue(
-    $("momentum"),
-    momentum(m5)
-  );
-
-
-  /* LIQUIDITY */
-
-  let liquidity =
-    getLiquidity(m15);
-
-  if(liquidity === "NONE"){
-
-    liquidity =
-      getLiquidity(h1);
-
+  if(
+    typeof data.decision==="object" &&
+    data.decision.rule
+  ){
+    reason=data.decision.rule;
   }
 
-  setAnalysisValue(
-    $("liquidity"),
-    liquidity
+  if(
+    data.executionGate?.reasons?.length
+  ){
+    reason =
+      data.executionGate.reasons
+        .join(" · ");
+  }
+
+  text("reason",reason);
+
+
+  /* CURRENT PRICE */
+
+  const price =
+    data.price ??
+    m1?.price ??
+    m5?.price ??
+    null;
+
+  text(
+    "livePrice",
+    price != null
+      ? Number(price).toFixed(2)
+      : "—"
   );
 
 
-  /* NEWS */
+  /* SUMMARY */
 
-  const news =
-    data?.safety?.newsRisk ||
-    "NOT CHECKED";
+  const primary =
+    m15 ||
+    h1 ||
+    h4 ||
+    m5 ||
+    m1;
 
-  setAnalysisValue(
-    $("news"),
-    news
+  setColored(
+    "trend",
+    upper(primary?.trend || primary?.bias)
+  );
+
+  setColored(
+    "structure",
+    upper(
+      primary?.structure?.structure ||
+      primary?.structure ||
+      "RANGE"
+    )
+  );
+
+  setColored(
+    "momentum",
+    upper(
+      primary?.momentum ||
+      primary?.momentumState ||
+      "NEUTRAL"
+    )
+  );
+
+  const liquidity =
+    m15?.liquiditySweep ??
+    m15?.liquidity ??
+    "NONE";
+
+  setColored(
+    "liquidity",
+    upper(liquidity)
+  );
+
+  text(
+    "newsRisk",
+    data.safety?.newsRisk ||
+    "NOT CHECKED"
   );
 
 
-  /* =================================================
-     STRICT DIAGNOSTICS
-  ================================================= */
+  /* DIAGNOSTICS */
 
-  const b4 =
-    tfBias(h4);
+  setColored(
+    "dH4",
+    upper(h4?.bias || h4?.direction)
+  );
 
-  const b1 =
-    tfBias(h1);
+  setColored(
+    "dH1",
+    upper(h1?.bias || h1?.direction)
+  );
 
-  const b15 =
-    tfBias(m15);
+  setColored(
+    "dM15",
+    upper(m15?.bias || m15?.direction)
+  );
 
-  const b5 =
-    tfBias(m5);
-
-  const aligned =
-    higherAlignment(
-      h4,
-      h1,
-      m15
-    );
-
-
-  /* H4 */
-
-  setDiag(
-    "diagH4",
-    "diagH4Value",
-    b4,
-    b4 === "BULLISH" ||
-    b4 === "BEARISH"
-      ? "pass"
-      : "neutral"
+  setColored(
+    "dM5",
+    upper(m5?.bias || m5?.direction)
   );
 
 
-  /* H1 */
+  const structureObj =
+    safeObject(m15?.structure);
 
-  setDiag(
-    "diagH1",
-    "diagH1Value",
-    b1,
-    b1 === "BULLISH" ||
-    b1 === "BEARISH"
-      ? "pass"
-      : "neutral"
+  text(
+    "dStructure",
+    upper(
+      structureObj?.structure ||
+      m15?.structure ||
+      "RANGE"
+    )
+  );
+
+  text(
+    "dBos",
+    upper(
+      structureObj?.bos ||
+      structureObj?.choch ||
+      m15?.bos ||
+      m15?.choch ||
+      "NONE"
+    )
+  );
+
+  text(
+    "dLiquidity",
+    upper(
+      m15?.liquiditySweep ||
+      m15?.liquidity ||
+      "NONE"
+    )
   );
 
 
-  /* M15 */
-
-  setDiag(
-    "diagM15",
-    "diagM15Value",
-    b15,
-    b15 === "BULLISH" ||
-    b15 === "BEARISH"
-      ? "pass"
-      : "neutral"
-  );
-
-
-  /* M5 */
-
-  setDiag(
-    "diagM5",
-    "diagM5Value",
-    b5,
-    b5 === "BULLISH" ||
-    b5 === "BEARISH"
-      ? "pass"
-      : "neutral"
-  );
-
-
-  /* M15 STRUCTURE */
-
-  const m15Structure =
-    getStructure(m15);
-
-  setDiag(
-    "diagStructure",
-    "diagStructureValue",
-    m15Structure,
-    m15Structure === "HH_HL" ||
-    m15Structure === "LH_LL"
-      ? "pass"
-      : "neutral"
-  );
-
-
-  /* M15 BOS */
-
-  const m15Bos =
-    getBOS(m15);
-
-  setDiag(
-    "diagBOS",
-    "diagBOSValue",
-    m15Bos,
-    m15Bos !== "NONE"
-      ? "pass"
-      : "neutral"
-  );
-
-
-  /* M15 LIQUIDITY */
-
-  const m15Liquidity =
-    getLiquidity(m15);
-
-  setDiag(
-    "diagLiquidity",
-    "diagLiquidityValue",
-    m15Liquidity,
-    m15Liquidity !== "NONE"
-      ? "pass"
-      : "neutral"
-  );
-
-
-  /* M5 PULLBACK
-
-     IMPORTANT:
-     The current Final Worker does not
-     expose a dedicated pullback field.
-
-     Therefore we DO NOT fabricate one.
-  */
+  /* M5 PULLBACK */
 
   const pullback =
     m5?.pullback ??
-    m5?.pullbackValid ??
-    m5?.entry?.pullback;
+    m5?.pullbackState ??
+    m5?.pullbackDetected ??
+    null;
 
-  if(
-    pullback === true
-  ){
-
-    setDiag(
-      "diagM5Pullback",
-      "diagM5PullbackValue",
-      "CONFIRMED",
-      "pass"
-    );
-
-  }
-
-  else if(
-    pullback === false
-  ){
-
-    setDiag(
-      "diagM5Pullback",
-      "diagM5PullbackValue",
-      "NOT CONFIRMED",
-      "wait"
-    );
-
-  }
-
-  else{
-
-    setDiag(
-      "diagM5Pullback",
-      "diagM5PullbackValue",
-      "NOT EXPOSED",
-      "neutral"
-    );
-
-  }
+  text(
+    "dPullback",
+    pullback === null
+      ? "NOT EXPOSED"
+      : (
+          typeof pullback==="object"
+            ? pullback.state ||
+              pullback.status ||
+              "DETECTED"
+            : String(pullback)
+        )
+  );
 
 
   /* M1 CONFIRMATION */
 
+  /*
+    CRITICAL FIX:
+    null means NO CONFIRMATION.
+    It must NEVER become "CONFIRMED".
+  */
+
   const confirmation =
-    m1?.confirmation ??
+    data.entryConfirmation ??
     m1?.entryConfirmation ??
-    data?.entryConfirmation;
+    null;
 
-  if(
-    confirmation === true ||
-    typeof confirmation === "object"
-  ){
+  if(confirmation===null){
 
-    setDiag(
-      "diagM1Confirm",
-      "diagM1ConfirmValue",
-      "CONFIRMED",
-      "pass"
+    text(
+      "dConfirmation",
+      "NOT CONFIRMED"
     );
 
-  }
+    el("dConfirmation")
+      ?.classList.remove(
+        "green","red","yellow"
+      );
 
-  else if(
-    confirmation === false
-  ){
+  }else{
 
-    setDiag(
-      "diagM1Confirm",
-      "diagM1ConfirmValue",
-      "NOT CONFIRMED",
-      "wait"
-    );
+    let confirmationText;
 
-  }
+    if(typeof confirmation==="object"){
 
-  else{
+      confirmationText =
+        confirmation.status ||
+        confirmation.state ||
+        confirmation.type ||
+        "CONFIRMED";
 
-    setDiag(
-      "diagM1Confirm",
-      "diagM1ConfirmValue",
-      "NOT EXPOSED",
-      "neutral"
+    }else{
+
+      confirmationText =
+        String(confirmation);
+
+    }
+
+    setColored(
+      "dConfirmation",
+      upper(confirmationText)
     );
 
   }
@@ -1786,334 +1378,804 @@ function render(data){
 
   /* FRESHNESS */
 
-  const fresh =
-    allFresh(
-      data?.freshness
+  const freshness =
+    data.freshness || {};
+
+  const freshList =
+    Object.values(freshness);
+
+  const allFresh =
+    data.dataStatus==="FRESH" ||
+    (
+      freshList.length===5 &&
+      freshList.every(
+        x=>x?.fresh!==false
+      )
     );
 
-  setDiag(
-    "diagFresh",
-    "diagFreshValue",
-    fresh
+  setColored(
+    "dFresh",
+    allFresh
       ? "FRESH"
-      : "STALE",
-    fresh
-      ? "pass"
-      : "fail"
+      : "STALE / DEGRADED"
   );
 
 
   /* EXECUTION GATE */
 
   const gate =
-    data?.executionGate;
+    safeObject(data.executionGate) || {};
 
-  const passed =
-    gate?.passed === true ||
-    data?.execution?.executable === true;
+  const executable =
+    gate.executable === true ||
+    data.execution?.executable === true;
 
-  if(passed){
+  if(executable){
 
-    $("gateState").textContent =
-      "✓ GATE OPEN";
+    el("gateState").textContent =
+      "🔓 GATE OPEN";
 
-    $("gateState").className =
-      "gate-state open";
+    el("gateState").className =
+      "execution-state green";
 
-  }
+  }else{
 
-  else{
-
-    $("gateState").textContent =
+    el("gateState").textContent =
       "🔒 GATE LOCKED";
 
-    $("gateState").className =
-      "gate-state locked";
+    el("gateState").className =
+      "execution-state yellow";
+
+  }
+
+  let reasons =
+    gate.reasons || [];
+
+  if(!Array.isArray(reasons))
+    reasons=[String(reasons)];
+
+  if(!reasons.length){
+
+    reasons=[
+      executable
+        ? "ALL STRICT ENTRY CONDITIONS PASSED"
+        : "NO EXECUTABLE SIGNAL"
+    ];
+
+  }
+
+  el("gateReasons").innerHTML =
+    reasons
+      .map(x=>`• ${escapeHtml(x)}`)
+      .join("<br>");
+
+
+  /* RISK PLAN */
+
+  const risk =
+    safeObject(data.riskPlan);
+
+  if(
+    risk &&
+    (
+      risk.entry != null ||
+      risk.stopLoss != null ||
+      risk.sl != null
+    )
+  ){
+
+    text(
+      "entry",
+      formatPrice(
+        risk.entry
+      )
+    );
+
+    text(
+      "sl",
+      formatPrice(
+        risk.stopLoss ??
+        risk.sl
+      )
+    );
+
+    text(
+      "tp1",
+      formatPrice(
+        risk.takeProfit1 ??
+        risk.tp1 ??
+        risk.tp
+      )
+    );
+
+    text(
+      "tp2",
+      formatPrice(
+        risk.takeProfit2 ??
+        risk.tp2
+      )
+    );
+
+    text(
+      "rr",
+      risk.rrToTP1 != null
+        ? "1:"+risk.rrToTP1
+        : risk.rr != null
+          ? (
+            typeof risk.rr==="number"
+              ? "1:"+risk.rr
+              : risk.rr
+          )
+          : "—"
+    );
+
+  }else{
+
+    [
+      "entry",
+      "sl",
+      "tp1",
+      "tp2",
+      "rr"
+    ].forEach(id=>text(id,"—"));
 
   }
 
 
-  const reasons =
-    gate?.reasons || [];
-
-  if(reasons.length){
-
-    $("gateReason").innerHTML =
-      `<strong>WHY WAIT</strong><br>` +
-      reasons
-        .map(x => `• ${safe(x)}`)
-        .join("<br>");
-
-  }
-
-  else if(passed){
-
-    $("gateReason").textContent =
-      "All current execution gates passed.";
-
-  }
-
-  else if(!aligned){
-
-    $("gateReason").textContent =
-      "Higher-timeframe direction is not aligned.";
-
-  }
-
-  else{
-
-    $("gateReason").textContent =
-      "Execution conditions are not yet complete.";
-
-  }
+  setColored(
+    "planStatus",
+    upper(decision)
+  );
 
 
-  /* DATA STATUS */
+  /* TIME */
 
-  if(fresh){
-
-    $("dataStatus").textContent =
-      "FRESH";
-
-    $("dataStatus").className =
-      "tf-bias value-green";
-
-    $("freshnessText").textContent =
-      "FRESH";
-
-    $("freshnessText").className =
-      "data-fresh";
-
-  }
-
-  else{
-
-    $("dataStatus").textContent =
-      "STALE";
-
-    $("dataStatus").className =
-      "tf-bias value-red";
-
-    $("freshnessText").textContent =
-      "STALE / CHECK DATA";
-
-    $("freshnessText").className =
-      "data-stale";
-
-  }
+  text(
+    "updated",
+    "Analysis updated · "+
+    new Date(
+      data.generatedAt || Date.now()
+    ).toLocaleTimeString()
+  );
 
 
-  /* UPDATED */
+  /* CHART SNAPSHOT */
 
-  $("updated").textContent =
-    `Analysis updated · ${
-      new Date().toLocaleTimeString()
-    }`;
+  setColored(
+    "chartM1",
+    upper(m1?.bias || "NEUTRAL")
+  );
 
+  setColored(
+    "chartM5",
+    upper(m5?.bias || "NEUTRAL")
+  );
+
+  setColored(
+    "chartM15",
+    upper(m15?.bias || "NEUTRAL")
+  );
+
+  setColored(
+    "chartH1",
+    upper(h1?.bias || "NEUTRAL")
+  );
+
+  setColored(
+    "chartH4",
+    upper(h4?.bias || "NEUTRAL")
+  );
 }
 
 
-/* =====================================================
-   ERROR
-===================================================== */
+/* =========================================================
+   CHART DATA
+========================================================= */
 
-function showError(message){
+async function loadChart(interval){
 
-  $("error").style.display =
-    "block";
+  currentChartTF=interval;
 
-  $("error").textContent =
-    message;
-}
-
-
-function clearError(){
-
-  $("error").style.display =
-    "none";
-
-  $("error").textContent =
-    "";
-}
-
-
-/* =====================================================
-   ANALYZE
-===================================================== */
-
-async function analyze(){
-
-  const button =
-    $("analyzeBtn");
-
-  clearError();
-
-  button.disabled =
-    true;
-
-  $("loading").style.display =
-    "block";
-
-  $("updated").textContent =
-    "Analyzing live market data…";
+  text(
+    "chartStatus",
+    "Loading "+interval+"…"
+  );
 
   try{
 
-    const response =
-      await fetch(
-        `${API_URL}/api/analyze`,
-        {
-          method:"GET",
-          cache:"no-store"
-        }
-      );
-
-    let data;
-
-    try{
-
-      data =
-        await response.json();
-
-    }
-
-    catch{
-
-      throw new Error(
-        "Invalid response from XAU AI API."
-      );
-
-    }
-
-    if(
-      !response.ok ||
-      data?.ok === false
-    ){
-
-      throw new Error(
-        data?.message ||
-        data?.error ||
-        "Analysis request failed."
-      );
-
-    }
-
-    render(data);
-
-  }
-
-  catch(error){
-
-    console.error(
-      "XAU AI error:",
-      error
+    const response=await fetch(
+      API+
+      "/api/market?interval="+
+      encodeURIComponent(interval)+
+      "&ts="+Date.now(),
+      {
+        method:"GET",
+        cache:"no-store"
+      }
     );
 
-    showError(
-      `Analysis failed: ${
-        error?.message ||
-        "Unknown error"
-      }`
+    const data=await response.json();
+
+    if(!response.ok || data.ok===false){
+
+      throw new Error(
+        data.error ||
+        data.details ||
+        "Market data unavailable"
+      );
+
+    }
+
+    chartData =
+      data.candles ||
+      data.values ||
+      [];
+
+    if(!Array.isArray(chartData) ||
+       chartData.length<2){
+
+      throw new Error(
+        "Not enough candles"
+      );
+
+    }
+
+    const latest =
+      chartData[chartData.length-1];
+
+    text(
+      "chartPrice",
+      latest?.close != null
+        ? Number(latest.close).toFixed(2)
+        : "—"
     );
 
-    $("updated").textContent =
-      "Analysis failed";
+    text(
+      "chartStatus",
+      (
+        data.freshness?.fresh === false
+          ? "STALE DATA"
+          : "FRESH · "+
+            chartData.length+
+            " candles"
+      )
+    );
 
-  }
+    drawChart(chartData);
 
-  finally{
+  }catch(error){
 
-    button.disabled =
-      false;
+    console.error(error);
 
-    $("loading").style.display =
-      "none";
+    text(
+      "chartStatus",
+      "DATA ERROR"
+    );
+
+    const canvas=
+      el("priceCanvas");
+
+    if(canvas){
+
+      const ctx=
+        canvas.getContext("2d");
+
+      resizeCanvas(canvas,ctx);
+
+      ctx.fillStyle="#0b0d12";
+
+      ctx.fillRect(
+        0,0,
+        canvas.width,
+        canvas.height
+      );
+
+      ctx.fillStyle="#9298a7";
+
+      ctx.font="14px -apple-system";
+
+      ctx.fillText(
+        "Market data unavailable",
+        24,
+        45
+      );
+
+    }
 
   }
 
 }
 
 
-/* =====================================================
-   NAV
-===================================================== */
+/* =========================================================
+   CHART TIMEFRAME
+========================================================= */
 
-$("chartNav").addEventListener(
-  "click",
-  () => {
-    alert(
-      "Chart module will be connected to live XAUUSD data in a future version."
+function changeChartTF(interval,button){
+
+  document
+    .querySelectorAll(".tf-btn")
+    .forEach(b=>
+      b.classList.remove("active")
     );
-  }
-);
 
-$("aiNav").addEventListener(
-  "click",
-  () => {
-    alert(
-      "AI Analysis module will be connected after the rules engine is fully validated."
+  if(button)
+    button.classList.add("active");
+
+  loadChart(interval);
+}
+
+
+/* =========================================================
+   CHART DRAWING
+========================================================= */
+
+function resizeCanvas(canvas,ctx){
+
+  const ratio=
+    window.devicePixelRatio || 1;
+
+  const rect=
+    canvas.getBoundingClientRect();
+
+  canvas.width=
+    Math.round(rect.width*ratio);
+
+  canvas.height=
+    Math.round(rect.height*ratio);
+
+  ctx.setTransform(
+    ratio,0,0,ratio,0,0
+  );
+
+  return {
+    width:rect.width,
+    height:rect.height
+  };
+
+}
+
+
+function drawChart(candles){
+
+  const canvas=
+    el("priceCanvas");
+
+  if(!canvas)return;
+
+  const ctx=
+    canvas.getContext("2d");
+
+  const size=
+    resizeCanvas(canvas,ctx);
+
+  const W=size.width;
+  const H=size.height;
+
+  ctx.clearRect(0,0,W,H);
+
+  if(!candles.length)return;
+
+
+  /*
+    Use the last 120 candles so the chart remains
+    readable on iPhone.
+  */
+
+  const visible=
+    candles.slice(-120);
+
+
+  const closes=
+    visible.map(c=>Number(c.close));
+
+  const highs=
+    visible.map(c=>Number(c.high));
+
+  const lows=
+    visible.map(c=>Number(c.low));
+
+
+  const ema20=
+    calculateEMA(closes,20);
+
+  const ema50=
+    calculateEMA(closes,50);
+
+  const ema200=
+    calculateEMA(closes,200);
+
+
+  let min=
+    Math.min(...lows);
+
+  let max=
+    Math.max(...highs);
+
+  const padding=25;
+
+  const range=
+    Math.max(
+      max-min,
+      0.01
     );
-  }
-);
 
-$("journalNav").addEventListener(
-  "click",
-  () => {
-    alert(
-      "Trade Journal module is planned for the next development phase."
+  min-=range*.06;
+  max+=range*.06;
+
+
+  function x(i){
+
+    return padding+
+      (
+        i/(visible.length-1)
+      )*
+      (W-padding*2);
+
+  }
+
+
+  function y(price){
+
+    return H-padding-
+      (
+        (price-min)/(max-min)
+      )*
+      (H-padding*2);
+
+  }
+
+
+  /* GRID */
+
+  ctx.lineWidth=1;
+  ctx.strokeStyle="#1c2028";
+
+  for(let i=0;i<=5;i++){
+
+    const yy=
+      padding+
+      (i/5)*
+      (H-padding*2);
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+      padding,
+      yy
     );
+
+    ctx.lineTo(
+      W-padding,
+      yy
+    );
+
+    ctx.stroke();
+
   }
-);
 
 
-/* =====================================================
-   BUTTON
-===================================================== */
+  /* CANDLES */
 
-$("analyzeBtn").addEventListener(
-  "click",
-  analyze
-);
+  const candleWidth=
+    Math.max(
+      2,
+      (
+        W-padding*2
+      )/visible.length*0.62
+    );
 
+  visible.forEach(
+    (candle,i)=>{
 
-/* =====================================================
-   SERVICE WORKER
-===================================================== */
+      const open=
+        Number(candle.open);
 
-if(
-  "serviceWorker" in navigator
-){
+      const close=
+        Number(candle.close);
 
-  window.addEventListener(
-    "load",
-    () => {
+      const high=
+        Number(candle.high);
 
-      navigator.serviceWorker
-        .register("sw.js")
-        .catch(
-          error =>
-            console.log(
-              "Service worker registration failed:",
-              error
-            )
+      const low=
+        Number(candle.low);
+
+      const xx=x(i);
+
+      const bullish=
+        close>=open;
+
+      const bodyTop=
+        y(Math.max(open,close));
+
+      const bodyBottom=
+        y(Math.min(open,close));
+
+      const bodyHeight=
+        Math.max(
+          1,
+          bodyBottom-bodyTop
         );
 
+      ctx.strokeStyle=
+        bullish
+          ? "#22d889"
+          : "#ff5d68";
+
+      ctx.fillStyle=
+        bullish
+          ? "#22d889"
+          : "#ff5d68";
+
+      /* wick */
+
+      ctx.beginPath();
+
+      ctx.moveTo(
+        xx,
+        y(high)
+      );
+
+      ctx.lineTo(
+        xx,
+        y(low)
+      );
+
+      ctx.stroke();
+
+
+      /* body */
+
+      ctx.fillRect(
+        xx-candleWidth/2,
+        bodyTop,
+        candleWidth,
+        bodyHeight
+      );
+
     }
+  );
+
+
+  /* EMA20 */
+
+  drawLine(
+    ctx,
+    ema20,
+    x,
+    y,
+    "#f5ca4f",
+    1.5
+  );
+
+  /* EMA50 */
+
+  drawLine(
+    ctx,
+    ema50,
+    x,
+    y,
+    "#5da9ff",
+    1.5
+  );
+
+  /* EMA200 */
+
+  drawLine(
+    ctx,
+    ema200,
+    x,
+    y,
+    "#c6cbd5",
+    1.5
+  );
+
+
+  /* PRICE LABEL */
+
+  const last=
+    closes[closes.length-1];
+
+  const lastY=
+    y(last);
+
+  ctx.strokeStyle="#555b68";
+  ctx.setLineDash([4,4]);
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    padding,
+    lastY
+  );
+
+  ctx.lineTo(
+    W-padding,
+    lastY
+  );
+
+  ctx.stroke();
+
+  ctx.setLineDash([]);
+
+  ctx.fillStyle="#f4f5f7";
+  ctx.font="12px -apple-system";
+
+  ctx.fillText(
+    Number(last).toFixed(2),
+    W-padding-65,
+    lastY-6
   );
 
 }
 
 
-/* =====================================================
-   INITIAL LOAD
-===================================================== */
+function drawLine(
+  ctx,
+  values,
+  x,
+  y,
+  stroke,
+  width
+){
+
+  ctx.strokeStyle=stroke;
+  ctx.lineWidth=width;
+  ctx.beginPath();
+
+  let started=false;
+
+  values.forEach(
+    (value,i)=>{
+
+      if(!Number.isFinite(value))
+        return;
+
+      const xx=x(i);
+      const yy=y(value);
+
+      if(!started){
+
+        ctx.moveTo(xx,yy);
+        started=true;
+
+      }else{
+
+        ctx.lineTo(xx,yy);
+
+      }
+
+    }
+  );
+
+  ctx.stroke();
+
+}
+
+
+/* =========================================================
+   EMA
+========================================================= */
+
+function calculateEMA(values,period){
+
+  const output=
+    new Array(values.length)
+      .fill(null);
+
+  if(values.length===0)
+    return output;
+
+  const k=
+    2/(period+1);
+
+  let ema=null;
+
+  for(let i=0;i<values.length;i++){
+
+    const value=
+      Number(values[i]);
+
+    if(!Number.isFinite(value))
+      continue;
+
+    if(ema===null){
+
+      ema=value;
+
+    }else{
+
+      ema=
+        value*k+
+        ema*(1-k);
+
+    }
+
+    output[i]=ema;
+
+  }
+
+  return output;
+}
+
+
+/* =========================================================
+   UTILS
+========================================================= */
+
+function formatPrice(value){
+
+  if(
+    value===null ||
+    value===undefined ||
+    value===""
+  ){
+    return "—";
+  }
+
+  const n=Number(value);
+
+  return Number.isFinite(n)
+    ? n.toFixed(2)
+    : String(value);
+}
+
+
+function escapeHtml(value){
+
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+function showSettings(){
+
+  alert(
+    "XAU AI\n\n"+
+    "FINAL STRICT EXECUTION SYSTEM\n"+
+    "Engine data is provided by Cloudflare Worker.\n\n"+
+    "News / spread / slippage are currently NOT CHECKED."
+  );
+
+}
+
+
+function showComingSoon(name){
+
+  alert(
+    name+
+    " will be connected in the next development phase."
+  );
+
+}
+
+
+/* =========================================================
+   STARTUP
+========================================================= */
+
+window.addEventListener(
+  "resize",
+  ()=>{
+    if(
+      chartData &&
+      chartData.length
+    ){
+      drawChart(chartData);
+    }
+  }
+);
+
 
 window.addEventListener(
   "load",
-  () => {
-
-    analyze();
-
+  ()=>{
+    analyzeXAU();
   }
 );
 
