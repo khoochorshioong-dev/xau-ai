@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 
 <title>XAU AI — Strict Execution System</title>
 
@@ -20,292 +20,531 @@
 :root{
   --bg:#08090c;
   --card:#111318;
+  --card2:#0d0f13;
   --muted:#8d93a1;
   --text:#f4f6f8;
   --green:#29d17d;
-  --red:#ff5d68;
-  --yellow:#f4c95d;
+  --red:#ff5b68;
+  --yellow:#f5c84c;
+  --orange:#ff9f43;
   --line:#242832;
+  --white:#ffffff;
 }
 
 *{
   box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html{
+  background:var(--bg);
 }
 
 body{
   margin:0;
-  background:#050608;
+  background:var(--bg);
   color:var(--text);
   font-family:
     -apple-system,
     BlinkMacSystemFont,
     "SF Pro Display",
+    "SF Pro Text",
     Arial,
     sans-serif;
-}
-
-.app{
-  max-width:480px;
-  margin:auto;
   min-height:100vh;
-  background:var(--bg);
-  padding-bottom:90px;
-}
-
-header{
-  padding:24px 20px 14px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.logo{
-  font-weight:800;
-  letter-spacing:.5px;
-  font-size:22px;
-}
-
-.sub{
-  font-size:10px;
-  color:var(--muted);
-  letter-spacing:2px;
-  margin-top:3px;
-}
-
-.icon{
-  width:36px;
-  height:36px;
-  border:1px solid var(--line);
-  border-radius:12px;
-  display:grid;
-  place-items:center;
-  color:var(--muted);
-}
-
-main{
-  padding:0 16px;
-}
-
-.ticker{
-  padding:8px 4px 18px;
-}
-
-.pair{
-  font-size:13px;
-  color:var(--muted);
-}
-
-.price{
-  font-size:34px;
-  font-weight:800;
-  margin-top:3px;
-}
-
-.change{
-  color:var(--muted);
-  font-size:12px;
-  margin-top:3px;
-}
-
-.card{
-  background:
-    linear-gradient(
-      145deg,
-      #12151b,
-      #0e1015
-    );
-
-  border:1px solid var(--line);
-  border-radius:20px;
-  padding:18px;
-  margin-bottom:14px;
-}
-
-.bias{
-  text-align:center;
-  padding:22px;
-}
-
-.label{
-  font-size:11px;
-  color:var(--muted);
-  letter-spacing:1.5px;
-}
-
-.signal{
-  font-size:30px;
-  font-weight:900;
-  margin:10px 0 4px;
-  color:var(--green);
-}
-
-.score{
-  font-size:13px;
-  color:#c9ced8;
-}
-
-.rows{
-  margin-top:18px;
-}
-
-.row{
-  display:flex;
-  justify-content:space-between;
-  padding:12px 0;
-  border-bottom:1px solid var(--line);
-  font-size:13px;
-}
-
-.row:last-child{
-  border:0;
-}
-
-.ok{
-  color:var(--green);
-}
-
-.warn{
-  color:var(--yellow);
-}
-
-.bad{
-  color:var(--red);
-}
-
-.neutral{
-  color:var(--muted);
-}
-
-.section-title{
-  font-size:12px;
-  color:var(--muted);
-  letter-spacing:1.4px;
-  margin:6px 2px 12px;
-}
-
-.tradegrid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-.box{
-  background:#0a0c10;
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:13px;
-  min-height:62px;
-}
-
-.box small{
-  display:block;
-  color:var(--muted);
-  font-size:10px;
-  margin-bottom:6px;
-}
-
-.box b{
-  font-size:15px;
+  padding-bottom:100px;
 }
 
 button{
-  width:100%;
-  border:0;
-  border-radius:15px;
-  padding:15px;
-  background:#f4f6f8;
-  color:#08090c;
-  font-weight:800;
-  font-size:14px;
-  margin-top:15px;
+  font:inherit;
 }
 
-button:disabled{
+.app{
+  width:100%;
+  max-width:900px;
+  margin:0 auto;
+  padding:
+    max(22px,env(safe-area-inset-top))
+    18px
+    120px;
+}
+
+/* HEADER */
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  margin-bottom:32px;
+}
+
+.brand{
+  font-size:34px;
+  font-weight:800;
+  letter-spacing:-1.5px;
+}
+
+.subtitle{
+  margin-top:7px;
+  font-size:13px;
+  letter-spacing:4px;
+  color:var(--muted);
+}
+
+.settings{
+  width:52px;
+  height:52px;
+  border:1px solid var(--line);
+  background:var(--card);
+  border-radius:18px;
+  color:var(--muted);
+  font-size:22px;
+}
+
+/* PRICE */
+
+.symbol{
+  font-size:17px;
+  color:var(--muted);
+  margin-bottom:8px;
+}
+
+.price{
+  font-size:56px;
+  font-weight:800;
+  letter-spacing:-2px;
+  line-height:1;
+}
+
+.live{
+  margin-top:12px;
+  color:var(--muted);
+  font-size:15px;
+}
+
+/* CARD */
+
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:28px;
+  padding:26px;
+  margin-top:22px;
+  box-shadow:0 12px 40px rgba(0,0,0,.18);
+}
+
+.section-title{
+  color:var(--muted);
+  font-size:14px;
+  letter-spacing:3px;
+  margin:10px 4px 16px;
+}
+
+/* DECISION */
+
+.decision-card{
+  text-align:center;
+  padding-top:38px;
+  padding-bottom:34px;
+}
+
+.decision-label{
+  color:var(--muted);
+  font-size:14px;
+  letter-spacing:3px;
+}
+
+.decision{
+  font-size:42px;
+  font-weight:850;
+  letter-spacing:-1.5px;
+  margin-top:25px;
+  line-height:1.08;
+}
+
+.decision.buy{
+  color:var(--green);
+}
+
+.decision.sell{
+  color:var(--red);
+}
+
+.decision.watch-buy{
+  color:var(--yellow);
+}
+
+.decision.watch-sell{
+  color:var(--orange);
+}
+
+.decision.no-trade{
+  color:var(--muted);
+}
+
+.score{
+  margin-top:14px;
+  font-size:22px;
+  color:var(--text);
+}
+
+.score span{
+  font-weight:800;
+}
+
+/* STATUS BANNER */
+
+.status-banner{
+  margin-top:24px;
+  padding:16px 18px;
+  border-radius:17px;
+  font-weight:700;
+  font-size:15px;
+  border:1px solid var(--line);
+}
+
+.status-banner.buy{
+  background:rgba(41,209,125,.08);
+  color:var(--green);
+}
+
+.status-banner.sell{
+  background:rgba(255,91,104,.08);
+  color:var(--red);
+}
+
+.status-banner.watch-buy{
+  background:rgba(245,200,76,.08);
+  color:var(--yellow);
+}
+
+.status-banner.watch-sell{
+  background:rgba(255,159,67,.08);
+  color:var(--orange);
+}
+
+.status-banner.no-trade{
+  background:rgba(141,147,161,.07);
+  color:var(--muted);
+}
+
+/* ANALYSIS ROWS */
+
+.analysis-list{
+  margin-top:28px;
+  text-align:left;
+}
+
+.analysis-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  min-height:59px;
+  border-bottom:1px solid var(--line);
+  font-size:16px;
+}
+
+.analysis-row:last-child{
+  border-bottom:none;
+}
+
+.analysis-value{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-weight:600;
+  color:var(--muted);
+}
+
+.dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  display:inline-block;
+}
+
+.dot.green{
+  background:var(--green);
+}
+
+.dot.red{
+  background:var(--red);
+}
+
+.dot.yellow{
+  background:var(--yellow);
+}
+
+.dot.orange{
+  background:var(--orange);
+}
+
+.dot.gray{
+  background:#8d93a1;
+}
+
+.value-green{
+  color:var(--green);
+}
+
+.value-red{
+  color:var(--red);
+}
+
+.value-yellow{
+  color:var(--yellow);
+}
+
+.value-orange{
+  color:var(--orange);
+}
+
+.value-gray{
+  color:var(--muted);
+}
+
+/* EXECUTION */
+
+.execution-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.metric{
+  min-height:112px;
+  background:var(--card2);
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:18px;
+}
+
+.metric-label{
+  color:var(--muted);
+  font-size:13px;
+  letter-spacing:1px;
+}
+
+.metric-value{
+  margin-top:16px;
+  font-size:23px;
+  font-weight:800;
+}
+
+.metric-value.muted{
+  color:var(--muted);
+}
+
+/* ANALYZE BUTTON */
+
+.analyze-btn{
+  width:100%;
+  margin-top:18px;
+  border:none;
+  border-radius:25px;
+  background:var(--white);
+  color:#08090c;
+  min-height:70px;
+  font-size:18px;
+  font-weight:850;
+  letter-spacing:.5px;
+}
+
+.analyze-btn:active{
+  transform:scale(.985);
+}
+
+.analyze-btn:disabled{
   opacity:.55;
 }
 
-.note{
-  font-size:11px;
-  color:var(--muted);
-  line-height:1.5;
-  margin-top:12px;
-}
-
-.status{
+.updated{
   text-align:center;
-  font-size:11px;
   color:var(--muted);
-  margin-top:8px;
+  margin-top:16px;
+  font-size:14px;
 }
 
-nav{
-  position:fixed;
-  bottom:0;
-  left:50%;
-  transform:translateX(-50%);
-  max-width:480px;
-  width:100%;
-  height:76px;
+.note{
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.6;
+  margin-top:22px;
+}
 
-  background:rgba(12,14,18,.94);
+/* TIMEFRAMES */
 
-  backdrop-filter:blur(16px);
-
-  border-top:1px solid var(--line);
-
+.tf-grid{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
-
-  padding-bottom:env(safe-area-inset-bottom);
+  grid-template-columns:1fr 1fr;
+  gap:14px;
 }
 
-nav button{
-  margin:0;
-  background:none;
-  color:var(--muted);
-  padding:12px 4px;
-  font-size:10px;
-}
-
-.active{
-  color:var(--text)!important;
-}
-
-.toast{
-  position:fixed;
-  top:20px;
-  left:50%;
-
-  transform:
-    translate(-50%,-20px);
-
-  opacity:0;
-
-  background:#171a21;
+.tf{
+  background:var(--card);
   border:1px solid var(--line);
-
-  padding:12px 16px;
-  border-radius:12px;
-
-  font-size:12px;
-
-  transition:.25s;
-
-  z-index:999;
+  border-radius:22px;
+  padding:20px;
+  min-height:115px;
 }
 
-.show{
-  opacity:1;
-  transform:translate(-50%,0);
+.tf-name{
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:16px;
 }
+
+.tf-bias{
+  font-size:22px;
+  font-weight:800;
+}
+
+/* DATA */
+
+.data-status{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:17px 0 4px;
+}
+
+.data-status-label{
+  color:var(--muted);
+}
+
+.data-fresh{
+  color:var(--green);
+  font-weight:800;
+}
+
+.data-stale{
+  color:var(--red);
+  font-weight:800;
+}
+
+/* ERROR */
+
+.error-box{
+  display:none;
+  margin-top:20px;
+  padding:18px;
+  border-radius:18px;
+  border:1px solid rgba(255,91,104,.3);
+  background:rgba(255,91,104,.07);
+  color:var(--red);
+  line-height:1.5;
+}
+
+/* LOADING */
 
 .loading{
-  animation:pulse 1.2s infinite;
+  display:none;
+  margin-top:18px;
+  text-align:center;
+  color:var(--muted);
 }
 
-@keyframes pulse{
-  0%,100%{opacity:.45}
-  50%{opacity:1}
+/* NAV */
+
+.bottom-nav{
+  position:fixed;
+  z-index:20;
+  left:0;
+  right:0;
+  bottom:0;
+  background:rgba(10,11,15,.94);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border-top:1px solid var(--line);
+  padding:
+    12px
+    8px
+    max(12px,env(safe-area-inset-bottom));
+}
+
+.nav-inner{
+  max-width:900px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+}
+
+.nav-item{
+  border:none;
+  background:transparent;
+  color:var(--muted);
+  padding:7px 2px;
+  font-size:12px;
+  font-weight:600;
+}
+
+.nav-icon{
+  font-size:18px;
+  margin-bottom:5px;
+}
+
+.nav-item.active{
+  color:var(--text);
+}
+
+/* RESPONSIVE */
+
+@media(min-width:700px){
+
+  .app{
+    padding-left:30px;
+    padding-right:30px;
+  }
+
+  .price{
+    font-size:68px;
+  }
+
+}
+
+@media(max-width:420px){
+
+  .card{
+    padding:21px;
+    border-radius:24px;
+  }
+
+  .decision{
+    font-size:35px;
+  }
+
+  .price{
+    font-size:50px;
+  }
+
+  .metric{
+    min-height:105px;
+    padding:16px;
+  }
+
+  .metric-value{
+    font-size:21px;
+  }
+
+}
+
+/* WATCH PULSE */
+
+.watch-pulse{
+  animation:
+    watchPulse 2.2s ease-in-out infinite;
+}
+
+@keyframes watchPulse{
+
+  0%,100%{
+    opacity:1;
+  }
+
+  50%{
+    opacity:.72;
+  }
+
 }
 
 </style>
@@ -315,704 +554,1178 @@ nav button{
 
 <div class="app">
 
-<header>
+  <!-- HEADER -->
 
-<div>
-  <div class="logo">XAU AI</div>
-  <div class="sub">STRICT EXECUTION SYSTEM</div>
+  <header class="header">
+
+    <div>
+
+      <div class="brand">
+        XAU AI
+      </div>
+
+      <div class="subtitle">
+        STRICT EXECUTION SYSTEM
+      </div>
+
+    </div>
+
+    <button
+      class="settings"
+      type="button"
+      aria-label="Settings"
+    >
+      ⚙
+    </button>
+
+  </header>
+
+
+  <!-- MARKET -->
+
+  <div class="symbol">
+    XAUUSD · Gold / US Dollar
+  </div>
+
+  <div
+    id="price"
+    class="price"
+  >
+    —
+  </div>
+
+  <div class="live">
+    Live analysis
+  </div>
+
+
+  <!-- DECISION -->
+
+  <div class="card decision-card">
+
+    <div class="decision-label">
+      MARKET DECISION
+    </div>
+
+    <div
+      id="decision"
+      class="decision no-trade"
+    >
+      NO TRADE
+    </div>
+
+    <div class="score">
+      SETUP SCORE
+      <span id="score">
+        —
+      </span>/100
+    </div>
+
+
+    <div
+      id="statusBanner"
+      class="status-banner no-trade"
+    >
+      STAY OUT · Waiting for a valid setup
+    </div>
+
+
+    <div class="analysis-list">
+
+      <div class="analysis-row">
+
+        <div>
+          TREND
+        </div>
+
+        <div
+          id="trend"
+          class="analysis-value"
+        >
+          <span class="dot gray"></span>
+          NEUTRAL
+        </div>
+
+      </div>
+
+
+      <div class="analysis-row">
+
+        <div>
+          STRUCTURE
+        </div>
+
+        <div
+          id="structure"
+          class="analysis-value"
+        >
+          <span class="dot gray"></span>
+          RANGE
+        </div>
+
+      </div>
+
+
+      <div class="analysis-row">
+
+        <div>
+          MOMENTUM
+        </div>
+
+        <div
+          id="momentum"
+          class="analysis-value"
+        >
+          <span class="dot gray"></span>
+          —
+        </div>
+
+      </div>
+
+
+      <div class="analysis-row">
+
+        <div>
+          LIQUIDITY
+        </div>
+
+        <div
+          id="liquidity"
+          class="analysis-value"
+        >
+          <span class="dot gray"></span>
+          NONE
+        </div>
+
+      </div>
+
+
+      <div class="analysis-row">
+
+        <div>
+          NEWS RISK
+        </div>
+
+        <div
+          id="news"
+          class="analysis-value"
+        >
+          <span class="dot gray"></span>
+          NOT CHECKED
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- EXECUTION -->
+
+  <div class="section-title">
+    EXECUTION PLAN
+  </div>
+
+  <div class="card">
+
+    <div class="execution-grid">
+
+      <div class="metric">
+
+        <div class="metric-label">
+          ENTRY
+        </div>
+
+        <div
+          id="entry"
+          class="metric-value muted"
+        >
+          —
+        </div>
+
+      </div>
+
+
+      <div class="metric">
+
+        <div class="metric-label">
+          STOP LOSS
+        </div>
+
+        <div
+          id="sl"
+          class="metric-value muted"
+        >
+          —
+        </div>
+
+      </div>
+
+
+      <div class="metric">
+
+        <div class="metric-label">
+          TP 1
+        </div>
+
+        <div
+          id="tp1"
+          class="metric-value muted"
+        >
+          —
+        </div>
+
+      </div>
+
+
+      <div class="metric">
+
+        <div class="metric-label">
+          TP 2
+        </div>
+
+        <div
+          id="tp2"
+          class="metric-value muted"
+        >
+          —
+        </div>
+
+      </div>
+
+
+      <div class="metric">
+
+        <div class="metric-label">
+          RISK / REWARD
+        </div>
+
+        <div
+          id="rr"
+          class="metric-value muted"
+        >
+          —
+        </div>
+
+      </div>
+
+
+      <div class="metric">
+
+        <div class="metric-label">
+          STATUS
+        </div>
+
+        <div
+          id="status"
+          class="metric-value muted"
+        >
+          NO TRADE
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <button
+      id="analyzeBtn"
+      class="analyze-btn"
+      type="button"
+    >
+      ANALYZE XAUUSD
+    </button>
+
+    <div
+      id="loading"
+      class="loading"
+    >
+      Analyzing live market data…
+    </div>
+
+    <div
+      id="updated"
+      class="updated"
+    >
+      Ready
+    </div>
+
+    <div class="note">
+      Rules-based prototype. Signals are for analysis only
+      and do not execute trades. No guaranteed win rate.
+    </div>
+
+    <div
+      id="error"
+      class="error-box"
+    ></div>
+
+  </div>
+
+
+  <!-- TIMEFRAMES -->
+
+  <div class="section-title">
+    TIMEFRAMES
+  </div>
+
+  <div class="card">
+
+    <div class="tf-grid">
+
+      <div class="tf">
+
+        <div class="tf-name">
+          M1
+        </div>
+
+        <div
+          id="tf1"
+          class="tf-bias value-gray"
+        >
+          —
+        </div>
+
+      </div>
+
+
+      <div class="tf">
+
+        <div class="tf-name">
+          M5
+        </div>
+
+        <div
+          id="tf5"
+          class="tf-bias value-gray"
+        >
+          —
+        </div>
+
+      </div>
+
+
+      <div class="tf">
+
+        <div class="tf-name">
+          M15
+        </div>
+
+        <div
+          id="tf15"
+          class="tf-bias value-gray"
+        >
+          —
+        </div>
+
+      </div>
+
+
+      <div class="tf">
+
+        <div class="tf-name">
+          H1
+        </div>
+
+        <div
+          id="tf60"
+          class="tf-bias value-gray"
+        >
+          —
+        </div>
+
+      </div>
+
+
+      <div class="tf">
+
+        <div class="tf-name">
+          H4
+        </div>
+
+        <div
+          id="tf240"
+          class="tf-bias value-gray"
+        >
+          —
+        </div>
+
+      </div>
+
+
+      <div class="tf">
+
+        <div class="tf-name">
+          DATA
+        </div>
+
+        <div
+          id="dataStatus"
+          class="tf-bias value-gray"
+        >
+          —
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="data-status">
+
+      <div class="data-status-label">
+        Market data
+      </div>
+
+      <div
+        id="freshnessText"
+        class="data-fresh"
+      >
+        —
+      </div>
+
+    </div>
+
+  </div>
+
 </div>
 
-<div class="icon">⚙︎</div>
 
-</header>
+<!-- BOTTOM NAV -->
 
-<main>
+<nav class="bottom-nav">
 
-<div class="ticker">
+  <div class="nav-inner">
 
-<div class="pair">
-XAUUSD · Gold / US Dollar
-</div>
+    <button
+      class="nav-item active"
+      type="button"
+    >
 
-<div class="price" id="price">
-—
-</div>
+      <div class="nav-icon">
+        ⌂
+      </div>
 
-<div class="change" id="marketStatus">
-Waiting for analysis
-</div>
+      Dashboard
 
-</div>
+    </button>
 
 
-<!-- MARKET BIAS -->
+    <button
+      class="nav-item"
+      type="button"
+      id="chartNav"
+    >
 
-<div class="card bias">
+      <div class="nav-icon">
+        ⌁
+      </div>
 
-<div class="label">
-MARKET DECISION
-</div>
+      Chart
 
-<div
-  class="signal neutral"
-  id="signal"
->
-NO TRADE
-</div>
-
-<div class="score">
-SETUP SCORE
-<b id="score">—</b>/100
-</div>
+    </button>
 
 
-<div class="rows">
+    <button
+      class="nav-item"
+      type="button"
+      id="aiNav"
+    >
 
-<div class="row">
-<span>TREND</span>
-<span id="trend" class="neutral">● —</span>
-</div>
+      <div class="nav-icon">
+        ✦
+      </div>
 
-<div class="row">
-<span>STRUCTURE</span>
-<span id="structure" class="neutral">● —</span>
-</div>
+      AI
 
-<div class="row">
-<span>MOMENTUM</span>
-<span id="momentum" class="neutral">● —</span>
-</div>
-
-<div class="row">
-<span>LIQUIDITY</span>
-<span id="liquidity" class="neutral">● —</span>
-</div>
-
-<div class="row">
-<span>NEWS RISK</span>
-<span id="newsRisk" class="neutral">● NOT CHECKED</span>
-</div>
-
-</div>
-
-</div>
+    </button>
 
 
-<!-- EXECUTION -->
+    <button
+      class="nav-item"
+      type="button"
+      id="journalNav"
+    >
 
-<div class="section-title">
-EXECUTION PLAN
-</div>
+      <div class="nav-icon">
+        ▣
+      </div>
 
-<div class="card">
+      Journal
 
-<div class="tradegrid">
+    </button>
 
-<div class="box">
-<small>ENTRY</small>
-<b id="entry">—</b>
-</div>
-
-<div class="box">
-<small>STOP LOSS</small>
-<b id="sl">—</b>
-</div>
-
-<div class="box">
-<small>TP 1</small>
-<b id="tp1">—</b>
-</div>
-
-<div class="box">
-<small>TP 2</small>
-<b id="tp2">—</b>
-</div>
-
-<div class="box">
-<small>RISK / REWARD</small>
-<b id="rr">—</b>
-</div>
-
-<div class="box">
-<small>STATUS</small>
-<b id="tradeStatus" class="neutral">
-NO TRADE
-</b>
-</div>
-
-</div>
-
-
-<button
-  id="analyzeBtn"
-  onclick="analyze()"
->
-ANALYZE XAUUSD
-</button>
-
-<div
-  class="status"
-  id="status"
->
-Ready
-</div>
-
-<div class="note">
-Rules-based prototype. No guaranteed win rate.
-Signals are for analysis only and do not execute trades.
-</div>
-
-</div>
-
-
-<!-- TIMEFRAMES -->
-
-<div class="section-title">
-TIMEFRAMES
-</div>
-
-<div class="card">
-
-<div class="tradegrid">
-
-<div class="box">
-<small>M1</small>
-<b id="tf1" class="neutral">—</b>
-</div>
-
-<div class="box">
-<small>M5</small>
-<b id="tf5" class="neutral">—</b>
-</div>
-
-<div class="box">
-<small>M15</small>
-<b id="tf15" class="neutral">—</b>
-</div>
-
-<div class="box">
-<small>H1</small>
-<b id="tf1h" class="neutral">—</b>
-</div>
-
-<div class="box">
-<small>H4</small>
-<b id="tf4h" class="neutral">—</b>
-</div>
-
-<div class="box">
-<small>DATA</small>
-<b id="dataStatus" class="neutral">—</b>
-</div>
-
-</div>
-
-</div>
-
-</main>
-
-
-<nav>
-
-<button class="active">
-⌂<br>
-Dashboard
-</button>
-
-<button>
-⌁<br>
-Chart
-</button>
-
-<button>
-✦<br>
-AI
-</button>
-
-<button>
-▣<br>
-Journal
-</button>
+  </div>
 
 </nav>
-
-</div>
-
-
-<div
-  id="toast"
-  class="toast"
->
-Analysis complete
-</div>
 
 
 <script>
 
+/* =====================================================
+   XAU AI V3.1
+   Frontend
+   ===================================================== */
+
 const API_URL =
-"https://xau-ai-api.khoochorshioong.workers.dev";
+  "https://xau-ai-api.khoochorshioong.workers.dev";
 
 
-function $(id){
-  return document.getElementById(id);
+const $ = id =>
+  document.getElementById(id);
+
+
+/* =====================================================
+   FORMAT HELPERS
+   ===================================================== */
+
+function safe(value){
+
+  if(
+    value === null ||
+    value === undefined ||
+    value === ""
+  ){
+    return "—";
+  }
+
+  return String(value);
 }
 
 
-function setText(
-  id,
+function biasClass(value){
+
+  if(value==="BULLISH"){
+    return "value-green";
+  }
+
+  if(value==="BEARISH"){
+    return "value-red";
+  }
+
+  return "value-gray";
+}
+
+
+function biasDot(value){
+
+  if(value==="BULLISH"){
+    return "green";
+  }
+
+  if(value==="BEARISH"){
+    return "red";
+  }
+
+  return "gray";
+}
+
+
+function momentumFromTimeframe(tf){
+
+  const data =
+    tf?.indicators;
+
+  if(!data){
+    return "—";
+  }
+
+  const histogram =
+    data?.macd?.histogram;
+
+  const rsi =
+    data?.rsi14;
+
+  if(
+    histogram !== null &&
+    histogram !== undefined
+  ){
+
+    if(
+      histogram > 0 &&
+      rsi >= 50
+    ){
+      return "BULLISH";
+    }
+
+    if(
+      histogram < 0 &&
+      rsi <= 50
+    ){
+      return "BEARISH";
+    }
+  }
+
+  return "NEUTRAL";
+}
+
+
+function setAnalysisValue(
+  element,
   value
 ){
-  $(id).textContent =
-    value ?? "—";
+
+  const cls =
+    biasDot(value);
+
+  element.className =
+    "analysis-value";
+
+  element.innerHTML =
+    `<span class="dot ${cls}"></span>${safe(value)}`;
+
+  if(value==="BULLISH"){
+    element.classList.add(
+      "value-green"
+    );
+  }
+
+  if(value==="BEARISH"){
+    element.classList.add(
+      "value-red"
+    );
+  }
+
 }
 
 
-function directionClass(
+/* =====================================================
+   DECISION STYLE
+   ===================================================== */
+
+function decisionStyle(
   direction
 ){
 
-  if(direction==="BUY")
-    return "ok";
+  if(direction==="BUY"){
 
-  if(direction==="SELL")
-    return "bad";
+    return {
+      cls:"buy",
+      banner:"buy",
+      text:
+        "EXECUTE · Strict BUY conditions confirmed"
+    };
 
-  return "neutral";
-}
-
-
-function biasClass(
-  bias
-){
-
-  if(bias==="BULLISH")
-    return "ok";
-
-  if(bias==="BEARISH")
-    return "bad";
-
-  return "neutral";
-}
-
-
-function formatPrice(
-  value
-){
-
-  if(
-    value===null ||
-    value===undefined ||
-    !Number.isFinite(Number(value))
-  ){
-    return "—";
   }
 
-  return Number(value)
-    .toFixed(2);
+  if(direction==="SELL"){
+
+    return {
+      cls:"sell",
+      banner:"sell",
+      text:
+        "EXECUTE · Strict SELL conditions confirmed"
+    };
+
+  }
+
+  if(
+    direction===
+    "WATCH — BUY SETUP"
+  ){
+
+    return {
+      cls:"watch-buy watch-pulse",
+      banner:"watch-buy",
+      text:
+        "WAIT FOR CONFIRMATION · Bullish setup developing"
+    };
+
+  }
+
+  if(
+    direction===
+    "WATCH — SELL SETUP"
+  ){
+
+    return {
+      cls:"watch-sell watch-pulse",
+      banner:"watch-sell",
+      text:
+        "WAIT FOR CONFIRMATION · Bearish setup developing"
+    };
+
+  }
+
+  return {
+
+    cls:"no-trade",
+
+    banner:"no-trade",
+
+    text:
+      "STAY OUT · No valid executable setup"
+
+  };
 }
 
 
-function formatRR(
+/* =====================================================
+   RISK PLAN
+   ===================================================== */
+
+function renderRisk(
+  decision,
   risk
 ){
 
+  const executable =
+    decision==="BUY" ||
+    decision==="SELL";
+
   if(
-    risk?.rrToTP1 == null
+    !executable ||
+    !risk
   ){
-    return "—";
-  }
 
-  return "1 : " +
-    Number(risk.rrToTP1)
-      .toFixed(1);
-}
+    $("entry").textContent="—";
+    $("sl").textContent="—";
+    $("tp1").textContent="—";
+    $("tp2").textContent="—";
+    $("rr").textContent="—";
 
+    $("entry").className =
+      "metric-value muted";
 
-function updateTimeframe(
-  id,
-  timeframe
-){
+    $("sl").className =
+      "metric-value muted";
 
-  const el=$(id);
+    $("tp1").className =
+      "metric-value muted";
 
-  if(!el)return;
+    $("tp2").className =
+      "metric-value muted";
 
-  const bias =
-    timeframe?.score?.bias ||
-    "NEUTRAL";
+    $("rr").className =
+      "metric-value muted";
 
-  el.textContent=bias;
-
-  el.className=
-    biasClass(bias);
-}
-
-
-function showToast(
-  message
-){
-
-  const toast=$("toast");
-
-  toast.textContent=message;
-
-  toast.classList.add("show");
-
-  setTimeout(
-    ()=>{
-      toast.classList.remove("show");
-    },
-    1800
-  );
-}
-
-
-function resetTradePlan(){
-
-  setText("entry","—");
-  setText("sl","—");
-  setText("tp1","—");
-  setText("tp2","—");
-  setText("rr","—");
-
-  setText(
-    "tradeStatus",
-    "NO TRADE"
-  );
-
-  $("tradeStatus")
-    .className="neutral";
-}
-
-
-function renderAnalysis(
-  data
-){
-
-  if(!data){
     return;
   }
 
+  $("entry").textContent =
+    safe(risk.entry);
 
-  /*
-   * Decision
-   */
+  $("sl").textContent =
+    safe(risk.stopLoss);
 
-  const decision =
-    data.decision || {};
+  $("tp1").textContent =
+    safe(risk.takeProfit1);
 
-  const direction =
-    decision.direction ||
-    "NO TRADE";
+  $("tp2").textContent =
+    safe(risk.takeProfit2);
 
-  const signal=$("signal");
+  $("rr").textContent =
+    risk.rrToTP1 !== null
+      ? `${risk.rrToTP1}R / ${risk.rrToTP2}R`
+      : "—";
 
-  signal.textContent=
-    direction;
+  $("entry").className =
+    "metric-value";
 
-  signal.className=
-    "signal " +
-    directionClass(direction);
+  $("sl").className =
+    "metric-value";
 
+  $("tp1").className =
+    "metric-value";
 
-  setText(
-    "score",
-    decision.setupScore ?? "—"
-  );
+  $("tp2").className =
+    "metric-value";
 
-
-  /*
-   * Risk plan
-   */
-
-  const risk =
-    data.riskPlan || {};
-
-  setText(
-    "entry",
-    formatPrice(risk.entry)
-  );
-
-  setText(
-    "sl",
-    formatPrice(risk.stopLoss)
-  );
-
-  setText(
-    "tp1",
-    formatPrice(risk.takeProfit1)
-  );
-
-  setText(
-    "tp2",
-    formatPrice(risk.takeProfit2)
-  );
-
-  setText(
-    "rr",
-    formatRR(risk)
-  );
-
-
-  const tradeStatus=
-    $("tradeStatus");
-
-  tradeStatus.textContent=
-    direction;
-
-  tradeStatus.className=
-    directionClass(direction);
-
-
-  /*
-   * Timeframes
-   */
-
-  const tf=
-    data.timeframes || {};
-
-
-  updateTimeframe(
-    "tf1",
-    tf["1min"]
-  );
-
-  updateTimeframe(
-    "tf5",
-    tf["5min"]
-  );
-
-  updateTimeframe(
-    "tf15",
-    tf["15min"]
-  );
-
-  updateTimeframe(
-    "tf1h",
-    tf["1h"]
-  );
-
-  updateTimeframe(
-    "tf4h",
-    tf["4h"]
-  );
-
-
-  /*
-   * Main trend / structure
-   */
-
-  const primary =
-    tf["5min"] ||
-    tf["15min"] ||
-    tf["1h"];
-
-
-  if(primary){
-
-    setText(
-      "trend",
-      "● " +
-      (primary.trend || "NEUTRAL")
-    );
-
-    $("trend").className=
-      biasClass(primary.trend);
-
-
-    setText(
-      "structure",
-      "● " +
-      (
-        primary.structure?.structure ||
-        "RANGE"
-      )
-    );
-
-    $("structure").className=
-      biasClass(
-        primary.structure?.structure
-      );
-
-
-    const histogram =
-      primary.indicators?.macd?.histogram;
-
-
-    let momentum=
-      "NEUTRAL";
-
-    if(
-      histogram !== null &&
-      histogram !== undefined
-    ){
-
-      if(histogram>0)
-        momentum="BULLISH";
-
-      if(histogram<0)
-        momentum="BEARISH";
-    }
-
-
-    setText(
-      "momentum",
-      "● " + momentum
-    );
-
-    $("momentum").className=
-      biasClass(momentum);
-
-
-    const sweep =
-      primary.liquiditySweep?.type ||
-      "NONE";
-
-
-    let liquidity=
-      "NONE";
-
-    if(
-      sweep==="SELL_SIDE_SWEEP"
-    ){
-      liquidity=
-        "SELL-SIDE SWEEP";
-    }
-
-    if(
-      sweep==="BUY_SIDE_SWEEP"
-    ){
-      liquidity=
-        "BUY-SIDE SWEEP";
-    }
-
-
-    setText(
-      "liquidity",
-      "● " + liquidity
-    );
-
-    $("liquidity").className=
-      sweep==="NONE"
-        ? "neutral"
-        : "warn";
-  }
-
-
-  /*
-   * News
-   */
-
-  const news =
-    data.safety?.newsRisk ||
-    "NOT CHECKED";
-
-
-  setText(
-    "newsRisk",
-    "● " + news
-  );
-
-
-  $("newsRisk").className=
-    news==="LOW"
-      ? "ok"
-      : "neutral";
-
-
-  /*
-   * Price
-   */
-
-  const currentPrice =
-    tf["1min"]?.price ||
-    risk.entry;
-
-
-  setText(
-    "price",
-    formatPrice(currentPrice)
-  );
-
-
-  /*
-   * Weekend
-   */
-
-  if(
-    data.safety?.weekend
-  ){
-
-    setText(
-      "marketStatus",
-      "Weekend · Market closed"
-    );
-
-  }else{
-
-    setText(
-      "marketStatus",
-      "Live analysis"
-    );
-  }
-
-
-  /*
-   * Data status
-   */
-
-  if(
-    data.safety?.dataFreshness ===
-    "PASSED"
-  ){
-
-    setText(
-      "dataStatus",
-      "FRESH"
-    );
-
-    $("dataStatus")
-      .className="ok";
-
-  }else{
-
-    setText(
-      "dataStatus",
-      data.safety?.dataFreshness ||
-      "CHECK"
-    );
-
-    $("dataStatus")
-      .className="warn";
-  }
-
+  $("rr").className =
+    "metric-value";
 }
 
 
+/* =====================================================
+   TIMEFRAME RENDER
+   ===================================================== */
+
+function renderTF(
+  elementId,
+  tf
+){
+
+  const element =
+    $(elementId);
+
+  if(!tf){
+
+    element.textContent =
+      "—";
+
+    element.className =
+      "tf-bias value-gray";
+
+    return;
+  }
+
+  const bias =
+    tf.score?.bias ||
+    "NEUTRAL";
+
+  element.textContent =
+    bias;
+
+  element.className =
+    `tf-bias ${biasClass(bias)}`;
+}
+
+
+/* =====================================================
+   FRESHNESS
+   ===================================================== */
+
+function allFresh(
+  freshness
+){
+
+  if(!freshness){
+    return false;
+  }
+
+  const values =
+    Object.values(
+      freshness
+    );
+
+  if(!values.length){
+    return false;
+  }
+
+  return values.every(
+    x => x?.fresh === true
+  );
+}
+
+
+/* =====================================================
+   MAIN RENDER
+   ===================================================== */
+
+function render(data){
+
+  const decision =
+    data?.decision?.direction ||
+    "NO TRADE";
+
+  const score =
+    data?.decision?.setupScore;
+
+  const style =
+    decisionStyle(
+      decision
+    );
+
+
+  /* PRICE */
+
+  const m1 =
+    data?.timeframes?.["1min"];
+
+  const currentPrice =
+    m1?.price;
+
+  $("price").textContent =
+    safe(currentPrice);
+
+
+  /* DECISION */
+
+  $("decision").textContent =
+    decision;
+
+  $("decision").className =
+    `decision ${style.cls}`;
+
+  $("score").textContent =
+    safe(score);
+
+
+  /* STATUS */
+
+  $("statusBanner").textContent =
+    style.text;
+
+  $("statusBanner").className =
+    `status-banner ${style.banner}`;
+
+
+  $("status").textContent =
+    decision;
+
+  $("status").className =
+    `metric-value ${
+      decision==="BUY"
+        ? "value-green"
+        : decision==="SELL"
+          ? "value-red"
+          : decision==="WATCH — BUY SETUP"
+            ? "value-yellow"
+            : decision==="WATCH — SELL SETUP"
+              ? "value-orange"
+              : "muted"
+    }`;
+
+
+  /* RISK */
+
+  renderRisk(
+    decision,
+    data?.riskPlan
+  );
+
+
+  /* M1 */
+
+  renderTF(
+    "tf1",
+    data?.timeframes?.["1min"]
+  );
+
+
+  /* M5 */
+
+  renderTF(
+    "tf5",
+    data?.timeframes?.["5min"]
+  );
+
+
+  /* M15 */
+
+  renderTF(
+    "tf15",
+    data?.timeframes?.["15min"]
+  );
+
+
+  /* H1 */
+
+  renderTF(
+    "tf60",
+    data?.timeframes?.["1h"]
+  );
+
+
+  /* H4 */
+
+  renderTF(
+    "tf240",
+    data?.timeframes?.["4h"]
+  );
+
+
+  /* TOP ANALYSIS */
+
+  const h1 =
+    data?.timeframes?.["1h"];
+
+  const h4 =
+    data?.timeframes?.["4h"];
+
+  const m5Data =
+    data?.timeframes?.["5min"];
+
+
+  const trend =
+    h1?.trend ||
+    h4?.trend ||
+    "NEUTRAL";
+
+  setAnalysisValue(
+    $("trend"),
+    trend
+  );
+
+
+  const structure =
+    h1?.structure ||
+    h4?.structure ||
+    "RANGE";
+
+  setAnalysisValue(
+    $("structure"),
+    structure
+  );
+
+
+  const momentum =
+    momentumFromTimeframe(
+      m5Data
+    );
+
+  setAnalysisValue(
+    $("momentum"),
+    momentum
+  );
+
+
+  let liquidity =
+    "NONE";
+
+  const sweeps =
+    Object.values(
+      data?.timeframes || {}
+    )
+    .map(
+      x =>
+        x?.liquiditySweep?.type
+    )
+    .filter(Boolean);
+
+
+  if(
+    sweeps.includes(
+      "SELL_SIDE_SWEEP"
+    )
+  ){
+
+    liquidity =
+      "SELL-SIDE SWEEP";
+
+  }else if(
+    sweeps.includes(
+      "BUY_SIDE_SWEEP"
+    )
+  ){
+
+    liquidity =
+      "BUY-SIDE SWEEP";
+  }
+
+
+  let liquidityDot =
+    "gray";
+
+  if(
+    liquidity==="SELL-SIDE SWEEP"
+  ){
+    liquidityDot =
+      "green";
+  }
+
+  if(
+    liquidity==="BUY-SIDE SWEEP"
+  ){
+    liquidityDot =
+      "red";
+  }
+
+  $("liquidity").className =
+    "analysis-value";
+
+  $("liquidity").innerHTML =
+    `<span class="dot ${liquidityDot}"></span>${liquidity}`;
+
+
+  /* NEWS */
+
+  const newsRisk =
+    data?.safety?.newsRisk ||
+    "NOT CHECKED";
+
+  $("news").className =
+    "analysis-value";
+
+  $("news").innerHTML =
+    `<span class="dot gray"></span>${newsRisk}`;
+
+
+  /* DATA */
+
+  const fresh =
+    allFresh(
+      data?.freshness
+    );
+
+  if(fresh){
+
+    $("dataStatus").textContent =
+      "FRESH";
+
+    $("dataStatus").className =
+      "tf-bias value-green";
+
+    $("freshnessText").textContent =
+      "FRESH";
+
+    $("freshnessText").className =
+      "data-fresh";
+
+  }else{
+
+    $("dataStatus").textContent =
+      "STALE";
+
+    $("dataStatus").className =
+      "tf-bias value-red";
+
+    $("freshnessText").textContent =
+      "STALE / CHECK DATA";
+
+    $("freshnessText").className =
+      "data-stale";
+  }
+
+
+  $("updated").textContent =
+    `Analysis updated · ${new Date().toLocaleTimeString()}`;
+}
+
+
+/* =====================================================
+   ERROR
+   ===================================================== */
+
+function showError(
+  message
+){
+
+  $("error").style.display =
+    "block";
+
+  $("error").textContent =
+    message;
+}
+
+
+function clearError(){
+
+  $("error").style.display =
+    "none";
+
+  $("error").textContent =
+    "";
+}
+
+
+/* =====================================================
+   ANALYZE
+   ===================================================== */
+
 async function analyze(){
 
-  const button=
+  const button =
     $("analyzeBtn");
 
-  button.disabled=true;
+  clearError();
 
-  button.textContent=
-    "ANALYZING...";
+  button.disabled =
+    true;
 
-  $("status").textContent=
-    "Connecting to XAU AI engine...";
+  $("loading").style.display =
+    "block";
 
-  $("status").classList.add(
-    "loading"
-  );
+  $("updated").textContent =
+    "Analyzing live market data…";
 
 
   try{
 
-    const response=
+    const response =
       await fetch(
-        API_URL +
-        "/api/analyze",
+        `${API_URL}/api/analyze`,
         {
           method:"GET",
           cache:"no-store"
@@ -1020,103 +1733,119 @@ async function analyze(){
       );
 
 
-    const data=
-      await response.json();
+    let data;
 
+    try{
 
-    if(
-      !response.ok ||
-      data.ok===false
-    ){
+      data =
+        await response.json();
 
-      const message=
-        data.message ||
-        data.details ||
-        data.error ||
-        "Analysis request failed";
-
+    }catch{
 
       throw new Error(
-        message
+        "Invalid response from XAU AI API."
       );
     }
 
 
-    renderAnalysis(data);
+    if(
+      !response.ok ||
+      data?.ok === false
+    ){
 
-
-    $("status").textContent=
-      "Analysis updated";
-
-    $("status")
-      .classList.remove(
-        "loading"
+      throw new Error(
+        data?.message ||
+        data?.error ||
+        "Analysis request failed."
       );
+    }
 
 
-    showToast(
-      data.decision?.direction ===
-      "NO TRADE"
-        ? "NO TRADE"
-        : "Analysis complete"
-    );
+    render(data);
 
 
   }catch(error){
 
-    console.error(error);
-
-
-    resetTradePlan();
-
-
-    $("signal").textContent=
-      "NO TRADE";
-
-    $("signal").className=
-      "signal neutral";
-
-
-    $("status").textContent=
-      "ERROR: " +
-      error.message;
-
-    $("status")
-      .classList.remove(
-        "loading"
-      );
-
-
-    showToast(
-      "Analysis failed"
+    console.error(
+      "XAU AI error:",
+      error
     );
+
+    showError(
+      `Analysis failed: ${
+        error?.message ||
+        "Unknown error"
+      }`
+    );
+
+    $("updated").textContent =
+      "Analysis failed";
+
 
   }finally{
 
-    button.disabled=false;
+    button.disabled =
+      false;
 
-    button.textContent=
-      "ANALYZE XAUUSD";
+    $("loading").style.display =
+      "none";
   }
-
 }
 
 
-/*
- * Auto-load once when app opens.
- */
+/* =====================================================
+   NAVIGATION
+   ===================================================== */
 
-window.addEventListener(
-  "load",
-  ()=>{
-    analyze();
+$("chartNav").addEventListener(
+  "click",
+  () => {
+
+    alert(
+      "Chart module is planned for a future version."
+    );
+
   }
 );
 
 
-/*
- * Service Worker
- */
+$("aiNav").addEventListener(
+  "click",
+  () => {
+
+    alert(
+      "AI Analysis module is planned for a future version."
+    );
+
+  }
+);
+
+
+$("journalNav").addEventListener(
+  "click",
+  () => {
+
+    alert(
+      "Trade Journal module is planned for a future version."
+    );
+
+  }
+);
+
+
+/* =====================================================
+   BUTTON
+   ===================================================== */
+
+$("analyzeBtn").addEventListener(
+  "click",
+  analyze
+);
+
+
+/* =====================================================
+   SERVICE WORKER
+   ===================================================== */
 
 if(
   "serviceWorker" in navigator
@@ -1124,20 +1853,35 @@ if(
 
   window.addEventListener(
     "load",
-    ()=>{
+    () => {
+
       navigator.serviceWorker
-        .register("./sw.js")
+        .register("sw.js")
         .catch(
-          error=>{
+          error =>
             console.log(
-              "Service worker:",
+              "Service worker registration failed:",
               error
-            );
-          }
+            )
         );
+
     }
   );
 }
+
+
+/* =====================================================
+   INITIAL LOAD
+   ===================================================== */
+
+window.addEventListener(
+  "load",
+  () => {
+
+    analyze();
+
+  }
+);
 
 </script>
 
