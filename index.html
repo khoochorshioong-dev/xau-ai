@@ -253,6 +253,7 @@ button{
   font-size:9px;
   color:#687482;
   letter-spacing:.8px;
+  line-height:1.35;
 }
 
 .decision-buy{
@@ -640,6 +641,7 @@ canvas{
 
   font-size:11px;
   font-weight:800;
+  line-height:1.35;
 }
 
 /* =========================
@@ -677,6 +679,7 @@ canvas{
 
   .decision-box{
     min-width:102px;
+    max-width:145px;
   }
 
   .chart-wrap{
@@ -731,9 +734,13 @@ canvas{
 
       </div>
 
-      <div class="live-pill">
+      <div
+        id="livePill"
+        class="live-pill">
+
         <span class="live-dot"></span>
         API ONLINE
+
       </div>
 
     </div>
@@ -1554,14 +1561,28 @@ function textValue(value){
 }
 
 
+/* =========================================================
+   FIXED API TIMEFRAME READER
+========================================================= */
+
 function getTF(
   data,
   tf
 ){
 
+  /*
+    FINAL-TRADING-ENGINE-1.1 returns:
+
+    data.analysis["1min"]
+    data.analysis["5min"]
+    data.analysis["15min"]
+    data.analysis["1h"]
+    data.analysis["4h"]
+  */
+
   return (
+    data?.analysis?.[tf] ??
     data?.timeframes?.[tf] ??
-    data?.analysis?.timeframes?.[tf] ??
     data?.[tf] ??
     null
   );
@@ -1765,11 +1786,12 @@ function extractStructure(
 
   const candidates = [
 
+    data?.structure?.state,
     data?.structure?.structure,
-    data?.structure,
+    data?.marketStructure?.state,
     data?.marketStructure,
-    data?.analysis?.structure?.structure,
-    data?.analysis?.structure
+    data?.analysis?.structure?.state,
+    data?.analysis?.structure?.structure
 
   ];
 
@@ -1806,6 +1828,7 @@ function extractBOS(
   const candidates = [
 
     data?.structure?.bos,
+    data?.structure?.BOS,
     data?.bos,
     data?.BOS,
     data?.analysis?.structure?.bos
@@ -1821,6 +1844,7 @@ function extractBOS(
     ){
 
       return value
+        .trim()
         .toUpperCase();
 
     }
@@ -1856,7 +1880,8 @@ function extractCHoCH(
     data?.structure?.CHoCH,
     data?.choch,
     data?.CHoCH,
-    data?.analysis?.structure?.choch
+    data?.analysis?.structure?.choch,
+    data?.analysis?.structure?.CHoCH
 
   ];
 
@@ -1869,6 +1894,7 @@ function extractCHoCH(
     ){
 
       return value
+        .trim()
         .toUpperCase();
 
     }
@@ -1917,6 +1943,7 @@ function extractLiquidity(
     ){
 
       return value
+        .trim()
         .toUpperCase();
 
     }
@@ -1956,6 +1983,7 @@ function extractPullback(
     ){
 
       return value
+        .trim()
         .toUpperCase();
 
     }
@@ -1971,6 +1999,14 @@ function extractPullback(
     }
 
   }
+
+  /*
+    FINAL ENGINE 1.1 does not expose
+    internal M5 pullback diagnostics
+    in the public JSON.
+
+    Never fabricate a result.
+  */
 
   return "NOT EXPOSED";
 
@@ -2005,6 +2041,7 @@ function extractConfirmation(
     ){
 
       return value
+        .trim()
         .toUpperCase();
 
     }
@@ -2021,13 +2058,19 @@ function extractConfirmation(
 
   }
 
+  /*
+    FINAL ENGINE 1.1 does not expose
+    internal M1 confirmation diagnostics
+    in the public JSON.
+  */
+
   return "NOT EXPOSED";
 
 }
 
 
 /* =========================================================
-   BOOLEAN STATE
+   BOOLEAN / STATUS STATE
 ========================================================= */
 
 function formatBooleanState(
@@ -2065,6 +2108,15 @@ function formatBooleanState(
     ){
 
       return value.status
+        .toUpperCase();
+
+    }
+
+    if(
+      typeof value.state === "string"
+    ){
+
+      return value.state
         .toUpperCase();
 
     }
@@ -2152,13 +2204,6 @@ function extractRiskPlan(
       );
 
 
-    /*
-      Zero is NOT a valid XAUUSD
-      execution price.
-
-      Convert 0 into unavailable.
-    */
-
     if(entry === 0)
       entry = null;
 
@@ -2202,7 +2247,7 @@ function extractRiskPlan(
 
 
 /* =========================================================
-   FETCH
+   FETCH JSON
 ========================================================= */
 
 async function fetchJSON(
@@ -2250,8 +2295,11 @@ async function fetchMarket(
 
 
   /*
-    Frontend cache prevents
-    unnecessary Twelve Data requests.
+    Frontend cache:
+
+    15 seconds.
+
+    Worker has its own longer cache.
   */
 
   if(
@@ -2301,6 +2349,125 @@ async function fetchAnalysis(){
 
 
 /* =========================================================
+   DIAGNOSTIC HELPER
+========================================================= */
+
+function setDiag(
+  id,
+  value
+){
+
+  const el =
+    document.getElementById(id);
+
+
+  if(!el){
+    return;
+  }
+
+
+  el.textContent =
+    textValue(value);
+
+
+  colorDirection(
+    el,
+    value
+  );
+
+}
+
+
+/* =========================================================
+   OBJECT TEXT
+========================================================= */
+
+function formatObjectText(
+  value
+){
+
+  if(
+    value === null ||
+    value === undefined
+  ){
+
+    return "—";
+
+  }
+
+
+  if(
+    typeof value === "object"
+  ){
+
+    return (
+      value.status ??
+      value.state ??
+      value.value ??
+      value.name ??
+      "—"
+    );
+
+  }
+
+
+  return String(value)
+    .toUpperCase();
+
+}
+
+
+/* =========================================================
+   GATE REASON FORMATTER
+========================================================= */
+
+function formatGateReason(
+  reason
+){
+
+  if(
+    !reason
+  ){
+
+    return "";
+
+  }
+
+
+  const map = {
+
+    H4_H1_M15_NOT_ALIGNED:
+      "H4 / H1 / M15 NOT ALIGNED",
+
+    M5_PULLBACK_NOT_CONFIRMED:
+      "M5 PULLBACK NOT CONFIRMED",
+
+    M1_CONFIRMATION_NOT_CONFIRMED:
+      "M1 CONFIRMATION NOT CONFIRMED",
+
+    DATA_NOT_FRESH:
+      "MARKET DATA NOT FRESH",
+
+    WEEKEND:
+      "WEEKEND",
+
+    VOLATILITY_TOO_HIGH:
+      "VOLATILITY TOO HIGH"
+
+  };
+
+
+  return (
+    map[reason] ??
+    String(reason)
+      .replaceAll("_"," ")
+      .toUpperCase()
+  );
+
+}
+
+
+/* =========================================================
    DASHBOARD RENDER
 ========================================================= */
 
@@ -2312,7 +2479,9 @@ function renderDashboard(
     data;
 
 
-  /* PRICE */
+  /* =====================================================
+     PRICE
+  ===================================================== */
 
   const price =
     safeNumber(
@@ -2330,7 +2499,9 @@ function renderDashboard(
         : price.toFixed(2);
 
 
-  /* DECISION */
+  /* =====================================================
+     DECISION
+  ===================================================== */
 
   const decision =
     extractDecision(data);
@@ -2352,16 +2523,69 @@ function renderDashboard(
   );
 
 
+  /* =====================================================
+     EXECUTION GATE
+  ===================================================== */
+
+  const gate =
+    data?.executionGate ??
+    data?.gate ??
+    data?.execution?.gate ??
+    data?.analysis?.executionGate ??
+    null;
+
+
+  const gatePassed =
+    gate?.passed === true;
+
+
+  const gateReasons =
+    Array.isArray(gate?.reasons)
+      ? gate.reasons
+      : [];
+
+
+  const formattedReasons =
+    gateReasons
+      .map(formatGateReason)
+      .filter(Boolean);
+
+
+  const primaryGateReason =
+    formattedReasons.length
+      ? formattedReasons.join(" · ")
+      : "";
+
+
+  /*
+    A BUY/SELL is executable only when
+    the backend gate explicitly passes.
+
+    Never infer executable status merely
+    from the decision string.
+  */
+
+  const executable =
+    (
+      decision === "BUY" ||
+      decision === "SELL"
+    ) &&
+    gatePassed;
+
+
   document
     .getElementById("decisionSub")
     .textContent =
-      decision === "BUY" ||
-      decision === "SELL"
+      executable
         ? "EXECUTABLE"
-        : "STRICT FILTER";
+        : primaryGateReason
+          ? primaryGateReason
+          : "STRICT FILTER";
 
 
-  /* SCORE */
+  /* =====================================================
+     SCORE
+  ===================================================== */
 
   const score =
     extractScore(data);
@@ -2396,10 +2620,35 @@ function renderDashboard(
     scoreFill.style.width =
       `${score}%`;
 
+    /*
+      Visual score intensity.
+    */
+
+    if(score >= 70){
+
+      scoreFill.style.background =
+        "#27d17f";
+
+    }
+    else if(score >= 50){
+
+      scoreFill.style.background =
+        "#ffc857";
+
+    }
+    else{
+
+      scoreFill.style.background =
+        "#ff5c67";
+
+    }
+
   }
 
 
-  /* MTF */
+  /* =====================================================
+     MTF
+  ===================================================== */
 
   const mtfGrid =
     document.getElementById(
@@ -2473,7 +2722,9 @@ function renderDashboard(
   );
 
 
-  /* DIAGNOSTICS */
+  /* =====================================================
+     INDIVIDUAL TIMEFRAMES
+  ===================================================== */
 
   const h4 =
     getTF(data,"4h");
@@ -2517,30 +2768,47 @@ function renderDashboard(
   );
 
 
+  /* =====================================================
+     M15 STRUCTURE
+  ===================================================== */
+
   setDiag(
     "structure",
     extractStructure(m15)
   );
+
 
   setDiag(
     "bos",
     extractBOS(m15)
   );
 
+
   setDiag(
     "choch",
     extractCHoCH(m15)
   );
+
 
   setDiag(
     "liquidity",
     extractLiquidity(m15)
   );
 
+
+  /* =====================================================
+     M5 PULLBACK
+  ===================================================== */
+
   setDiag(
     "pullback",
     extractPullback(m5)
   );
+
+
+  /* =====================================================
+     M1 CONFIRMATION
+  ===================================================== */
 
   setDiag(
     "confirmation",
@@ -2548,28 +2816,14 @@ function renderDashboard(
   );
 
 
-  /* EXECUTION */
-
-  const gate =
-    data?.executionGate ??
-    data?.gate ??
-    data?.execution?.gate ??
-    data?.analysis?.executionGate;
-
+  /* =====================================================
+     EXECUTION GATE
+  ===================================================== */
 
   const gateText =
-    typeof gate === "string"
-      ? gate.toUpperCase()
-      : (
-        gate?.status ??
-        gate?.state ??
-        (
-          decision === "BUY" ||
-          decision === "SELL"
-            ? "OPEN"
-            : "LOCKED"
-        )
-      );
+    gatePassed
+      ? "OPEN"
+      : "LOCKED";
 
 
   setDiag(
@@ -2582,11 +2836,6 @@ function renderDashboard(
     document.getElementById(
       "gateBadge"
     );
-
-
-  const executable =
-    decision === "BUY" ||
-    decision === "SELL";
 
 
   if(executable){
@@ -2609,7 +2858,9 @@ function renderDashboard(
   }
 
 
-  /* RISK */
+  /* =====================================================
+     RISK PLAN
+  ===================================================== */
 
   const risk =
     extractRiskPlan(data);
@@ -2641,134 +2892,147 @@ function renderDashboard(
         : `${risk.rr.toFixed(2)}R`;
 
 
-  /* MARKET STATUS */
+  /* =====================================================
+     FINAL ENGINE SAFETY
+  ===================================================== */
+
+  const safety =
+    data?.safety ?? {};
+
+
+  /* =====================================================
+     SESSION
+  ===================================================== */
 
   const session =
-    data?.session ??
-    data?.marketStatus?.session ??
-    data?.diagnostics?.session;
+    safety?.session;
 
+
+  if(
+    session &&
+    typeof session === "object"
+  ){
+
+    const sessionName =
+      session.name ??
+      session.state ??
+      "—";
+
+
+    const sessionQuality =
+      session.quality
+        ? ` · ${session.quality}`
+        : "";
+
+
+    document
+      .getElementById("session")
+      .textContent =
+        `${String(sessionName).toUpperCase()}${sessionQuality}`;
+
+  }
+  else{
+
+    document
+      .getElementById("session")
+      .textContent =
+      "—";
+
+  }
+
+
+  /* =====================================================
+     VOLATILITY
+  ===================================================== */
 
   const volatility =
-    data?.volatility ??
-    data?.marketStatus?.volatility;
+    safety?.volatility;
 
+
+  if(
+    volatility &&
+    typeof volatility === "object"
+  ){
+
+    const state =
+      volatility.state ??
+      "—";
+
+
+    const atrPercent =
+      safeNumber(
+        volatility.atrPercent
+      );
+
+
+    document
+      .getElementById("volatility")
+      .textContent =
+        atrPercent === null
+          ? String(state).toUpperCase()
+          : `${String(state).toUpperCase()} · ${atrPercent.toFixed(2)}%`;
+
+  }
+  else{
+
+    document
+      .getElementById("volatility")
+      .textContent =
+        "—";
+
+  }
+
+
+  /* =====================================================
+     MARKET CONDITION
+  ===================================================== */
 
   const marketCondition =
-    data?.marketCondition ??
-    data?.marketStatus?.condition;
-
-
-  document
-    .getElementById("session")
-    .textContent =
-      formatObjectText(session);
-
-
-  document
-    .getElementById("volatility")
-    .textContent =
-      formatObjectText(volatility);
+    safety?.marketCondition;
 
 
   document
     .getElementById("marketCondition")
     .textContent =
-      formatObjectText(
-        marketCondition
-      );
+      typeof marketCondition === "string"
+        ? marketCondition.toUpperCase()
+        : "—";
 
+
+  /* =====================================================
+     NEWS RISK
+  ===================================================== */
 
   document
     .getElementById("newsRisk")
     .textContent =
       formatBooleanState(
-        data?.newsRisk ??
-        data?.risk?.newsRisk
+        safety?.newsRisk
       );
 
+
+  /* =====================================================
+     SPREAD
+  ===================================================== */
 
   document
     .getElementById("spread")
     .textContent =
       formatBooleanState(
-        data?.spread ??
-        data?.risk?.spread
+        safety?.spread
       );
 
+
+  /* =====================================================
+     SLIPPAGE
+  ===================================================== */
 
   document
     .getElementById("slippage")
     .textContent =
       formatBooleanState(
-        data?.slippage ??
-        data?.risk?.slippage
+        safety?.slippage
       );
-
-}
-
-
-/* =========================================================
-   DIAGNOSTIC HELPER
-========================================================= */
-
-function setDiag(
-  id,
-  value
-){
-
-  const el =
-    document.getElementById(id);
-
-
-  if(!el){
-    return;
-  }
-
-
-  el.textContent =
-    textValue(value);
-
-
-  colorDirection(
-    el,
-    value
-  );
-
-}
-
-
-function formatObjectText(
-  value
-){
-
-  if(
-    value === null ||
-    value === undefined
-  ){
-
-    return "—";
-
-  }
-
-
-  if(
-    typeof value === "object"
-  ){
-
-    return (
-      value.status ??
-      value.state ??
-      value.value ??
-      value.name ??
-      "—"
-    );
-
-  }
-
-
-  return String(value)
-    .toUpperCase();
 
 }
 
@@ -2788,8 +3052,6 @@ function normalizeCandles(
 
 
   /*
-    IMPORTANT:
-
     Twelve Data data coming from
     the Worker is already chronological:
 
@@ -3012,9 +3274,7 @@ function detectEvents(
   const events = [];
 
 
-  /*
-    BOS
-  */
+  /* BOS HIGH */
 
   for(
     let i=1;
@@ -3053,6 +3313,8 @@ function detectEvents(
   }
 
 
+  /* BOS LOW */
+
   for(
     let i=1;
     i<swings.lows.length;
@@ -3090,9 +3352,7 @@ function detectEvents(
   }
 
 
-  /*
-    CHoCH
-  */
+  /* CHoCH HIGH */
 
   for(
     let i=1;
@@ -3130,6 +3390,8 @@ function detectEvents(
 
   }
 
+
+  /* CHoCH LOW */
 
   for(
     let i=1;
@@ -3169,7 +3431,7 @@ function detectEvents(
 
 
   /*
-    Liquidity sweep
+    Liquidity sweep.
 
     Diagnostic approximation only.
   */
@@ -3285,13 +3547,6 @@ function getImportantEvents(
         visibleEnd
     );
 
-
-  /*
-    Keep only the latest events.
-
-    This dramatically reduces
-    chart clutter.
-  */
 
   const bos =
     filtered
@@ -3508,10 +3763,6 @@ function drawChart(
   );
 
 
-  /*
-    Chart padding
-  */
-
   const left =
     45*dpr;
 
@@ -3536,12 +3787,6 @@ function drawChart(
     top -
     bottom;
 
-
-  /*
-    Display latest 120 candles,
-    but EMA is calculated from
-    ALL available candles.
-  */
 
   const visibleCount =
     Math.min(
@@ -3589,10 +3834,6 @@ function drawChart(
     );
 
 
-  /*
-    Price range
-  */
-
   let minPrice =
     Infinity;
 
@@ -3618,11 +3859,6 @@ function drawChart(
     }
   );
 
-
-  /*
-    Include EMA values
-    inside visible range.
-  */
 
   for(
     let i=firstIndex;
@@ -3761,9 +3997,7 @@ function drawChart(
   }
 
 
-  /* ======================
-     GRID
-  ======================= */
+  /* GRID */
 
   ctx.lineWidth =
     1*dpr;
@@ -3825,9 +4059,7 @@ function drawChart(
   }
 
 
-  /* ======================
-     CANDLES
-  ======================= */
+  /* CANDLES */
 
   const candleGap =
     chartWidth /
@@ -3873,14 +4105,11 @@ function drawChart(
         candle.open;
 
 
-      /*
-        Wick
-      */
-
       ctx.strokeStyle =
         bullish
           ? "#27d17f"
           : "#ff5c67";
+
 
       ctx.lineWidth =
         Math.max(
@@ -3903,10 +4132,6 @@ function drawChart(
 
       ctx.stroke();
 
-
-      /*
-        Body
-      */
 
       const bodyTop =
         Math.min(
@@ -3943,9 +4168,7 @@ function drawChart(
   );
 
 
-  /* ======================
-     EMA DRAW
-  ======================= */
+  /* EMA */
 
   function drawEMA(
     values,
@@ -4040,9 +4263,7 @@ function drawChart(
   );
 
 
-  /* ======================
-     EVENTS
-  ======================= */
+  /* EVENTS */
 
   const events =
     detectEvents(
@@ -4057,11 +4278,6 @@ function drawChart(
       candles.length-1
     );
 
-
-  /*
-    De-duplicate events at
-    the same candle/type.
-  */
 
   const uniqueEvents = [];
 
@@ -4090,14 +4306,6 @@ function drawChart(
     }
   );
 
-
-  /*
-    Label collision control.
-
-    We use horizontal buckets
-    instead of simply stacking every
-    nearby event.
-  */
 
   const labelBuckets =
     new Map();
@@ -4155,10 +4363,6 @@ function drawChart(
       }
 
 
-      /*
-        Bucket width.
-      */
-
       const bucket =
         Math.round(
           px /
@@ -4173,11 +4377,6 @@ function drawChart(
           bucket
         ) || 0;
 
-
-      /*
-        Maximum 2 labels
-        in the same horizontal zone.
-      */
 
       if(
         count >= 2
@@ -4226,10 +4425,6 @@ function drawChart(
       }
 
 
-      /*
-        Marker
-      */
-
       ctx.fillStyle =
         color;
 
@@ -4246,10 +4441,6 @@ function drawChart(
 
       ctx.fill();
 
-
-      /*
-        Label
-      */
 
       const labelY =
         py +
@@ -4297,9 +4488,7 @@ function drawChart(
   );
 
 
-  /* ======================
-     CURRENT PRICE
-  ======================= */
+  /* CURRENT PRICE */
 
   const latest =
     candles[
@@ -4354,9 +4543,7 @@ function drawChart(
   }
 
 
-  /* ======================
-     TIME LABELS
-  ======================= */
+  /* TIME LABELS */
 
   const labelCount =
     5;
@@ -4581,14 +4768,30 @@ async function loadAnalysis(){
       await fetchAnalysis();
 
 
+    /*
+      Basic backend validation.
+    */
+
+    if(
+      !data ||
+      data.ok === false
+    ){
+
+      throw new Error(
+        "Invalid analysis response"
+      );
+
+    }
+
+
     renderDashboard(
       data
     );
 
 
     document
-      .querySelector(
-        ".live-pill"
+      .getElementById(
+        "livePill"
       )
       .innerHTML = `
         <span class="live-dot"></span>
@@ -4621,6 +4824,14 @@ async function loadAnalysis(){
 
     document
       .getElementById(
+        "decisionSub"
+      )
+      .textContent =
+      "API UNAVAILABLE";
+
+
+    document
+      .getElementById(
         "scoreValue"
       )
       .textContent =
@@ -4636,8 +4847,8 @@ async function loadAnalysis(){
 
 
     document
-      .querySelector(
-        ".live-pill"
+      .getElementById(
+        "livePill"
       )
       .innerHTML = `
         <span
@@ -4858,11 +5069,12 @@ document.addEventListener(
 ========================================================= */
 
 /*
-  Analysis cache on Worker is 30 seconds.
+  Worker analysis cache = 30 seconds.
 
-  Refreshing every 35 seconds keeps
-  dashboard reasonably current without
-  hammering Twelve Data.
+  Frontend refresh = 35 seconds.
+
+  This avoids unnecessary requests while
+  keeping the dashboard reasonably current.
 */
 
 setInterval(
