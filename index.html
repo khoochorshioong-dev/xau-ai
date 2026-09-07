@@ -488,10 +488,6 @@ canvas{
 
 <div class="app">
 
-<!-- ====================================================== -->
-<!-- DASHBOARD -->
-<!-- ====================================================== -->
-
 <section id="dashboardPage" class="page active">
 
   <div class="header">
@@ -549,7 +545,6 @@ canvas{
 
   </div>
 
-
   <div class="card">
 
     <div class="section-label">
@@ -559,61 +554,28 @@ canvas{
     <div class="grid2">
 
       <div class="metric">
-
-        <div class="metric-label">
-          Trend
-        </div>
-
-        <div id="dashTrend"
-             class="metric-value">
-          —
-        </div>
-
+        <div class="metric-label">Trend</div>
+        <div id="dashTrend" class="metric-value">—</div>
       </div>
 
       <div class="metric">
-
-        <div class="metric-label">
-          Structure
-        </div>
-
-        <div id="dashStructure"
-             class="metric-value">
-          —
-        </div>
-
+        <div class="metric-label">Structure</div>
+        <div id="dashStructure" class="metric-value">—</div>
       </div>
 
       <div class="metric">
-
-        <div class="metric-label">
-          Momentum
-        </div>
-
-        <div id="dashMomentum"
-             class="metric-value">
-          —
-        </div>
-
+        <div class="metric-label">Momentum</div>
+        <div id="dashMomentum" class="metric-value">—</div>
       </div>
 
       <div class="metric">
-
-        <div class="metric-label">
-          Liquidity
-        </div>
-
-        <div id="dashLiquidity"
-             class="metric-value">
-          —
-        </div>
-
+        <div class="metric-label">Liquidity</div>
+        <div id="dashLiquidity" class="metric-value">—</div>
       </div>
 
     </div>
 
   </div>
-
 
   <div class="card">
 
@@ -677,7 +639,6 @@ canvas{
 
   </div>
 
-
   <div class="card">
 
     <div class="section-label">
@@ -688,9 +649,7 @@ canvas{
 
       <div class="execution-title">
 
-        <strong>
-          STRICT EXECUTION
-        </strong>
+        <strong>STRICT EXECUTION</strong>
 
         <span id="planBadge"
               class="badge">
@@ -702,43 +661,23 @@ canvas{
       <div class="execution-grid">
 
         <div class="execution-item">
-
           <span>Entry</span>
-
-          <strong id="planEntry">
-            —
-          </strong>
-
+          <strong id="planEntry">—</strong>
         </div>
 
         <div class="execution-item">
-
           <span>Stop Loss</span>
-
-          <strong id="planSL">
-            —
-          </strong>
-
+          <strong id="planSL">—</strong>
         </div>
 
         <div class="execution-item">
-
           <span>Take Profit</span>
-
-          <strong id="planTP">
-            —
-          </strong>
-
+          <strong id="planTP">—</strong>
         </div>
 
         <div class="execution-item">
-
           <span>R:R</span>
-
-          <strong id="planRR">
-            —
-          </strong>
-
+          <strong id="planRR">—</strong>
         </div>
 
       </div>
@@ -749,10 +688,6 @@ canvas{
 
 </section>
 
-
-<!-- ====================================================== -->
-<!-- CHART V3 -->
-<!-- ====================================================== -->
 
 <section id="chartPage" class="page">
 
@@ -765,7 +700,6 @@ canvas{
     </p>
 
   </div>
-
 
   <div class="card">
 
@@ -802,7 +736,6 @@ canvas{
 
     </div>
 
-
     <div style="margin-top:20px">
 
       <div class="price-row">
@@ -828,7 +761,6 @@ canvas{
 
     </div>
 
-
     <div class="chart-toolbar">
 
       <div class="chart-toolbar-left">
@@ -847,13 +779,11 @@ canvas{
 
     </div>
 
-
     <div class="chart-wrap">
 
       <canvas id="chartCanvas"></canvas>
 
     </div>
-
 
     <div class="legend">
 
@@ -895,18 +825,13 @@ canvas{
 
     </div>
 
-
     <button id="refreshChart"
             class="primary-btn">
-
       REFRESH CHART
-
     </button>
 
   </div>
 
-
-  <!-- EXECUTION LEVELS -->
 
   <div class="card">
 
@@ -917,83 +842,41 @@ canvas{
     <div class="chart-info">
 
       <div class="level-card">
-
-        <div class="level-title">
-          Entry
-        </div>
-
-        <div id="chartEntry"
-             class="level-price">
-          —
-        </div>
-
+        <div class="level-title">Entry</div>
+        <div id="chartEntry" class="level-price">—</div>
       </div>
 
-
       <div class="level-card">
-
-        <div class="level-title">
-          Stop Loss
-        </div>
-
-        <div id="chartSL"
-             class="level-price red">
-          —
-        </div>
-
+        <div class="level-title">Stop Loss</div>
+        <div id="chartSL" class="level-price red">—</div>
       </div>
 
-
       <div class="level-card">
-
-        <div class="level-title">
-          Take Profit
-        </div>
-
-        <div id="chartTP"
-             class="level-price green">
-          —
-        </div>
-
+        <div class="level-title">Take Profit</div>
+        <div id="chartTP" class="level-price green">—</div>
       </div>
 
-
       <div class="level-card">
-
-        <div class="level-title">
-          R:R
-        </div>
-
-        <div id="chartRR"
-             class="level-price">
-          —
-        </div>
-
+        <div class="level-title">R:R</div>
+        <div id="chartRR" class="level-price">—</div>
       </div>
 
     </div>
-
 
     <button id="refreshAnalysis"
             class="secondary-btn"
             style="margin-top:12px">
-
       REFRESH STRICT ANALYSIS
-
     </button>
 
     <div class="small"
          style="margin-top:10px">
-
       Analysis refresh uses the protected
       multi-timeframe engine.
-
     </div>
 
   </div>
 
-
-  <!-- MTF -->
 
   <div class="card">
 
@@ -1005,58 +888,38 @@ canvas{
 
       <div class="metric">
         <div class="metric-label">H4</div>
-        <div id="chartH4"
-             class="metric-value">
-          —
-        </div>
+        <div id="chartH4" class="metric-value">—</div>
       </div>
 
       <div class="metric">
         <div class="metric-label">H1</div>
-        <div id="chartH1"
-             class="metric-value">
-          —
-        </div>
+        <div id="chartH1" class="metric-value">—</div>
       </div>
 
       <div class="metric">
         <div class="metric-label">M15</div>
-        <div id="chartM15"
-             class="metric-value">
-          —
-        </div>
+        <div id="chartM15" class="metric-value">—</div>
       </div>
 
       <div class="metric">
         <div class="metric-label">M5</div>
-        <div id="chartM5"
-             class="metric-value">
-          —
-        </div>
+        <div id="chartM5" class="metric-value">—</div>
       </div>
 
       <div class="metric">
         <div class="metric-label">M1</div>
-        <div id="chartM1"
-             class="metric-value">
-          —
-        </div>
+        <div id="chartM1" class="metric-value">—</div>
       </div>
 
       <div class="metric">
         <div class="metric-label">Score</div>
-        <div id="chartScore"
-             class="metric-value">
-          —
-        </div>
+        <div id="chartScore" class="metric-value">—</div>
       </div>
 
     </div>
 
   </div>
 
-
-  <!-- STRICT STATUS -->
 
   <div class="card">
 
@@ -1079,49 +942,36 @@ canvas{
 
       </div>
 
-
       <div class="diagnostic">
 
         <div class="diag">
           <span>M15 Structure</span>
-          <strong id="chartStructure">
-            —
-          </strong>
+          <strong id="chartStructure">—</strong>
         </div>
 
         <div class="diag">
           <span>M15 BOS / CHoCH</span>
-          <strong id="chartBos">
-            —
-          </strong>
+          <strong id="chartBos">—</strong>
         </div>
 
         <div class="diag">
           <span>Liquidity</span>
-          <strong id="chartLiquidity">
-            —
-          </strong>
+          <strong id="chartLiquidity">—</strong>
         </div>
 
         <div class="diag">
           <span>M5 Pullback</span>
-          <strong id="chartPullback">
-            —
-          </strong>
+          <strong id="chartPullback">—</strong>
         </div>
 
         <div class="diag">
           <span>M1 Confirmation</span>
-          <strong id="chartConfirm">
-            —
-          </strong>
+          <strong id="chartConfirm">—</strong>
         </div>
 
         <div class="diag">
           <span>Execution Gate</span>
-          <strong id="chartGate">
-            —
-          </strong>
+          <strong id="chartGate">—</strong>
         </div>
 
       </div>
@@ -1144,10 +994,6 @@ canvas{
 
 </section>
 
-
-<!-- ====================================================== -->
-<!-- AI -->
-<!-- ====================================================== -->
 
 <section id="aiPage" class="page">
 
@@ -1178,10 +1024,6 @@ canvas{
 
 </section>
 
-
-<!-- ====================================================== -->
-<!-- JOURNAL -->
-<!-- ====================================================== -->
 
 <section id="journalPage" class="page">
 
@@ -1215,10 +1057,6 @@ canvas{
 </div>
 
 
-<!-- ====================================================== -->
-<!-- NAV -->
-<!-- ====================================================== -->
-
 <nav class="nav">
 
   <div class="nav-inner">
@@ -1226,45 +1064,34 @@ canvas{
     <button class="nav-btn active"
             data-page="dashboardPage">
 
-      <span class="nav-icon">
-        ⌂
-      </span>
+      <span class="nav-icon">⌂</span>
 
       Dashboard
 
     </button>
 
-
     <button class="nav-btn"
             data-page="chartPage">
 
-      <span class="nav-icon">
-        ⌁
-      </span>
+      <span class="nav-icon">⌁</span>
 
       Chart
 
     </button>
 
-
     <button class="nav-btn"
             data-page="aiPage">
 
-      <span class="nav-icon">
-        ✦
-      </span>
+      <span class="nav-icon">✦</span>
 
       AI
 
     </button>
 
-
     <button class="nav-btn"
             data-page="journalPage">
 
-      <span class="nav-icon">
-        ▣
-      </span>
+      <span class="nav-icon">▣</span>
 
       Journal
 
@@ -1328,6 +1155,37 @@ function fmt(value){
 }
 
 
+function textValue(value,fallback="—"){
+
+  if(
+    value === null ||
+    value === undefined
+  ){
+
+    return fallback;
+
+  }
+
+  if(
+    typeof value === "object"
+  ){
+
+    return String(
+      value.value ??
+      value.type ??
+      value.status ??
+      value.direction ??
+      value.bias ??
+      fallback
+    );
+
+  }
+
+  return String(value);
+
+}
+
+
 function getTF(tf){
 
   return (
@@ -1344,12 +1202,29 @@ function direction(tf){
   const x =
     getTF(tf);
 
-  return String(
-    x?.score?.bias ||
-    x?.bias ||
-    x?.direction ||
-    "NEUTRAL"
-  ).toUpperCase();
+  const raw =
+    x?.score?.bias ??
+    x?.bias ??
+    x?.direction ??
+    "NEUTRAL";
+
+  if(
+    raw &&
+    typeof raw === "object"
+  ){
+
+    return String(
+      raw.bias ??
+      raw.direction ??
+      raw.value ??
+      raw.type ??
+      "NEUTRAL"
+    ).toUpperCase();
+
+  }
+
+  return String(raw)
+    .toUpperCase();
 
 }
 
@@ -1375,7 +1250,8 @@ function colorDirection(
 
   if(
     v.includes("BULL") ||
-    v.includes("BUY")
+    v.includes("BUY") ||
+    v === "LONG"
   ){
 
     element.classList.add(
@@ -1385,7 +1261,8 @@ function colorDirection(
   }
   else if(
     v.includes("BEAR") ||
-    v.includes("SELL")
+    v.includes("SELL") ||
+    v === "SHORT"
   ){
 
     element.classList.add(
@@ -1395,7 +1272,8 @@ function colorDirection(
   }
   else if(
     v.includes("WAIT") ||
-    v.includes("WATCH")
+    v.includes("WATCH") ||
+    v.includes("CONFLICT")
   ){
 
     element.classList.add(
@@ -1420,10 +1298,14 @@ function colorDirection(
 
 function extractDecision(data){
 
-  return String(
+  const raw =
     data?.decision ??
     data?.signal ??
     data?.analysis?.decision ??
+    "NO TRADE";
+
+  return textValue(
+    raw,
     "NO TRADE"
   ).toUpperCase();
 
@@ -1446,7 +1328,7 @@ function extractStructure(tf){
   const x =
     getTF(tf);
 
-  const value =
+  let value =
     x?.structure?.structure ??
     x?.structure ??
     "RANGE";
@@ -1456,15 +1338,18 @@ function extractStructure(tf){
     typeof value === "object"
   ){
 
-    return (
+    value =
       value.structure ??
       value.type ??
-      "RANGE"
-    );
+      value.value ??
+      "RANGE";
 
   }
 
-  return value;
+  return textValue(
+    value,
+    "RANGE"
+  );
 
 }
 
@@ -1474,7 +1359,7 @@ function extractBOS(tf){
   const x =
     getTF(tf);
 
-  const value =
+  let value =
     x?.structure?.bos ??
     x?.bos ??
     x?.structure?.event ??
@@ -1485,15 +1370,18 @@ function extractBOS(tf){
     typeof value === "object"
   ){
 
-    return (
+    value =
       value.type ??
       value.event ??
-      "NONE"
-    );
+      value.value ??
+      "NONE";
 
   }
 
-  return value;
+  return textValue(
+    value,
+    "NONE"
+  );
 
 }
 
@@ -1503,7 +1391,7 @@ function extractLiquidity(tf){
   const x =
     getTF(tf);
 
-  const value =
+  let value =
     x?.liquidity?.type ??
     x?.liquidity ??
     "NONE";
@@ -1513,15 +1401,18 @@ function extractLiquidity(tf){
     typeof value === "object"
   ){
 
-    return (
+    value =
       value.type ??
       value.event ??
-      "NONE"
-    );
+      value.value ??
+      "NONE";
 
   }
 
-  return value;
+  return textValue(
+    value,
+    "NONE"
+  );
 
 }
 
@@ -1557,7 +1448,7 @@ function extractConfirmation(){
 
 
 /* ====================================================== */
-/* FIXED BOOLEAN FORMATTER */
+/* BOOLEAN FORMATTER */
 /* ====================================================== */
 
 function formatBooleanState(value){
@@ -1581,17 +1472,25 @@ function formatBooleanState(value){
     typeof value === "object"
   ){
 
-    if(value === null)
-      return "NOT EXPOSED";
+    if(
+      value.confirmed === true
+    ){
 
-    if(value.confirmed === true)
       return "CONFIRMED";
 
-    if(value.confirmed === false)
-      return "WAIT";
+    }
 
     if(
-      value.status !== undefined
+      value.confirmed === false
+    ){
+
+      return "WAIT";
+
+    }
+
+    if(
+      value.status !== undefined &&
+      value.status !== null
     ){
 
       return String(
@@ -1635,8 +1534,15 @@ function extractRiskPlan(data){
     const plan of candidates
   ){
 
-    if(!plan)
+    if(
+      !plan ||
+      typeof plan !== "object"
+    ){
+
       continue;
+
+    }
+
 
     const entry =
       safeNumber(
@@ -1664,10 +1570,12 @@ function extractRiskPlan(data){
         plan.riskReward
       );
 
+
     if(
       entry !== null ||
       sl !== null ||
-      tp !== null
+      tp !== null ||
+      rr !== null
     ){
 
       return {
@@ -1680,6 +1588,7 @@ function extractRiskPlan(data){
     }
 
   }
+
 
   return {
     entry:null,
@@ -1708,6 +1617,7 @@ async function fetchJSON(url){
     "ts=" +
     Date.now();
 
+
   const response =
     await fetch(
       finalURL,
@@ -1715,6 +1625,7 @@ async function fetchJSON(url){
         cache:"no-store"
       }
     );
+
 
   if(!response.ok){
 
@@ -1724,6 +1635,7 @@ async function fetchJSON(url){
     );
 
   }
+
 
   return await response.json();
 
@@ -1763,8 +1675,10 @@ function renderDashboard(){
   if(!analysisData)
     return;
 
+
   const m1 =
     getTF("1min");
+
 
   const price =
     safeNumber(
@@ -1773,34 +1687,41 @@ function renderDashboard(){
       m1?.close
     );
 
+
   const decision =
     extractDecision(
       analysisData
     );
+
 
   const score =
     extractScore(
       analysisData
     );
 
+
   const plan =
     extractRiskPlan(
       analysisData
     );
+
 
   const trend =
     analysisData?.trend ??
     m1?.trend ??
     direction("1min");
 
+
   const structure =
     analysisData?.structure ??
     extractStructure("15min");
+
 
   const momentum =
     analysisData?.momentum ??
     m1?.momentum ??
     "NEUTRAL";
+
 
   const liquidity =
     analysisData?.liquidity ??
@@ -1816,6 +1737,7 @@ function renderDashboard(){
   $("dashDecision").textContent =
     decision;
 
+
   colorDirection(
     $("dashDecision"),
     decision
@@ -1829,23 +1751,31 @@ function renderDashboard(){
 
 
   $("dashTrend").textContent =
-    String(trend)
-      .toUpperCase();
+    textValue(
+      trend,
+      "NEUTRAL"
+    ).toUpperCase();
 
 
   $("dashStructure").textContent =
-    String(structure)
-      .toUpperCase();
+    textValue(
+      structure,
+      "RANGE"
+    ).toUpperCase();
 
 
   $("dashMomentum").textContent =
-    String(momentum)
-      .toUpperCase();
+    textValue(
+      momentum,
+      "NEUTRAL"
+    ).toUpperCase();
 
 
   $("dashLiquidity").textContent =
-    String(liquidity)
-      .toUpperCase();
+    textValue(
+      liquidity,
+      "NONE"
+    ).toUpperCase();
 
 
   $("dH4").textContent =
@@ -1862,20 +1792,20 @@ function renderDashboard(){
 
 
   $("dStructure").textContent =
-    String(
-      extractStructure("15min")
+    extractStructure(
+      "15min"
     ).toUpperCase();
 
 
   $("dBos").textContent =
-    String(
-      extractBOS("15min")
+    extractBOS(
+      "15min"
     ).toUpperCase();
 
 
   $("dLiquidity").textContent =
-    String(
-      extractLiquidity("15min")
+    extractLiquidity(
+      "15min"
     ).toUpperCase();
 
 
@@ -1899,27 +1829,34 @@ function renderDashboard(){
 
 
   $("dGate").textContent =
-    String(gate)
-      .toUpperCase();
+    textValue(
+      gate,
+      "LOCKED"
+    ).toUpperCase();
 
 
   $("planEntry").textContent =
     fmt(plan.entry);
 
+
   $("planSL").textContent =
     fmt(plan.sl);
+
 
   $("planTP").textContent =
     fmt(plan.tp);
 
+
   $("planRR").textContent =
     plan.rr === null
       ? "—"
-      : plan.rr.toFixed(2) + "R";
+      : plan.rr.toFixed(2) +
+        "R";
 
 
   $("planBadge").textContent =
     decision;
+
 
   colorDirection(
     $("planBadge"),
@@ -1927,8 +1864,32 @@ function renderDashboard(){
   );
 
 
-  $("dashFresh").textContent =
-    "LIVE";
+  const freshness =
+    analysisData?.freshness;
+
+
+  if(
+    freshness?.fresh === true
+  ){
+
+    $("dashFresh").textContent =
+      "FRESH";
+
+  }
+  else if(
+    freshness?.fresh === false
+  ){
+
+    $("dashFresh").textContent =
+      "STALE";
+
+  }
+  else{
+
+    $("dashFresh").textContent =
+      "LIVE";
+
+  }
 
 
   $("dashTime").textContent =
@@ -1956,40 +1917,55 @@ function normalizeCandles(data){
     data?.candles ??
     [];
 
-  return raw
-    .map(c => {
 
-      return {
+  const candles =
+    raw
+      .map(c => {
 
-        time:
-          c.datetime ??
-          c.time ??
-          c.date ??
-          "",
+        return {
 
-        open:
-          safeNumber(c.open),
+          time:
+            c.datetime ??
+            c.time ??
+            c.date ??
+            "",
 
-        high:
-          safeNumber(c.high),
+          open:
+            safeNumber(c.open),
 
-        low:
-          safeNumber(c.low),
+          high:
+            safeNumber(c.high),
 
-        close:
-          safeNumber(c.close)
+          low:
+            safeNumber(c.low),
 
-      };
+          close:
+            safeNumber(c.close)
 
-    })
-    .filter(
-      c =>
-        c.open !== null &&
-        c.high !== null &&
-        c.low !== null &&
-        c.close !== null
-    )
-    .reverse();
+        };
+
+      })
+      .filter(
+        c =>
+          c.open !== null &&
+          c.high !== null &&
+          c.low !== null &&
+          c.close !== null
+      );
+
+
+  /*
+    Twelve Data time_series is already returned
+    in chronological order by the Worker.
+
+    DO NOT reverse here.
+
+    This was the source of the previous chart
+    appearing backwards.
+  */
+
+
+  return candles;
 
 }
 
@@ -2008,6 +1984,7 @@ function ema(
       values.length
     ).fill(null);
 
+
   if(
     values.length <
     period
@@ -2017,7 +1994,9 @@ function ema(
 
   }
 
+
   let sum = 0;
+
 
   for(
     let i=0;
@@ -2029,8 +2008,10 @@ function ema(
 
   }
 
+
   let previous =
     sum / period;
+
 
   result[
     period-1
@@ -2040,7 +2021,10 @@ function ema(
 
   const multiplier =
     2 /
-    (period+1);
+    (
+      period +
+      1
+    );
 
 
   for(
@@ -2057,10 +2041,12 @@ function ema(
       multiplier +
       previous;
 
+
     result[i] =
       previous;
 
   }
+
 
   return result;
 
@@ -2076,7 +2062,9 @@ function detectSwings(
 ){
 
   const highs = [];
+
   const lows = [];
+
 
   for(
     let i=2;
@@ -2127,6 +2115,7 @@ function detectSwings(
 
   }
 
+
   return {
     highs,
     lows
@@ -2148,10 +2137,13 @@ function detectEvents(
       candles
     );
 
+
   const events = [];
+
 
   let previousHigh =
     null;
+
 
   let previousLow =
     null;
@@ -2210,6 +2202,7 @@ function detectEvents(
         price:c.close
       });
 
+
       previousHigh =
         null;
 
@@ -2229,6 +2222,7 @@ function detectEvents(
         price:c.close
       });
 
+
       previousLow =
         null;
 
@@ -2237,7 +2231,12 @@ function detectEvents(
   }
 
 
-  /* CHoCH */
+  /*
+    CHoCH is intentionally kept as a
+    lightweight visual diagnostic.
+
+    It does NOT affect execution.
+  */
 
   for(
     let i=3;
@@ -2292,7 +2291,9 @@ function detectEvents(
   }
 
 
-  /* Liquidity */
+  /*
+    Liquidity sweep visualisation.
+  */
 
   for(
     let i=5;
@@ -2303,8 +2304,10 @@ function detectEvents(
     const c =
       candles[i];
 
+
     let priorHigh =
       -Infinity;
+
 
     let priorLow =
       Infinity;
@@ -2321,6 +2324,7 @@ function detectEvents(
           priorHigh,
           candles[j].high
         );
+
 
       priorLow =
         Math.min(
@@ -2376,10 +2380,13 @@ function detectEvents(
 /* ====================================================== */
 
 function getImportantEvents(
-  structure
+  structure,
+  firstIndex,
+  lastIndex
 ){
 
   const result = [];
+
 
   const types = [
     "BOS",
@@ -2396,7 +2403,9 @@ function getImportantEvents(
       structure.events
         .filter(
           e =>
-            e.type === type
+            e.type === type &&
+            e.index >= firstIndex &&
+            e.index <= lastIndex
         )
         .sort(
           (a,b) =>
@@ -2406,26 +2415,21 @@ function getImportantEvents(
 
 
     /*
-      Only recent meaningful events.
-      This prevents the chart from becoming
-      unreadable.
+      Keep only the most recent events.
+      This prevents the chart becoming cluttered.
     */
 
     const limit =
       type === "LIQUIDITY"
-        ? 5
-        : 4;
-
-
-    const selected =
-      list.slice(
-        0,
-        limit
-      );
+        ? 3
+        : 2;
 
 
     result.push(
-      ...selected
+      ...list.slice(
+        0,
+        limit
+      )
     );
 
   }
@@ -2449,11 +2453,14 @@ function resizeCanvas(){
   const canvas =
     $("chartCanvas");
 
+
   if(!canvas)
     return;
 
+
   const rect =
     canvas.getBoundingClientRect();
+
 
   if(
     rect.width <= 0 ||
@@ -2466,7 +2473,8 @@ function resizeCanvas(){
 
 
   dpr =
-    window.devicePixelRatio || 1;
+    window.devicePixelRatio ||
+    1;
 
 
   canvas.width =
@@ -2474,6 +2482,7 @@ function resizeCanvas(){
       rect.width *
       dpr
     );
+
 
   canvas.height =
     Math.floor(
@@ -2504,14 +2513,18 @@ function drawText(
   ctx.fillStyle =
     color;
 
+
   ctx.font =
     `${size}px -apple-system,BlinkMacSystemFont,Arial`;
+
 
   ctx.textAlign =
     align;
 
+
   ctx.textBaseline =
     "middle";
+
 
   ctx.fillText(
     text,
@@ -2531,6 +2544,7 @@ function drawChart(){
   const canvas =
     $("chartCanvas");
 
+
   if(!canvas)
     return;
 
@@ -2541,11 +2555,29 @@ function drawChart(){
     );
 
 
+  const W =
+    canvas.width;
+
+
+  const H =
+    canvas.height;
+
+
+  if(
+    W <= 0 ||
+    H <= 0
+  ){
+
+    return;
+
+  }
+
+
   ctx.clearRect(
     0,
     0,
-    canvas.width,
-    canvas.height
+    W,
+    H
   );
 
 
@@ -2556,45 +2588,25 @@ function drawChart(){
     drawText(
       ctx,
       "NO MARKET DATA",
-      canvas.width/2,
-      canvas.height/2,
+      W/2,
+      H/2,
       14*dpr,
       "#727987",
       "center"
     );
+
 
     return;
 
   }
 
 
-  const W =
-    canvas.width;
-
-  const H =
-    canvas.height;
-
-
-  const padding = {
-
-    left:48*dpr,
-
-    right:65*dpr,
-
-    top:28*dpr,
-
-    bottom:30*dpr
-
-  };
-
-
   /*
-    IMPORTANT:
+    Use ALL received candles for calculations.
 
-    Use ALL candles for EMA calculation.
-    Only the final 120 candles are displayed.
+    Only the last 120 are displayed.
 
-    This fixes the previous EMA200 problem.
+    This is important for EMA200.
   */
 
   const full =
@@ -2608,6 +2620,11 @@ function drawChart(){
   const firstIndex =
     full.length -
     visible.length;
+
+
+  const lastIndex =
+    full.length -
+    1;
 
 
   const closes =
@@ -2682,8 +2699,26 @@ function drawChart(){
   maxPrice +=
     extra;
 
+
   minPrice -=
     extra;
+
+
+  const padding = {
+
+    left:
+      48*dpr,
+
+    right:
+      65*dpr,
+
+    top:
+      28*dpr,
+
+    bottom:
+      30*dpr
+
+  };
 
 
   const plotW =
@@ -2739,6 +2774,7 @@ function drawChart(){
   ctx.strokeStyle =
     "#1b2029";
 
+
   ctx.lineWidth =
     1*dpr;
 
@@ -2753,20 +2789,25 @@ function drawChart(){
       padding.top +
       (
         plotH/5
-      )*i;
+      ) *
+      i;
 
 
     ctx.beginPath();
+
 
     ctx.moveTo(
       padding.left,
       gy
     );
 
+
     ctx.lineTo(
-      W-padding.right,
+      W -
+      padding.right,
       gy
     );
+
 
     ctx.stroke();
 
@@ -2802,7 +2843,8 @@ function drawChart(){
   const candleWidth =
     Math.max(
       2*dpr,
-      xStep*0.58
+      xStep *
+      0.58
     );
 
 
@@ -2816,11 +2858,14 @@ function drawChart(){
       const openY =
         y(c.open);
 
+
       const closeY =
         y(c.close);
 
+
       const highY =
         y(c.high);
+
 
       const lowY =
         y(c.low);
@@ -2839,8 +2884,10 @@ function drawChart(){
       ctx.strokeStyle =
         candleColor;
 
+
       ctx.fillStyle =
         candleColor;
+
 
       ctx.lineWidth =
         Math.max(
@@ -2849,24 +2896,23 @@ function drawChart(){
         );
 
 
-      /* Wick */
-
       ctx.beginPath();
+
 
       ctx.moveTo(
         cx,
         highY
       );
 
+
       ctx.lineTo(
         cx,
         lowY
       );
 
+
       ctx.stroke();
 
-
-      /* Body */
 
       const bodyTop =
         Math.min(
@@ -2898,7 +2944,7 @@ function drawChart(){
 
 
   /* ==================================================== */
-  /* EMA LINES */
+  /* EMA */
   /* ==================================================== */
 
   function drawEMA(
@@ -2909,10 +2955,13 @@ function drawChart(){
     ctx.strokeStyle =
       color;
 
+
     ctx.lineWidth =
       2*dpr;
 
+
     ctx.beginPath();
+
 
     let started =
       false;
@@ -2945,6 +2994,7 @@ function drawChart(){
         const px =
           x(i);
 
+
         const py =
           y(value);
 
@@ -2955,6 +3005,7 @@ function drawChart(){
             px,
             py
           );
+
 
           started =
             true;
@@ -2973,7 +3024,11 @@ function drawChart(){
     );
 
 
-    ctx.stroke();
+    if(started){
+
+      ctx.stroke();
+
+    }
 
   }
 
@@ -3002,7 +3057,8 @@ function drawChart(){
 
   const current =
     visible[
-      visible.length-1
+      visible.length -
+      1
     ].close;
 
 
@@ -3013,8 +3069,10 @@ function drawChart(){
   ctx.strokeStyle =
     "#717886";
 
+
   ctx.lineWidth =
     1*dpr;
+
 
   ctx.setLineDash(
     [
@@ -3026,10 +3084,12 @@ function drawChart(){
 
   ctx.beginPath();
 
+
   ctx.moveTo(
     padding.left,
     currentY
   );
+
 
   ctx.lineTo(
     W -
@@ -3037,7 +3097,9 @@ function drawChart(){
     currentY
   );
 
+
   ctx.stroke();
+
 
   ctx.setLineDash([]);
 
@@ -3067,30 +3129,17 @@ function drawChart(){
 
   const importantEvents =
     getImportantEvents(
-      structure
+      structure,
+      firstIndex,
+      lastIndex
     );
 
-
-  /*
-    Prevent labels from sitting directly
-    on top of one another.
-  */
 
   const labelPositions = [];
 
 
   importantEvents.forEach(
     event => {
-
-      if(
-        event.index <
-        firstIndex
-      ){
-
-        return;
-
-      }
-
 
       const vi =
         event.index -
@@ -3109,6 +3158,7 @@ function drawChart(){
 
       const px =
         x(vi);
+
 
       const py =
         y(event.price);
@@ -3139,11 +3189,6 @@ function drawChart(){
 
       }
 
-
-      /*
-        Slight vertical adjustment
-        to avoid overlap.
-      */
 
       let offset =
         event.direction ===
@@ -3189,12 +3234,12 @@ function drawChart(){
       });
 
 
-      /* Marker */
-
       ctx.fillStyle =
         color;
 
+
       ctx.beginPath();
+
 
       ctx.arc(
         px,
@@ -3203,6 +3248,7 @@ function drawChart(){
         0,
         Math.PI*2
       );
+
 
       ctx.fill();
 
@@ -3247,7 +3293,7 @@ function drawChart(){
         s.index >=
         firstIndex
     )
-    .slice(-8)
+    .slice(-6)
     .forEach(
       s => {
 
@@ -3277,7 +3323,7 @@ function drawChart(){
         s.index >=
         firstIndex
     )
-    .slice(-8)
+    .slice(-6)
     .forEach(
       s => {
 
@@ -3344,8 +3390,10 @@ function drawChart(){
     ctx.strokeStyle =
       color;
 
+
     ctx.lineWidth =
       1.5*dpr;
+
 
     ctx.setLineDash(
       [
@@ -3357,10 +3405,12 @@ function drawChart(){
 
     ctx.beginPath();
 
+
     ctx.moveTo(
       padding.left,
       py
     );
+
 
     ctx.lineTo(
       W -
@@ -3368,7 +3418,9 @@ function drawChart(){
       py
     );
 
+
     ctx.stroke();
+
 
     ctx.setLineDash([]);
 
@@ -3428,7 +3480,8 @@ function renderChart(){
 
   const latest =
     chartCandles[
-      chartCandles.length-1
+      chartCandles.length -
+      1
     ];
 
 
@@ -3440,8 +3493,34 @@ function renderChart(){
     `${chartCandles.length} candles`;
 
 
-  $("chartFresh").textContent =
-    "FRESH";
+  const fresh =
+    marketData[
+      selectedTF
+    ]?.freshness;
+
+
+  if(
+    fresh?.fresh === true
+  ){
+
+    $("chartFresh").textContent =
+      "FRESH";
+
+  }
+  else if(
+    fresh?.fresh === false
+  ){
+
+    $("chartFresh").textContent =
+      "STALE";
+
+  }
+  else{
+
+    $("chartFresh").textContent =
+      "LIVE";
+
+  }
 
 
   const dir =
@@ -3518,14 +3597,18 @@ function renderChart(){
     $("chartH4").textContent =
       direction("4h");
 
+
     $("chartH1").textContent =
       direction("1h");
+
 
     $("chartM15").textContent =
       direction("15min");
 
+
     $("chartM5").textContent =
       direction("5min");
+
 
     $("chartM1").textContent =
       direction("1min");
@@ -3538,26 +3621,20 @@ function renderChart(){
 
 
     $("chartStructure").textContent =
-      String(
-        extractStructure(
-          "15min"
-        )
+      extractStructure(
+        "15min"
       ).toUpperCase();
 
 
     $("chartBos").textContent =
-      String(
-        extractBOS(
-          "15min"
-        )
+      extractBOS(
+        "15min"
       ).toUpperCase();
 
 
     $("chartLiquidity").textContent =
-      String(
-        extractLiquidity(
-          "15min"
-        )
+      extractLiquidity(
+        "15min"
       ).toUpperCase();
 
 
@@ -3580,19 +3657,24 @@ function renderChart(){
       "LOCKED";
 
 
+    const gateText =
+      textValue(
+        gate,
+        "LOCKED"
+      ).toUpperCase();
+
+
     $("chartGate").textContent =
-      String(gate)
-        .toUpperCase();
+      gateText;
 
 
     $("chartGateBadge").textContent =
-      String(gate)
-        .toUpperCase();
+      gateText;
 
 
     colorDirection(
       $("chartGateBadge"),
-      gate
+      gateText
     );
 
   }
@@ -3651,6 +3733,21 @@ async function loadChart(
 
     renderChart();
 
+
+    /*
+      The chart page may have just become visible.
+      Give the browser one frame to calculate the
+      actual canvas size before drawing.
+    */
+
+    requestAnimationFrame(
+      () => {
+
+        resizeCanvas();
+
+      }
+    );
+
   }
   catch(error){
 
@@ -3693,17 +3790,21 @@ async function loadAnalysis(){
 
     renderChart();
 
+
+    requestAnimationFrame(
+      () => {
+
+        resizeCanvas();
+
+      }
+    );
+
   }
   catch(error){
 
     console.error(
       "Analysis error:",
       error
-    );
-
-
-    console.error(
-      error.stack
     );
 
   }
@@ -3773,6 +3874,20 @@ document
             "chartPage"
           ){
 
+            /*
+              Important:
+              Chart page must be visible before
+              measuring canvas dimensions.
+            */
+
+            await new Promise(
+              resolve =>
+                requestAnimationFrame(
+                  resolve
+                )
+            );
+
+
             if(
               !chartCandles.length
             ){
@@ -3780,6 +3895,11 @@ document
               await loadChart(
                 selectedTF
               );
+
+            }
+            else{
+
+              resizeCanvas();
 
             }
 
@@ -3830,7 +3950,10 @@ document
 
       btn.addEventListener(
         "click",
-        async () => {
+        async event => {
+
+          event.stopPropagation();
+
 
           await loadChart(
             btn.dataset.tf
@@ -3933,7 +4056,7 @@ window.addEventListener(
       resizeCanvas();
 
     },
-    300
+    500
   );
 
 })();
