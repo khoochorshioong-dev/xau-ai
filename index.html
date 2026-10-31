@@ -9,6 +9,10 @@
 
 <title>XAU AI — Strict Execution System</title>
 
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+<link rel="apple-touch-icon" href="./icon-192.png">
+
 <style>
 * {
   box-sizing: border-box;
@@ -102,6 +106,18 @@ button {
   border-radius: 50%;
   background: #20d88a;
   box-shadow: 0 0 12px rgba(32, 216, 138, .65);
+}
+
+.last-update {
+  margin-top: 10px;
+  color: #6f7b8b;
+  font-size: 11px;
+  letter-spacing: .08em;
+  font-variant-numeric: tabular-nums;
+}
+
+.last-update.error {
+  color: #ff6a7b;
 }
 
 .api-dot.offline {
@@ -710,10 +726,17 @@ button {
       ></span>
 
       <span id="apiStatus">
-        API ONLINE
+        CONNECTING
       </span>
     </div>
 
+  </div>
+
+  <div
+    id="lastUpdate"
+    class="last-update"
+  >
+    WAITING FOR FIRST UPDATE
   </div>
 
 </header>
@@ -1750,18 +1773,32 @@ function getExecutionReasons(data) {
 function directionClass(value) {
 
   if (
-    value === "BULLISH"
+    value === "BULLISH" ||
+    value === "HH_HL" ||
+    value === "BULLISH_SWEEP"
   ) {
     return "bullish";
   }
 
   if (
-    value === "BEARISH"
+    value === "BEARISH" ||
+    value === "LH_LL" ||
+    value === "BEARISH_SWEEP"
   ) {
     return "bearish";
   }
 
   return "neutral";
+}
+
+
+function escapeHTML(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
 }
 
 
@@ -1901,7 +1938,37 @@ function formatReason(reason) {
       "M5 PULLBACK TOO DEEP",
 
     INSUFFICIENT_DATA:
-      "INSUFFICIENT DATA"
+      "INSUFFICIENT DATA",
+
+    M5_PULLBACK_CONFIRMED:
+      "M5 PULLBACK CONFIRMED",
+
+    M5_VALID_PULLBACK:
+      "M5 PULLBACK CONFIRMED",
+
+    M5_CHASING:
+      "M5 CHASING — WAIT FOR PULLBACK",
+
+    M5_DEEP_PULLBACK:
+      "M5 PULLBACK TOO DEEP",
+
+    M5_NO_M5_IMPULSE:
+      "NO M5 IMPULSE",
+
+    M5_INSUFFICIENT_DATA:
+      "M5 INSUFFICIENT DATA",
+
+    M5_ALIGNED:
+      "M5 ALIGNED",
+
+    M1_ALIGNED:
+      "M1 ALIGNED",
+
+    DAILY_BREAK:
+      "MARKET DAILY BREAK (17:00–18:00 NEW YORK)",
+
+    MARKET_CLOSED:
+      "MARKET CLOSED"
   };
 
   return (
@@ -2472,9 +2539,11 @@ function renderPlan(data) {
     byId(
       "rr"
     ).textContent =
-      `1:${Number(
-        plan.rr || 2
-      ).toFixed(0)}`;
+      `1:${(
+        Math.round(
+          Number(plan.rr || 2) * 10
+        ) / 10
+      ).toString()}`;
 
   } else {
 
@@ -2747,7 +2816,7 @@ function renderAI(data) {
 
     el.innerHTML = `
       <strong style="color:#35df9b">
-        EXECUTABLE ${safeText(decision)}
+        EXECUTABLE ${escapeHTML(safeText(decision))}
       </strong>
       <br><br>
       Multi-timeframe direction is aligned.
@@ -2765,14 +2834,14 @@ function renderAI(data) {
 
   el.innerHTML = `
     <strong style="color:#f1c75b">
-      ${safeText(decision)}
+      ${escapeHTML(safeText(decision))}
     </strong>
     <br><br>
     Multi-timeframe bias:
-    <strong>${safeText(direction)}</strong>
+    <strong>${escapeHTML(safeText(direction))}</strong>
     <br>
     Setup score:
-    <strong>${safeText(score)}/100</strong>
+    <strong>${escapeHTML(safeText(score))}/100</strong>
     <br><br>
     Execution gate:
     <strong style="color:#ff6a7b">
@@ -2784,7 +2853,7 @@ function renderAI(data) {
         ? reasons
             .map(
               r =>
-                `• ${formatReason(r)}`
+                `• ${escapeHTML(formatReason(r))}`
             )
             .join("<br>")
         : "No execution reason available."
@@ -2848,68 +2917,172 @@ function renderDashboard(data) {
   );
 }
 
+/* =========================================================
+   LOCKED STATE (API / DATA ERROR)
+
+   Never leave an old executable plan on screen when the
+   latest data could not be loaded.
+========================================================= */
+
+function renderLocked(message) {
+
+  const el =
+    byId("decision");
+
+  el.textContent =
+    "NO TRADE";
+
+  el.className =
+    "decision no-trade";
+
+  byId("decisionReasons").textContent =
+    message;
+
+  byId("score").textContent =
+    "—";
+
+  const fill =
+    byId("scoreFill");
+
+  fill.style.width =
+    "0%";
+
+  fill.className =
+    "score-fill";
+
+  renderPlan(null);
+
+  const executionEl =
+    byId("diagExecution");
+
+  executionEl.textContent =
+    "LOCKED";
+
+  executionEl.className =
+    "diagnostic-value status-bad";
+
+  const container =
+    byId("reasonList");
+
+  container.innerHTML =
+    "";
+
+  const div =
+    document.createElement("div");
+
+  div.className =
+    "reason fail";
+
+  div.textContent =
+    message;
+
+  container.appendChild(div);
+}
+
+
+/* =========================================================
+   LAST UPDATE
+========================================================= */
+
+let lastSuccessAt = null;
+
+function renderLastUpdate(errorText) {
+
+  const el =
+    byId("lastUpdate");
+
+  if (!el) {
+    return;
+  }
+
+  const time =
+    lastSuccessAt
+      ? lastSuccessAt.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit"
+        })
+      : "—";
+
+  el.textContent =
+    errorText
+      ? `${errorText} · LAST OK ${time}`
+      : `UPDATED ${time}`;
+
+  el.classList.toggle(
+    "error",
+    !!errorText
+  );
+}
+
 
 /* =========================================================
    FETCH ANALYSIS
 ========================================================= */
 
+let analysisInFlight = false;
+
 async function fetchAnalysis() {
 
+  if (analysisInFlight) {
+    return;
+  }
+
+  analysisInFlight = true;
+
   try {
-
-    setApiStatus(
-      true
-    );
-
 
     const response =
       await fetch(
         `${ANALYZE_URL}?_=${Date.now()}`,
         {
-          method:
-            "GET",
-
-          cache:
-            "no-store"
+          method: "GET",
+          cache: "no-store",
+          signal: AbortSignal.timeout
+            ? AbortSignal.timeout(20000)
+            : undefined
         }
       );
 
+    let data = null;
 
-    if (
-      !response.ok
-    ) {
-
-      throw new Error(
-        `HTTP ${response.status}`
-      );
+    try {
+      data =
+        await response.json();
+    } catch {
+      data = null;
     }
 
-
-    const data =
-      await response.json();
-
-
     if (
+      !response.ok ||
       !data ||
       data.ok !== true
     ) {
+      const error =
+        new Error(
+          data?.details ||
+          data?.error ||
+          `HTTP ${response.status}`
+        );
 
-      throw new Error(
-        data?.error ||
-        "Invalid API response"
-      );
+      error.status =
+        response.status;
+
+      throw error;
     }
-
 
     renderDashboard(
       data
     );
 
+    lastSuccessAt =
+      new Date();
 
     setApiStatus(
       true
     );
 
+    renderLastUpdate();
 
   } catch (
     error
@@ -2920,28 +3093,27 @@ async function fetchAnalysis() {
       error
     );
 
-
     setApiStatus(
       false
     );
 
+    const message =
+      error?.status === 429
+        ? "DATA LIMIT REACHED"
+        : "API / DATA ERROR";
 
-    byId(
-      "decision"
-    ).textContent =
-      "NO TRADE";
+    renderLocked(
+      message
+    );
 
+    renderLastUpdate(
+      message
+    );
 
-    byId(
-      "decisionReasons"
-    ).textContent =
-      "API / DATA ERROR";
+  } finally {
 
-
-    byId(
-      "score"
-    ).textContent =
-      "—";
+    analysisInFlight =
+      false;
   }
 }
 
@@ -2950,20 +3122,34 @@ async function fetchAnalysis() {
    CHART
 ========================================================= */
 
+let chartCandles = null;
+let chartInFlight = false;
+
+function chartIsActive() {
+  return byId("chart")
+    ?.classList.contains("active");
+}
+
 async function fetchChart() {
 
+  if (chartInFlight) {
+    return;
+  }
+
+  chartInFlight = true;
+
   const loading =
-    byId(
-      "chartLoading"
-    );
+    byId("chartLoading");
 
-
-  if (loading) {
-
+  if (
+    loading &&
+    !chartCandles
+  ) {
+    loading.textContent =
+      "Loading market data...";
     loading.style.display =
       "flex";
   }
-
 
   try {
 
@@ -2971,47 +3157,40 @@ async function fetchChart() {
       await fetch(
         `${MARKET_URL}&_=${Date.now()}`,
         {
-          cache:
-            "no-store"
+          cache: "no-store"
         }
       );
-
 
     if (
       !response.ok
     ) {
-
       throw new Error(
         `HTTP ${response.status}`
       );
     }
 
-
     const data =
       await response.json();
-
 
     if (
       !data?.candles?.length
     ) {
-
       throw new Error(
         "No candles"
       );
     }
 
+    chartCandles =
+      data.candles;
 
     drawChart(
-      data.candles
+      chartCandles
     );
 
-
     if (loading) {
-
       loading.style.display =
         "none";
     }
-
 
   } catch (
     error
@@ -3022,15 +3201,20 @@ async function fetchChart() {
       error
     );
 
-
-    if (loading) {
-
+    if (
+      loading &&
+      !chartCandles
+    ) {
       loading.textContent =
         "Chart data unavailable";
-
       loading.style.display =
         "flex";
     }
+
+  } finally {
+
+    chartInFlight =
+      false;
   }
 }
 
@@ -3050,30 +3234,25 @@ function chartEMA(
     return [];
   }
 
-
   const k =
     2 /
     (period + 1);
 
-
   const output = [
     values[0]
   ];
-
 
   for (
     let i = 1;
     i < values.length;
     i++
   ) {
-
     output.push(
       values[i] * k +
       output[i - 1] *
         (1 - k)
     );
   }
-
 
   return output;
 }
@@ -3083,111 +3262,82 @@ function chartEMA(
    DRAW CHART
 ========================================================= */
 
+const VISIBLE_CANDLES = 100;
+
 function drawChart(candles) {
 
   const canvas =
-    byId(
-      "chartCanvas"
-    );
-
+    byId("chartCanvas");
 
   if (!canvas) {
     return;
   }
 
-
   const rect =
     canvas.getBoundingClientRect();
 
+  if (
+    !rect.width ||
+    !rect.height
+  ) {
+    return;
+  }
 
   const dpr =
     window.devicePixelRatio ||
     1;
 
-
   canvas.width =
-    rect.width *
-    dpr;
-
+    Math.round(rect.width * dpr);
 
   canvas.height =
-    rect.height *
-    dpr;
-
+    Math.round(rect.height * dpr);
 
   const ctx =
-    canvas.getContext(
-      "2d"
-    );
+    canvas.getContext("2d");
 
-
-  ctx.scale(
-    dpr,
-    dpr
+  ctx.setTransform(
+    dpr, 0, 0, dpr, 0, 0
   );
-
 
   const width =
     rect.width;
 
-
   const height =
     rect.height;
 
+  /*
+    EMAs are computed on the FULL series and only then
+    sliced, so EMA50 / EMA200 are correct on screen.
+  */
+  const allCloses =
+    candles.map(c => Number(c.close));
+
+  const start =
+    Math.max(
+      0,
+      candles.length - VISIBLE_CANDLES
+    );
 
   const visible =
-    candles.slice(
-      -100
-    );
-
-
-  const closes =
-    visible.map(
-      c =>
-        Number(
-          c.close
-        )
-    );
-
-
-  const highs =
-    visible.map(
-      c =>
-        Number(
-          c.high
-        )
-    );
-
-
-  const lows =
-    visible.map(
-      c =>
-        Number(
-          c.low
-        )
-    );
-
+    candles.slice(start);
 
   const ema20 =
-    chartEMA(
-      closes,
-      20
-    );
-
+    chartEMA(allCloses, 20).slice(start);
 
   const ema50 =
-    chartEMA(
-      closes,
-      50
-    );
-
+    chartEMA(allCloses, 50).slice(start);
 
   const ema200 =
-    chartEMA(
-      closes,
-      200
-    );
+    candles.length >= 200
+      ? chartEMA(allCloses, 200).slice(start)
+      : [];
 
+  const highs =
+    visible.map(c => Number(c.high));
+
+  const lows =
+    visible.map(c => Number(c.low));
 
   const allValues = [
     ...highs,
@@ -3199,25 +3349,17 @@ function drawChart(candles) {
     Number.isFinite
   );
 
-
   if (
     !allValues.length
   ) {
     return;
   }
 
-
   const min =
-    Math.min(
-      ...allValues
-    );
-
+    Math.min(...allValues);
 
   const max =
-    Math.max(
-      ...allValues
-    );
-
+    Math.max(...allValues);
 
   const range =
     Math.max(
@@ -3225,31 +3367,23 @@ function drawChart(candles) {
       0.01
     );
 
+  const padTop = 20;
+  const padBottom = 25;
+  const padLeft = 8;
+  const padRight = 56;
 
-  const padTop =
-    20;
+  const plotWidth =
+    width - padLeft - padRight;
 
-  const padBottom =
-    25;
-
-  const padLeft =
-    8;
-
-  const padRight =
-    8;
-
+  const plotHeight =
+    height - padTop - padBottom;
 
   function x(i) {
-
     return (
       padLeft +
       i *
         (
-          (
-            width -
-            padLeft -
-            padRight
-          ) /
+          plotWidth /
           Math.max(
             visible.length - 1,
             1
@@ -3258,24 +3392,14 @@ function drawChart(candles) {
     );
   }
 
-
   function y(value) {
-
     return (
       padTop +
-      (
-        max -
-        value
-      ) /
-      range *
-      (
-        height -
-        padTop -
-        padBottom
-      )
+      (max - value) /
+        range *
+        plotHeight
     );
   }
-
 
   ctx.clearRect(
     0,
@@ -3284,87 +3408,69 @@ function drawChart(candles) {
     height
   );
 
+  /* GRID + PRICE SCALE */
 
-  /* GRID */
-
-  ctx.lineWidth =
-    1;
-
+  ctx.lineWidth = 1;
   ctx.strokeStyle =
     "rgba(255,255,255,.05)";
-
+  ctx.fillStyle =
+    "#6f7b8b";
+  ctx.font =
+    "10px -apple-system, BlinkMacSystemFont, Arial, sans-serif";
+  ctx.textBaseline =
+    "middle";
 
   for (
-    let i = 1;
-    i < 6;
+    let i = 0;
+    i <= 6;
     i++
   ) {
 
     const gy =
       padTop +
-      (
-        height -
-        padTop -
-        padBottom
-      ) *
-      i /
-      6;
+      plotHeight * i / 6;
 
+    if (
+      i > 0 &&
+      i < 6
+    ) {
+      ctx.beginPath();
+      ctx.moveTo(0, gy);
+      ctx.lineTo(width - padRight, gy);
+      ctx.stroke();
+    }
 
-    ctx.beginPath();
-
-    ctx.moveTo(
-      0,
+    ctx.fillText(
+      (max - range * i / 6).toFixed(2),
+      width - padRight + 6,
       gy
     );
-
-    ctx.lineTo(
-      width,
-      gy
-    );
-
-    ctx.stroke();
   }
-
 
   /* CANDLES */
 
   const candleWidth =
     Math.max(
       2,
-      (
-        width -
-        padLeft -
-        padRight
-      ) /
-      visible.length *
-      .55
+      plotWidth /
+        visible.length *
+        .55
     );
-
 
   visible.forEach(
     (candle, i) => {
 
       const open =
-        Number(
-          candle.open
-        );
+        Number(candle.open);
 
       const high =
-        Number(
-          candle.high
-        );
+        Number(candle.high);
 
       const low =
-        Number(
-          candle.low
-        );
+        Number(candle.low);
 
       const close =
-        Number(
-          candle.close
-        );
-
+        Number(candle.close);
 
       if (
         ![
@@ -3379,15 +3485,11 @@ function drawChart(candles) {
         return;
       }
 
-
       const bullish =
-        close >=
-        open;
-
+        close >= open;
 
       const cx =
         x(i);
-
 
       /* WICK */
 
@@ -3396,66 +3498,37 @@ function drawChart(candles) {
           ? "rgba(53,223,155,.8)"
           : "rgba(255,92,112,.8)";
 
-
-      ctx.lineWidth =
-        1;
-
+      ctx.lineWidth = 1;
 
       ctx.beginPath();
-
-      ctx.moveTo(
-        cx,
-        y(high)
-      );
-
-      ctx.lineTo(
-        cx,
-        y(low)
-      );
-
+      ctx.moveTo(cx, y(high));
+      ctx.lineTo(cx, y(low));
       ctx.stroke();
-
 
       /* BODY */
 
       const top =
-        y(
-          Math.max(
-            open,
-            close
-          )
-        );
-
+        y(Math.max(open, close));
 
       const bottom =
-        y(
-          Math.min(
-            open,
-            close
-          )
-        );
-
+        y(Math.min(open, close));
 
       ctx.fillStyle =
         bullish
           ? "rgba(53,223,155,.85)"
           : "rgba(255,92,112,.85)";
 
-
       ctx.fillRect(
-        cx -
-          candleWidth / 2,
+        cx - candleWidth / 2,
         top,
         candleWidth,
         Math.max(
-          bottom -
-            top,
+          bottom - top,
           1
         )
       );
     }
   );
-
 
   /* LINE */
 
@@ -3466,79 +3539,96 @@ function drawChart(candles) {
   ) {
 
     ctx.beginPath();
-
     ctx.lineWidth =
       lineWidth;
-
     ctx.strokeStyle =
       stroke;
 
-
     let started =
       false;
-
 
     values.forEach(
       (value, i) => {
 
         if (
-          !Number.isFinite(
-            value
-          )
+          !Number.isFinite(value)
         ) {
           return;
         }
 
-
         if (!started) {
-
-          ctx.moveTo(
-            x(i),
-            y(value)
-          );
-
-          started =
-            true;
-
+          ctx.moveTo(x(i), y(value));
+          started = true;
         } else {
-
-          ctx.lineTo(
-            x(i),
-            y(value)
-          );
+          ctx.lineTo(x(i), y(value));
         }
       }
     );
 
-
     ctx.stroke();
   }
 
+  drawLine(ema20, "#e7edf5", 1.5);
+  drawLine(ema50, "#8f9baa", 1.2);
+  drawLine(ema200, "#566271", 1);
 
-  /* EMA20 */
+  /* LAST PRICE */
 
-  drawLine(
-    ema20,
-    "#e7edf5",
-    1.5
-  );
+  const last =
+    Number(visible.at(-1)?.close);
 
+  if (
+    Number.isFinite(last)
+  ) {
 
-  /* EMA50 */
+    const ly =
+      y(last);
 
-  drawLine(
-    ema50,
-    "#8f9baa",
-    1.2
-  );
+    ctx.setLineDash([3, 3]);
+    ctx.strokeStyle =
+      "rgba(241,199,91,.7)";
+    ctx.beginPath();
+    ctx.moveTo(padLeft, ly);
+    ctx.lineTo(width - padRight, ly);
+    ctx.stroke();
+    ctx.setLineDash([]);
 
+    ctx.fillStyle =
+      "#f1c75b";
+    ctx.fillRect(
+      width - padRight + 2,
+      ly - 8,
+      padRight - 4,
+      16
+    );
 
-  /* EMA200 */
+    ctx.fillStyle =
+      "#07090d";
+    ctx.fillText(
+      last.toFixed(2),
+      width - padRight + 6,
+      ly
+    );
+  }
 
-  drawLine(
-    ema200,
-    "#566271",
-    1
+  /* LEGEND */
+
+  ctx.textBaseline =
+    "top";
+
+  [
+    ["EMA20", "#e7edf5"],
+    ["EMA50", "#8f9baa"],
+    ["EMA200", "#566271"]
+  ].forEach(
+    ([label, color], i) => {
+      ctx.fillStyle = color;
+      ctx.fillText(
+        label,
+        padLeft + 4 + i * 54,
+        4
+      );
+    }
   );
 }
 
@@ -3554,7 +3644,6 @@ function setupNavigation() {
       ".nav button"
     );
 
-
   buttons.forEach(
     button => {
 
@@ -3565,7 +3654,6 @@ function setupNavigation() {
           const page =
             button.dataset.page;
 
-
           buttons.forEach(
             b =>
               b.classList.remove(
@@ -3573,11 +3661,9 @@ function setupNavigation() {
               )
           );
 
-
           button.classList.add(
             "active"
           );
-
 
           document
             .querySelectorAll(
@@ -3590,24 +3676,24 @@ function setupNavigation() {
                 )
             );
 
-
           const target =
-            byId(
-              page
-            );
-
+            byId(page);
 
           if (target) {
-
             target.classList.add(
               "active"
             );
           }
 
-
           if (
             page === "chart"
           ) {
+
+            if (chartCandles) {
+              requestAnimationFrame(
+                () => drawChart(chartCandles)
+              );
+            }
 
             fetchChart();
           }
@@ -3616,6 +3702,65 @@ function setupNavigation() {
     }
   );
 }
+
+
+/* =========================================================
+   REFRESH LOOP
+
+   Polling pauses while the app is in the background to
+   protect the Twelve Data quota, and refreshes immediately
+   when the app comes back.
+========================================================= */
+
+function refreshTick() {
+
+  fetchAnalysis();
+
+  if (
+    chartIsActive()
+  ) {
+    fetchChart();
+  }
+}
+
+function startRefresh() {
+
+  if (refreshTimer) {
+    return;
+  }
+
+  refreshTimer =
+    setInterval(
+      refreshTick,
+      REFRESH_MS
+    );
+}
+
+function stopRefresh() {
+
+  clearInterval(
+    refreshTimer
+  );
+
+  refreshTimer =
+    null;
+}
+
+document.addEventListener(
+  "visibilitychange",
+  () => {
+
+    if (
+      document.hidden
+    ) {
+      stopRefresh();
+      return;
+    }
+
+    refreshTick();
+    startRefresh();
+  }
+);
 
 
 /* =========================================================
@@ -3628,37 +3773,69 @@ async function startApp() {
 
   await fetchAnalysis();
 
-
-  refreshTimer =
-    setInterval(
-      fetchAnalysis,
-      REFRESH_MS
-    );
+  if (
+    !document.hidden
+  ) {
+    startRefresh();
+  }
 }
 
 
 /* =========================================================
-   RESIZE
+   RESIZE (debounced redraw, no refetch)
 ========================================================= */
+
+let resizeTimer = null;
 
 window.addEventListener(
   "resize",
   () => {
 
-    if (
-      document
-        .getElementById(
-          "chart"
-        )
-        ?.classList.contains(
-          "active"
-        )
-    ) {
+    clearTimeout(
+      resizeTimer
+    );
 
-      fetchChart();
-    }
+    resizeTimer =
+      setTimeout(
+        () => {
+          if (
+            chartIsActive() &&
+            chartCandles
+          ) {
+            drawChart(
+              chartCandles
+            );
+          }
+        },
+        150
+      );
   }
 );
+
+
+/* =========================================================
+   SERVICE WORKER
+========================================================= */
+
+if (
+  "serviceWorker" in navigator &&
+  location.protocol === "https:"
+) {
+  window.addEventListener(
+    "load",
+    () => {
+      navigator.serviceWorker
+        .register("./sw.js")
+        .catch(
+          error =>
+            console.warn(
+              "Service worker registration failed:",
+              error
+            )
+        );
+    }
+  );
+}
 
 
 /* =========================================================
